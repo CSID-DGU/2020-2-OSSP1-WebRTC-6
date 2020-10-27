@@ -1,31 +1,20 @@
-Multi-Client WebRTC Video
-=========================
+동국대학교 공개 SW웨어
+프로젝트
 
-Based on https://github.com/shanet/WebRTC-Example, see [https://shanetully.com/2014/09/a-dead-simple-webrtc-example/](https://shanetully.com/2014/09/a-dead-simple-webrtc-example/) for a description of WebRTC basics.
+6조 가짜 프로그래머
 
-## Usage
+WebRTC Project 
 
-The signaling server uses Node.js and `ws` and can be started as 
-follows:
+## 사용법
 
-```
-$ npm install
-$ npm start
-```
+Node.js 로 Singaling Server 사용
+실행하고 하려면
 
-With the server running, open Chrome and go to to `https://[server]` from any client on the LAN.
+///////////////////
+npm install
+npm start
+///////////////////
 
-Optionally, use a URL parameter to specify the client display name, e.g. `https://[server]/?displayName=Boston`
-
-You may have conflicting tasks already using the default HTTP and/or 
-HTTPS ports (80 and 443), which will result in an error on startup. 
-Change the constants in server.js and go to 
-https://localhost:[HTTPS_PORT]
-
-For production, the server can be deployed as a Windows service using 
-node-windows, which can be installed as follows:
-
-```
-npm install -g node-windows
-node install_service.js
-```
+웹 페이지에서 
+https://localhost:8443/
+입력 후 실행
