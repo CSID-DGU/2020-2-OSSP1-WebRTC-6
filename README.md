@@ -10,11 +10,10 @@ WebRTC Project
 Node.js 로 Singaling Server 사용
 실행하고 하려면
 
-///////////////////
+
 npm install
-///////////////////
 npm start
-///////////////////
+
 
 웹 페이지에서 
 https://localhost:8443/
