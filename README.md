@@ -12,6 +12,7 @@ Node.js 로 Singaling Server 사용
 
 ///////////////////
 npm install
+///////////////////
 npm start
 ///////////////////
 
