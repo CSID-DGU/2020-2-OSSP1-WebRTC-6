@@ -47,3 +47,79 @@
       bottom: 0;
       padding: 4px;
   }
+
+
+
+/*여기부터 화이트보드*/
+#canvas {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 3px 3px 2px grey;
+}
+
+#exitCanvas {
+  z-index: 1001;
+  font-size: 22px;
+  width: 30px;
+  height: 30px;
+}
+
+.canvasUI {
+  position: absolute;
+  top: 10px;
+  z-index: 1000;
+}
+
+#canvasBtns {
+  margin-top: 765px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#jsRange {
+  margin-left: 300px;
+}
+
+.boardButton {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+#whiteBoard {
+  display: none;
+}
+
+/*여기까지 화이트보드*/
+
+/*녹화기능*/
+.basicBtns{
+  background-color: #121212;
+  border: none;
+  width: 40px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  margin: 10px 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.navbar {
+  width: 50%;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  background-color: #121212;
+  z-index: 1100;
+  position: relative;
+  opacity: 0.9;
+  border-radius: 7px;
+  text-align: center;
+}
+
+
+
+#download {
+  margin-right: 60px;
+}
