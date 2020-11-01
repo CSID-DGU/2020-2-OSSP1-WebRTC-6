@@ -179,7 +179,6 @@ function createUUID() {
 }
 
 
-//2020.10.25 조영욱 시작
 //마이크,카메라 on/off 기능
 function micOnOff(element) {
   if(localStream.getAudioTracks()[0].enabled) {
@@ -310,10 +309,9 @@ function showWhiteBoard() {
 function hideWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'none';
 }
-//2020.10.25 조영욱 끝
 
 
-//여기부터녹화
+//녹화 기능
 let recordedBlobs;
 var recordStart = true;
 const recordButton = document.getElementById("record");
