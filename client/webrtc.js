@@ -1,5 +1,7 @@
 const WS_PORT = 8443; //make sure this matches the port for the webscokets server
 
+'use strict';
+
 var localUuid;
 var localDisplayName;
 var localStream;
@@ -28,7 +30,7 @@ function start() {
       height: {max: 240},
       frameRate: {max: 30},
     },
-    audio: false,
+    audio: true,
   };
 
   // set up local video stream
@@ -174,4 +176,238 @@ function createUUID() {
   }
 
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+
+//마이크,카메라 on/off 기능
+function micOnOff(element) {
+  if(localStream.getAudioTracks()[0].enabled) {
+    localStream.getAudioTracks()[0].enabled = false
+    document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
+  }
+  else {
+    localStream.getAudioTracks()[0].enabled = true;
+    document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
+  }
+}
+
+function cameraOnOff(element) {
+  if(localStream.getVideoTracks()[0].enabled) {
+    localStream.getVideoTracks()[0].enabled = false;
+    document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
+  }
+  else {
+    localStream.getVideoTracks()[0].enabled = true;
+    document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
+  }
+}
+
+//화이트보드 기능
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
+const erase = document.getElementById("jsErase");
+const redpen = document.getElementById("redpen");
+const reset = document.getElementById("reset");
+
+canvas.width = 1100;
+canvas.height = 800;
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.strokeStyle = "#2c2c2c";
+ctx.lineWidth = 2.5;
+
+let painting = false;
+let filling = false;
+
+stopPainting = () => {
+  painting = false;
+};
+
+onMouseMove = e => {
+  console.log(e);
+  const x = e.offsetX;
+  const y = e.offsetY;
+  if (!painting) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  } else {
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+};
+
+startPainting = () => {
+  painting = true;
+};
+handleCanvasClick = () => {
+};
+handleCM = e => {
+  e.preventDefault();
+};
+
+if (canvas) {
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mouseup", stopPainting);
+  canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("contextmenu", handleCM);
+}
+
+handleRangeChange = e => {
+  const brushWidth = e.target.value;
+  ctx.lineWidth = brushWidth;
+};
+
+if (range) {
+  range.addEventListener("input", handleRangeChange);
+}
+
+//Paint 클릭 시
+handleModeClick = e => {
+  painting = false;
+  ctx.strokeStyle = "#2c2c2c";
+  filling = false;
+};
+//Erase 클릭 시
+handleEraseClick = e => {
+  painting = false;
+  ctx.strokeStyle = "white";
+  filling = false;
+};
+//Redpen 클릭 시
+handleRedPen = e => {
+  painting = false;
+  ctx.strokeStyle = "red";
+  filling = false;
+}
+//Reset 클릭 시
+handleReset = e => {
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+if (mode) {
+  mode.addEventListener("click", handleModeClick);
+}
+if (erase) {
+  erase.addEventListener("click", handleEraseClick);
+}
+if (redpen) {
+  redpen.addEventListener("click", handleRedPen);
+}
+if (reset) {
+  reset.addEventListener("click", handleReset);
+}
+
+function showWhiteBoard() {
+  document.getElementById("whiteBoard").style.display = 'block';
+}
+
+function hideWhiteBoard() {
+  document.getElementById("whiteBoard").style.display = 'none';
+}
+
+
+//녹화 기능
+let recordedBlobs;
+var recordStart = true;
+const recordButton = document.getElementById("record");
+function init() {
+  recordButton.addEventListener('click', function(){
+    if (recordStart == true) {
+      recordStart = false;
+      startRecording();
+      recordButton.style.color = "red";
+    } else {
+      recordStart = true;
+      stopRecording();
+      downloadButton.disabled = false;
+      recordButton.style.color = "white";
+    }
+  });
+}
+
+const downloadButton = document.querySelector('button#download');
+downloadButton.addEventListener('click', () => {
+  const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = 'test.webm';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+});
+
+function handleDataAvailable(event) {
+  console.log('handleDataAvailable', event);
+  if (event.data && event.data.size > 0) {
+    recordedBlobs.push(event.data);
+  }
+}
+
+function download() {
+  var blob = new Blob(recordedChunks, {
+    type: "video/webm"
+  });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  document.body.appendChild(a);
+  a.style = "display: none";
+  a.href = url;
+  a.download = "test.webm";
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+function startRecording() {
+  recordedBlobs = [];
+  var canvas = document.querySelector("video");
+  // Optional frames per second argument.
+  var stream = canvas.captureStream(25);
+  var recordedChunks = [];
+
+  console.log(stream);
+  var options = { mimeType: "video/webm; codecs=vp9" };
+  if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+    console.error(`${options.mimeType} is not supported`);
+    options = { mimeType: 'video/webm;codecs=vp8,opus' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      console.error(`${options.mimeType} is not supported`);
+      options = { mimeType: 'video/webm' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.error(`${options.mimeType} is not supported`);
+        options = { mimeType: '' };
+      }
+    }
+  }
+
+  try {
+    mediaRecorder = new MediaRecorder(stream, options);
+  } catch (e) {
+    console.error('Exception while creating MediaRecorder:', e);
+    errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+    return;
+  }
+
+  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+ // downloadButton.disabled = true;
+  mediaRecorder.onstop = (event) => {
+    console.log('Recorder stopped: ', event);
+    console.log('Recorded Blobs: ', recordedBlobs);
+  };
+  mediaRecorder.ondataavailable = handleDataAvailable;
+  mediaRecorder.start();
+  console.log('MediaRecorder started', mediaRecorder);
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
 }

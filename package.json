@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/shanet/WebRTC-Example#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "ws": "^3.3.2"
   }
 }

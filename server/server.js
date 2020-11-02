@@ -1,12 +1,49 @@
 const HTTPS_PORT = 8443; //default port for https is 443
 const HTTP_PORT = 8001; //default port for http is 80
 
+const express = require('express');
+const app = express();
+//const router = express.Router();
+const path = require("path");
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+//const url = requries('url');
 const WebSocket = require('ws');
 // based on examples at https://www.npmjs.com/package/ws 
 const WebSocketServer = WebSocket.Server;
+
+const hostname = '3.35.207.229';
+
+
+app.get('/', function(req,res){
+  res.sendFile(path.join(__dirname, "../client/login.html"));
+})
+
+app.get('/index', function(req,res){
+    console.log('request received: ' + req.url);
+
+    res.set('Content-Type', 'text/html');
+    res.sendFile(path.join(__dirname, "../client/index.html"));
+  
+})
+
+app.get('/style.css', function(req,res){
+  console.log('request received: ' + req.url);
+
+    res.set('Content-Type', 'text/css');
+    res.sendFile(path.join(__dirname, "../client/style.css"));
+
+})
+
+app.get('/webrtc.js', function(req,res){
+  console.log('request received: ' + req.url);
+
+    res.set('Content-Type', 'application/javascript');
+    res.sendFile(path.join(__dirname, "../client/webrtc.js"));
+
+})
+
 
 // Yes, TLS is required
 const serverConfig = {
@@ -33,7 +70,8 @@ const handleRequest = function (request, response) {
   }
 };
 
-const httpsServer = https.createServer(serverConfig, handleRequest);
+
+const httpsServer = http.createServer(serverConfig, app);
 httpsServer.listen(HTTPS_PORT);
 
 // ----------------------------------------------------------------------------------------
