@@ -34,6 +34,6 @@ http://localhost:8443
 
 
 * * *
-*현재 Streaming server 미적용을 local 환경에서만 실행 가능*
+*현재 Streaming server 미적용을 local 환경에서만 실행 가능*   
 *차 후 빠른시일내 Kurento를 이용한 미디어 서버 구축을 완료 할 예정* 
 
