@@ -15,5 +15,9 @@ npm start
 
 
 웹 페이지에서 
-https://localhost:8443/
+http://localhost:8443/
 입력 후 실행
+
+////////////////////////////////////////////////////////////
+현재 Streaming server 미적용을 local 환경에서만 실행 가능
+
