@@ -330,6 +330,23 @@ function init() {
   });
 }
 
+function getDateFormat(date, delimiter) { //날짜 구하기 > filename
+  var newDate = new Date();
+  if (date != null) newDate = date;
+
+  var yy = newDate.getFullYear();
+  var mm = newDate.getMonth() + 1;
+  if (mm < 10) mm = "0" + mm;
+
+  var dd = newDate.getDate();
+  if (dd < 10) dd = "0" + dd;
+
+  if (delimiter == null) delimiter = "";
+  return yy + delimiter + mm + delimiter + dd;
+}
+
+
+
 const downloadButton = document.querySelector('button#download');
 downloadButton.addEventListener('click', () => {
   const blob = new Blob(recordedBlobs, { type: 'video/webm' });
@@ -337,7 +354,9 @@ downloadButton.addEventListener('click', () => {
   const a = document.createElement('a');
   a.style.display = 'none';
   a.href = url;
-  a.download = 'test.webm';
+  file_name = getDateFormat(new Date());
+  file_name.concat(".webm");
+  a.download = file_name;
   document.body.appendChild(a);
   a.click();
   setTimeout(() => {
