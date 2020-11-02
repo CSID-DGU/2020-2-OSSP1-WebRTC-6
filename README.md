@@ -23,7 +23,6 @@ master branch 기준
 ~~~
 git clone develop https://github.com/CSID-DGU/2020-2-OSSP1-WebRTC-6.git   
 cd 2020-2-OSSP1-WebRTC-6.git   
-npm install express --save   
 npm start
 ~~~
 
