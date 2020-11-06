@@ -489,8 +489,17 @@ function errorMsg(msg, error) {
 
 const screenshare = document.getElementById('screenshare');
 screenshare.addEventListener('click', () => {
-  navigator.mediaDevices.getDisplayMedia({ video: true })
+  var screenStream=navigator.mediaDevices.getDisplayMedia({ video: true })
     .then(handleSuccess, handleError);
+
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(screenStream.getVideoTracks()[0]);
+
+  arrPeers.forEach(function (element) {
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
+
+  
 });
 
 if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
