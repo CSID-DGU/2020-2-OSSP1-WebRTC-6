@@ -5,12 +5,6 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
-var done = {};
-var canvasStream = document.getElementById('canvas').captureStream(30);
-var tempStream;
-var arrPeers = new Array;
-
-var tempPeer;
 
 var peerConnectionConfig = {
   'iceServers': [
@@ -20,33 +14,33 @@ var peerConnectionConfig = {
 };
 
 function start() {
-
   localUuid = createUUID();
+
   // check if "&displayName=xxx" is appended to URL, otherwise alert user to populate
   var urlParams = new URLSearchParams(window.location.search);
   localDisplayName = urlParams.get('displayName') || prompt('Enter your name', '');
   document.getElementById('localVideoContainer').appendChild(makeLabel(localDisplayName));
-  
+
+  // specify no audio for user media
   var constraints = {
     video: {
       width: {max: 320},
       height: {max: 240},
       frameRate: {max: 30},
     },
-    audio: true,
+    audio: false,
   };
+
   // set up local video stream
   if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
-        tempStream = stream.getVideoTracks()[0];
         localStream = stream;
         document.getElementById('localVideo').srcObject = stream;
       }).catch(errorHandler)
 
       // set up websocket and message all existing clients
       .then(() => {
-        done[localUuid] = false;
         serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
         serverConnection.onmessage = gotMessageFromServer;
         serverConnection.onopen = event => {
@@ -68,14 +62,13 @@ function gotMessageFromServer(message) {
 
   if (signal.displayName && signal.dest == 'all') {
     // set up peer connection object for a newcomer peer
-    arrPeers.push(peerUuid);
     setUpPeer(peerUuid, signal.displayName);
     serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': peerUuid }));
 
   } else if (signal.displayName && signal.dest == localUuid) {
     // initiate call if we are the newcomer peer
     setUpPeer(peerUuid, signal.displayName, true);
-    arrPeers.push(peerUuid);
+
   } else if (signal.sdp) {
     peerConnections[peerUuid].pc.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function () {
       // Only create answers in response to offers
@@ -95,7 +88,7 @@ function setUpPeer(peerUuid, displayName, initCall = false) {
   peerConnections[peerUuid].pc.ontrack = event => gotRemoteStream(event, peerUuid);
   peerConnections[peerUuid].pc.oniceconnectionstatechange = event => checkPeerDisconnect(event, peerUuid);
   peerConnections[peerUuid].pc.addStream(localStream);
-  tempPeer = peerUuid;
+
   if (initCall) {
     peerConnections[peerUuid].pc.createOffer().then(description => createdDescription(description, peerUuid)).catch(errorHandler);
   }
@@ -115,8 +108,6 @@ function createdDescription(description, peerUuid) {
 }
 
 function gotRemoteStream(event, peerUuid) {
-  if(done[peerUuid] == true) { return; }  //한번 읽어온 미디어는 다시 읽지 않음
-
   console.log(`got remote stream, peer ${peerUuid}`);
   //assign stream to new HTML video element
   var vidElement = document.createElement('video');
@@ -133,8 +124,6 @@ function gotRemoteStream(event, peerUuid) {
   document.getElementById('videos').appendChild(vidContainer);
 
   updateLayout();
-  
-  done[peerUuid] = true;
 }
 
 function checkPeerDisconnect(event, peerUuid) {
@@ -144,12 +133,6 @@ function checkPeerDisconnect(event, peerUuid) {
     delete peerConnections[peerUuid];
     document.getElementById('videos').removeChild(document.getElementById('remoteVideo_' + peerUuid));
     updateLayout();
-    //디스커넥트된 유저id 배열에서도 삭제
-    for(var i = 0; i < arrPeers.length; i++) {
-      if(peerUuid == arrPeers[i]) {
-        arrPeers.splice(i, 1);
-      }
-    }
   }
 }
 
@@ -191,252 +174,4 @@ function createUUID() {
   }
 
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
-
-//마이크,카메라 on/off 기능
-function micOnOff(element) {
-  if(localStream.getAudioTracks()[0].enabled) {
-    localStream.getAudioTracks()[0].enabled = false
-    document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
-  }
-  else {
-    localStream.getAudioTracks()[0].enabled = true;
-    document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
-  }
-}
-
-function cameraOnOff(element) {
-  if(localStream.getVideoTracks()[0].enabled) {
-    localStream.getVideoTracks()[0].enabled = false;
-    document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
-  }
-  else {
-    localStream.getVideoTracks()[0].enabled = true;
-    document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
-  }
-}
-
-//화이트보드 기능
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const range = document.getElementById("jsRange");
-const mode = document.getElementById("jsMode");
-const erase = document.getElementById("jsErase");
-const redpen = document.getElementById("redpen");
-const reset = document.getElementById("reset");
-
-canvas.width = 1100;
-canvas.height = 800;
-
-ctx.fillStyle = "white";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-ctx.strokeStyle = "#2c2c2c";
-ctx.lineWidth = 2.5;
-
-let painting = false;
-let filling = false;
-
-stopPainting = () => {
-  painting = false;
-};
-
-onMouseMove = e => {
-  const x = e.offsetX;
-  const y = e.offsetY;
-  if (!painting) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  } else {
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  }
-};
-
-startPainting = () => {
-  painting = true;
-};
-handleCanvasClick = () => {
-};
-handleCM = e => {
-  e.preventDefault();
-};
-
-if (canvas) {
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
-  canvas.addEventListener("mouseup", stopPainting);
-  canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", handleCanvasClick);
-  canvas.addEventListener("contextmenu", handleCM);
-}
-
-handleRangeChange = e => {
-  const brushWidth = e.target.value;
-  ctx.lineWidth = brushWidth;
-};
-
-if (range) {
-  range.addEventListener("input", handleRangeChange);
-}
-
-//Paint 클릭 시
-handleModeClick = e => {
-  painting = false;
-  ctx.strokeStyle = "#2c2c2c";
-  filling = false;
-};
-//Erase 클릭 시
-handleEraseClick = e => {
-  painting = false;
-  ctx.strokeStyle = "white";
-  filling = false;
-};
-//Redpen 클릭 시
-handleRedPen = e => {
-  painting = false;
-  ctx.strokeStyle = "red";
-  filling = false;
-}
-//Reset 클릭 시
-handleReset = e => {
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-if (mode) {
-  mode.addEventListener("click", handleModeClick);
-}
-if (erase) {
-  erase.addEventListener("click", handleEraseClick);
-}
-if (redpen) {
-  redpen.addEventListener("click", handleRedPen);
-}
-if (reset) {
-  reset.addEventListener("click", handleReset);
-}
-
-function showWhiteBoard() {                                           //화이트보드
-  document.getElementById("whiteBoard").style.display = 'block';
-  
-  localStream.removeTrack(localStream.getVideoTracks()[0]);
-  localStream.addTrack(canvasStream.getVideoTracks()[0]);
-
-  arrPeers.forEach(function(element) { 
-    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  });
-}
-
-function hideWhiteBoard() {
-  document.getElementById("whiteBoard").style.display = 'none';
-
-  localStream.removeTrack(localStream.getVideoTracks()[0]);
-  localStream.addTrack(tempStream);
-
-  arrPeers.forEach(function(element) { 
-    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  });
-}
-
-
-//녹화 기능
-let recordedBlobs;
-var recordStart = true;
-const recordButton = document.getElementById("record");
-function init() {
-  recordButton.addEventListener('click', function(){
-    if (recordStart == true) {
-      recordStart = false;
-      startRecording();
-      recordButton.style.color = "red";
-    } else {
-      recordStart = true;
-      stopRecording();
-      downloadButton.disabled = false;
-      recordButton.style.color = "white";
-    }
-  });
-}
-
-const downloadButton = document.querySelector('button#download');
-downloadButton.addEventListener('click', () => {
-  const blob = new Blob(recordedBlobs, { type: 'video/webm' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = url;
-  a.download = 'test.webm';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => {
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }, 100);
-});
-
-function handleDataAvailable(event) {
-  console.log('handleDataAvailable', event);
-  if (event.data && event.data.size > 0) {
-    recordedBlobs.push(event.data);
-  }
-}
-
-function download() {
-  var blob = new Blob(recordedChunks, {
-    type: "video/webm"
-  });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-  a.href = url;
-  a.download = "test.webm";
-  a.click();
-  window.URL.revokeObjectURL(url);
-}
-
-function startRecording() {
-  recordedBlobs = [];
-  var canvas = document.querySelector("video");
-  // Optional frames per second argument.
-  var stream = canvas.captureStream(25);
-  var recordedChunks = [];
-
-  console.log(stream);
-  var options = { mimeType: "video/webm; codecs=vp9" };
-  if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-    console.error(`${options.mimeType} is not supported`);
-    options = { mimeType: 'video/webm;codecs=vp8,opus' };
-    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      console.error(`${options.mimeType} is not supported`);
-      options = { mimeType: 'video/webm' };
-      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.error(`${options.mimeType} is not supported`);
-        options = { mimeType: '' };
-      }
-    }
-  }
-
-  try {
-    mediaRecorder = new MediaRecorder(stream, options);
-  } catch (e) {
-    console.error('Exception while creating MediaRecorder:', e);
-    errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
-    return;
-  }
-
-  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
- // downloadButton.disabled = true;
-  mediaRecorder.onstop = (event) => {
-    console.log('Recorder stopped: ', event);
-    console.log('Recorded Blobs: ', recordedBlobs);
-  };
-  mediaRecorder.ondataavailable = handleDataAvailable;
-  mediaRecorder.start();
-  console.log('MediaRecorder started', mediaRecorder);
-}
-
-function stopRecording() {
-  mediaRecorder.stop();
 }
