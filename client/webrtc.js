@@ -10,6 +10,7 @@ var peerConnections = {}; // key is uuid, values are peer connection object and 
 var done = {};
 var canvasStream = document.getElementById('canvas').captureStream(30);
 var tempStream;
+var screenStream;
 var arrPeers = new Array;
 
 var peerConnectionConfig = {
@@ -462,16 +463,27 @@ function stopRecording() {
 }
 
 //화면공유(개발중)
-function handleSuccess(stream) {
+function handleSuccess(screenStream) {
   screenshare.disabled = true;
-  const video = document.querySelector('video');
-  video.srcObject = stream;
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(screenStream.getVideoTracks()[0]);
+
+  arrPeers.forEach(function (element) {
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
 
   // demonstrates how to detect that the user has stopped
   // sharing the screen via the browser UI.
-  stream.getVideoTracks()[0].addEventListener('ended', () => {
-    errorMsg('The user has ended sharing the screen');
-    startButton.disabled = false;
+  screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+    localStream.removeTrack(localStream.getVideoTracks()[0]);
+    localStream.addTrack(tempStream);
+
+    arrPeers.forEach(function (element) {
+      peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+    });
+    
+    //errorMsg('The user has ended sharing the screen');
+    screenshare.disabled = false;
   });
 }
 
@@ -489,18 +501,10 @@ function errorMsg(msg, error) {
 
 const screenshare = document.getElementById('screenshare');
 screenshare.addEventListener('click', () => {
-  var screenStream=navigator.mediaDevices.getDisplayMedia({ video: true })
+  navigator.mediaDevices.getDisplayMedia({ video: true })
     .then(handleSuccess, handleError);
 
-  localStream.removeTrack(localStream.getVideoTracks()[0]);
-  localStream.addTrack(screenStream.getVideoTracks()[0]);
-
-  arrPeers.forEach(function (element) {
-    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
   });
-
-  
-});
 
 if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
   screenshare.disabled = false;
