@@ -226,10 +226,9 @@ const erase = document.getElementById("jsErase");
 const redpen = document.getElementById("redpen");
 const reset = document.getElementById("reset");
 
-//canvas.width = 1100;
-//canvas.height = 800;
-canvas.width = 300;
-canvas.height= 200;
+canvas.width = 1100;
+canvas.height = 800;
+
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
