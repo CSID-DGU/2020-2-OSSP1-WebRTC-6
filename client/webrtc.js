@@ -41,6 +41,7 @@ function start() {
   if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
+        tempStream = stream.getVideoTracks()[0];
         localStream = stream;
         document.getElementById('localVideo').srcObject = stream;
       }).catch(errorHandler)
@@ -243,7 +244,6 @@ stopPainting = () => {
 };
 
 onMouseMove = e => {
-  console.log(e);
   const x = e.offsetX;
   const y = e.offsetY;
   if (!painting) {
