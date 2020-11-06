@@ -1,12 +1,16 @@
 const WS_PORT = 8443; //make sure this matches the port for the webscokets server
 
-'use strict';
-
 var localUuid;
 var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
+var done = {};
+var canvasStream = document.getElementById('canvas').captureStream(30);
+var tempStream;
+var arrPeers = new Array;
+
+var tempPeer;
 
 var peerConnectionConfig = {
   'iceServers': [
@@ -16,14 +20,13 @@ var peerConnectionConfig = {
 };
 
 function start() {
-  localUuid = createUUID();
 
+  localUuid = createUUID();
   // check if "&displayName=xxx" is appended to URL, otherwise alert user to populate
   var urlParams = new URLSearchParams(window.location.search);
   localDisplayName = urlParams.get('displayName') || prompt('Enter your name', '');
   document.getElementById('localVideoContainer').appendChild(makeLabel(localDisplayName));
-
-  // specify no audio for user media
+  
   var constraints = {
     video: {
       width: {max: 320},
@@ -32,17 +35,18 @@ function start() {
     },
     audio: true,
   };
-
   // set up local video stream
   if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
+        tempStream = stream.getVideoTracks()[0];
         localStream = stream;
         document.getElementById('localVideo').srcObject = stream;
       }).catch(errorHandler)
 
       // set up websocket and message all existing clients
       .then(() => {
+        done[localUuid] = false;
         serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
         serverConnection.onmessage = gotMessageFromServer;
         serverConnection.onopen = event => {
@@ -64,13 +68,14 @@ function gotMessageFromServer(message) {
 
   if (signal.displayName && signal.dest == 'all') {
     // set up peer connection object for a newcomer peer
+    arrPeers.push(peerUuid);
     setUpPeer(peerUuid, signal.displayName);
     serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': peerUuid }));
 
   } else if (signal.displayName && signal.dest == localUuid) {
     // initiate call if we are the newcomer peer
     setUpPeer(peerUuid, signal.displayName, true);
-
+    arrPeers.push(peerUuid);
   } else if (signal.sdp) {
     peerConnections[peerUuid].pc.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function () {
       // Only create answers in response to offers
@@ -90,7 +95,7 @@ function setUpPeer(peerUuid, displayName, initCall = false) {
   peerConnections[peerUuid].pc.ontrack = event => gotRemoteStream(event, peerUuid);
   peerConnections[peerUuid].pc.oniceconnectionstatechange = event => checkPeerDisconnect(event, peerUuid);
   peerConnections[peerUuid].pc.addStream(localStream);
-
+  tempPeer = peerUuid;
   if (initCall) {
     peerConnections[peerUuid].pc.createOffer().then(description => createdDescription(description, peerUuid)).catch(errorHandler);
   }
@@ -110,6 +115,8 @@ function createdDescription(description, peerUuid) {
 }
 
 function gotRemoteStream(event, peerUuid) {
+  if(done[peerUuid] == true) { return; }  //한번 읽어온 미디어는 다시 읽지 않음
+
   console.log(`got remote stream, peer ${peerUuid}`);
   //assign stream to new HTML video element
   var vidElement = document.createElement('video');
@@ -126,6 +133,8 @@ function gotRemoteStream(event, peerUuid) {
   document.getElementById('videos').appendChild(vidContainer);
 
   updateLayout();
+  
+  done[peerUuid] = true;
 }
 
 function checkPeerDisconnect(event, peerUuid) {
@@ -135,6 +144,12 @@ function checkPeerDisconnect(event, peerUuid) {
     delete peerConnections[peerUuid];
     document.getElementById('videos').removeChild(document.getElementById('remoteVideo_' + peerUuid));
     updateLayout();
+    //디스커넥트된 유저id 배열에서도 삭제
+    for(var i = 0; i < arrPeers.length; i++) {
+      if(peerUuid == arrPeers[i]) {
+        arrPeers.splice(i, 1);
+      }
+    }
   }
 }
 
@@ -211,8 +226,10 @@ const erase = document.getElementById("jsErase");
 const redpen = document.getElementById("redpen");
 const reset = document.getElementById("reset");
 
-canvas.width = 1100;
-canvas.height = 800;
+//canvas.width = 1100;
+//canvas.height = 800;
+canvas.width = 300;
+canvas.height= 200;
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -227,7 +244,6 @@ stopPainting = () => {
 };
 
 onMouseMove = e => {
-  console.log(e);
   const x = e.offsetX;
   const y = e.offsetY;
   if (!painting) {
@@ -302,12 +318,26 @@ if (reset) {
   reset.addEventListener("click", handleReset);
 }
 
-function showWhiteBoard() {
+function showWhiteBoard() {                                           //화이트보드
   document.getElementById("whiteBoard").style.display = 'block';
+  
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(canvasStream.getVideoTracks()[0]);
+
+  arrPeers.forEach(function(element) { 
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
 }
 
 function hideWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'none';
+
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(tempStream);
+
+  arrPeers.forEach(function(element) { 
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
 }
 
 
