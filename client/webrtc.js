@@ -43,7 +43,7 @@ function start() {
 
       // set up websocket and message all existing clients
       .then(() => {
-        serverConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+        serverConnection = new WebSocket('ws://' + window.location.hostname + ':' + WS_PORT);
         serverConnection.onmessage = gotMessageFromServer;
         serverConnection.onopen = event => {
           serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': 'all' }));
@@ -429,4 +429,42 @@ function startRecording() {
 
 function stopRecording() {
   mediaRecorder.stop();
+}
+
+//화면공유(개발중)
+function handleSuccess(stream) {
+  screenshare.disabled = true;
+  const video = document.querySelector('video');
+  video.srcObject = stream;
+
+  // demonstrates how to detect that the user has stopped
+  // sharing the screen via the browser UI.
+  stream.getVideoTracks()[0].addEventListener('ended', () => {
+    errorMsg('The user has ended sharing the screen');
+    startButton.disabled = false;
+  });
+}
+
+function handleError(error) {
+  errorMsg(`getDisplayMedia error: ${error.name}`, error);
+}
+
+function errorMsg(msg, error) {
+  const errorElement = document.querySelector('#errorMsg');
+  errorElement.innerHTML += `<p>${msg}</p>`;
+  if (typeof error !== 'undefined') {
+    console.error(error);
+  }
+}
+
+const screenshare = document.getElementById('screenshare');
+screenshare.addEventListener('click', () => {
+  navigator.mediaDevices.getDisplayMedia({ video: true })
+    .then(handleSuccess, handleError);
+});
+
+if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
+  screenshare.disabled = false;
+} else {
+  errorMsg('getDisplayMedia is not supported');
 }

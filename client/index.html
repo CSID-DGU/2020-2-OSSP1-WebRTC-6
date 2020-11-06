@@ -9,20 +9,30 @@
 </head>
 
 <body onload='init()'>
-
+  <div class="navbar">
+    <button id="record" class="basicBtns"><i class="fas fa-record-vinyl"></i></button>
+    <!--녹화 시작/정지-->
+    <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button>
+    <!--다운로드-->
+    <button class="basicBtns" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button>
+    <!--마이크온오프-->
+    <button class="basicBtns" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button>
+    <!--카메라온오프-->
+    <button class="basicBtns" onclick="showWhiteBoard()"><i class="fas fa-palette fa-lg"></i></button>
+    <!--화이트보드-->
+    <button id="screenshare" class="basicBtns"><i class="fas fa-desktop"></i></button>
+  </div>
+  
+ <!--화면 녹화-->
   <div id="videos" class="videos">
     <div id="localVideoContainer" class="videoContainer">
-      <div class="navbar">
-        <button id="record" class="basicBtns"><i class="fas fa-record-vinyl"></i></button> <!--녹화 시작/정지-->
-        <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button> <!--다운로드-->
-        <button class="basicBtns" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button> <!--마이크온오프-->
-        <button class="basicBtns" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
-        <button class="basicBtns" onclick="showWhiteBoard()"><i class="fas fa-palette fa-lg"></i></button> <!--화이트보드-->
-      </div>
-
       <video id="localVideo" autoplay></video>
     </div>
     <!-- Remote videos get appended here -->
+  </div>
+
+  <div >
+    <video id="gum-local" autoplay playsinline muted></video>
   </div>
 
   <!--화이트보드-->
