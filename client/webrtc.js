@@ -7,6 +7,10 @@ var localDisplayName;
 var localStream;
 var serverConnection;
 var peerConnections = {}; // key is uuid, values are peer connection object and user defined display name string
+var done = {};
+var canvasStream = document.getElementById('canvas').captureStream(30);
+var tempStream;
+var arrPeers = new Array;
 
 var peerConnectionConfig = {
   'iceServers': [
@@ -64,11 +68,13 @@ function gotMessageFromServer(message) {
 
   if (signal.displayName && signal.dest == 'all') {
     // set up peer connection object for a newcomer peer
+    arrPeers.push(peerUuid);
     setUpPeer(peerUuid, signal.displayName);
     serverConnection.send(JSON.stringify({ 'displayName': localDisplayName, 'uuid': localUuid, 'dest': peerUuid }));
 
   } else if (signal.displayName && signal.dest == localUuid) {
     // initiate call if we are the newcomer peer
+    arrPeers.push(peerUuid);
     setUpPeer(peerUuid, signal.displayName, true);
 
   } else if (signal.sdp) {
@@ -110,6 +116,8 @@ function createdDescription(description, peerUuid) {
 }
 
 function gotRemoteStream(event, peerUuid) {
+  if(done[peerUuid] == true) { return; }  //한번 읽어온 미디어는 다시 읽지 않음
+  
   console.log(`got remote stream, peer ${peerUuid}`);
   //assign stream to new HTML video element
   var vidElement = document.createElement('video');
@@ -126,6 +134,8 @@ function gotRemoteStream(event, peerUuid) {
   document.getElementById('videos').appendChild(vidContainer);
 
   updateLayout();
+  
+  done[peerUuid] = true;
 }
 
 function checkPeerDisconnect(event, peerUuid) {
@@ -135,6 +145,12 @@ function checkPeerDisconnect(event, peerUuid) {
     delete peerConnections[peerUuid];
     document.getElementById('videos').removeChild(document.getElementById('remoteVideo_' + peerUuid));
     updateLayout();
+    
+    for(var i = 0; i < arrPeers.length; i++) {
+      if(peerUuid == arrPeers[i]) {
+        arrPeers.splice(i, 1);
+      }
+    }
   }
 }
 
@@ -304,10 +320,24 @@ if (reset) {
 
 function showWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'block';
+  
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(canvasStream.getVideoTracks()[0]);
+
+  arrPeers.forEach(function(element) { 
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
 }
 
 function hideWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'none';
+  
+  localStream.removeTrack(localStream.getVideoTracks()[0]);
+  localStream.addTrack(tempStream);
+
+  arrPeers.forEach(function(element) { 
+    peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  });
 }
 
 
