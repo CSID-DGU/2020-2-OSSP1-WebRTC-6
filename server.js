@@ -36,7 +36,7 @@ io.sockets.on("connection",socket=>{
 })
 
 // Listening port
-server.listen(port,()=>{
+server.listen(port,'0.0.0.0',()=>{
     console.log(`Server opening at PORT : ${port}`);
 })
 
