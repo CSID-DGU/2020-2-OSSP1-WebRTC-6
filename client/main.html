@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+   
+
+    <div class="slider">
+        <h1>WebRTC 화상회의</h1>
+        <h2>미팅 룸 목록</h2>
+        <form id="form"> 
+            <input type="search" id="query" name="q" placeholder="미팅룸검색">
+            <button>Search</button>
+        </form>
+        <p></p>
+
+        <div class="slides">
+            <div class="column">
+            <div class="card" id="slide-1">
+                <img src="img1.jpg" alt="Jane" style="width:50%" >
+                <div class="container">
+                <h2>손윤식</h2>
+                <p class="title">공개 SW 프로젝트</p>
+                <p>공개 SoftWare 프로젝트 화상회의 미팅 룸 입니다.</p>
+                <p>미팅시간 : 12:00 ~ 15:00</p>
+                <p><button class="button">화상회의 참여</button></p>
+                </div>
+            </div>
+            </div>
+        
+            <div class="column">
+            <div class="card">
+                <img src="img1.jpg" alt="Mike" style="width:50%">
+                <div class="container" id="slide-2">
+                <h2>장태무</h2>
+                <p class="title">컴퓨터구조</p>
+                <p>동국대학교 컴퓨터 구조 화상회의 입니다.</p>
+                <p>미팅시간 : 12:00 ~ 16:00</p>
+                <p><button class="button">화상회의 참여</button></p>
+                </div>
+            </div>
+            </div>
+        
+            <div class="column">
+            <div class="card">
+                <img src="img1.jpg" alt="John" style="width:50%">
+                <div class="container" id="slide-3">
+                <h2>엄준식</h2>
+                <p class="title">컴파일러 구성</p>
+                <p>컴파일러 구성 수업</p>
+                <p>미팅시간 : 13:00 ~ 15:00</p>
+                <p><button class="button">화상회의 참여</button></p>
+                </div>
+            </div>
+            </div>
+        </div>
+        <br><br>
+        <!-- <button class="button2" onlclick ="test()">화상회의 생성</button> -->
+        <input class="button2" type="button" value = "화상회의 생성" onclick="pop()">
+        <script type="text/javascript">
+            function pop(){
+                var name = prompt("강의명을 입력해주세요");
+                var description = prompt("강의에 대한 간단한 설명을 입력해주세요");
+                var time = prompt("강의 진행 시간을 입력해주세요");
+                var check = confirm("강의명 : " + name + "\n강의 진행 시간 : " + time + "\n강의 정보 : " + description + "\n가 맞습니까?");
+                if(check){
+                    pagemove();
+                }
+                else{
+                    alert("다시 시도해주세요");
+                }
+            }
+            function pagemove(){
+                location.href = "/index";
+            }
+        </script>
+    </div>
+</body>
+
+</html>
