@@ -3,6 +3,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Please Login</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
     <style type="text/css">
@@ -14,8 +16,12 @@
         }
         .font_02{
             font-family: 'Nanum Gothic Coding', monospace;
-            font-size:30px;
+            font-size:20px;
             font-weight:medium;
+        }
+        #box1{
+            background-color: #E2E2E2;
+            padding-left:850px;
         }
     </style>
     <meta charset="utf-8" />
@@ -31,9 +37,11 @@
         <img src="https://www.flaticon.com/svg/static/icons/svg/1436/1436733.svg" width=200px; height=200px;><br>
         WebRTC 화상회의<br>
         가짜프로그래머<br>
-
     </div>
-    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+
+    <!-- GOOGLE LOGIN -->
+
+    <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
 
     <script>
         function onSignIn(googleUser) {
@@ -50,17 +58,28 @@
             var id_token = googleUser.getAuthResponse().id_token;
             console.log("ID Token: " + id_token);
         };
-    </script>
+    </script> -->
         <div class="font_02">
+            <table bordercolor="white"> 
+                <tr>
+                    <td rowspan="3"><img src="https://cdn.pixabay.com/photo/2016/12/18/12/49/cyber-security-1915628_960_720.png" width=50 height=50>
+                    <font size="10" color="#80B3FF">LOGIN&nbsp;</font></td>
+                    <td>id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type='text' name='id'></td>
+                </tr>
+                <tr>
+                    <td>password : <input type='password' name='password'><br></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="job" value="Professor">강사 <input type="radio" name="job" value="Student">학생</td>
+                </tr>
+            </table>
             <br>
-                Google ID로 손쉽게 로그인하세요.<br><br>
+            <!-- <br>
+                id &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<input type='text' name='id'><br>
+                password : <input type='password' name='password'><br><br>
+                 -->
         </div>
-        <input type="button" value = "미팅화면으로 이동" onclick="pagemove()">
-        <script type="text/javascript">
-            function pagemove(){
-                location.href = "/index";
-            }
-        </script>
+        
     </center>
 </body>
 </html>
