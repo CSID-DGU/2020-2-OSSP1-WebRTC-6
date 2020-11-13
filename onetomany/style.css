@@ -35,3 +35,31 @@ li {
     border-left: 1px solid rgb(189, 189, 189);
     padding: .5em;
 }
+
+
+.basicBtns{
+    background-color: #121212;
+    border: none;
+    width: 40px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 10px 4px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .navbar {
+    width: 50%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    background-color: #121212;
+    z-index: 1100;
+    position: relative;
+    opacity: 0.9;
+    border-radius: 7px;
+    text-align: center;
+    display: none;
+  }

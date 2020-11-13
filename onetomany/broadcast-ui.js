@@ -27,12 +27,12 @@ var config = {
     },
     onRemoteStream: function(media) {
         var video = media.video;
-        video.setAttribute('controls', true);
+        // video.setAttribute('controls', true);
 
         participants.insertBefore(video, participants.firstChild);
 
         video.play();
-        rotateVideo(video);
+        // rotateVideo(video);
     },
     onRoomFound: function(room) {
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -106,6 +106,8 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
+    var navbar = document.getElementsByClassName('navbar');
+    navbar[0].style.display = 'block';
 }
 
 function rotateVideo(video) {
