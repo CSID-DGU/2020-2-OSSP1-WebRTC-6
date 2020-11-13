@@ -376,8 +376,6 @@ function getDateFormat(date, delimiter) { //날짜 구하기 > filename
   return yy + delimiter + mm + delimiter + dd;
 }
 
-
-
 const downloadButton = document.querySelector('button#download');
 downloadButton.addEventListener('click', () => {
   const blob = new Blob(recordedBlobs, { type: 'video/webm' });
@@ -462,7 +460,7 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
-//화면공유(개발중)
+//화면공유
 function handleSuccess(screenStream) {
   screenshare.disabled = true;
   localStream.removeTrack(localStream.getVideoTracks()[0]);
