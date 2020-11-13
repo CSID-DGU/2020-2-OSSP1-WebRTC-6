@@ -4,11 +4,12 @@
 
 <head>
     <link rel="stylesheet" href="main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
    
-
     <div class="slider">
         <h1>WebRTC 화상회의</h1>
         <h2>미팅 룸 목록</h2>
@@ -19,6 +20,7 @@
         <p></p>
 
         <div class="slides">
+            
             <div class="column">
             <div class="card" id="slide-1">
                 <img src="img1.jpg" alt="Jane" style="width:50%" >
@@ -58,6 +60,7 @@
             </div>
             </div>
         </div>
+    
         <br><br>
         <!-- <button class="button2" onlclick ="test()">화상회의 생성</button> -->
         <input class="button2" type="button" value = "화상회의 생성" onclick="pop()">
@@ -66,17 +69,41 @@
                 var name = prompt("강의명을 입력해주세요");
                 var description = prompt("강의에 대한 간단한 설명을 입력해주세요");
                 var time = prompt("강의 진행 시간을 입력해주세요");
-                var check = confirm("강의명 : " + name + "\n강의 진행 시간 : " + time + "\n강의 정보 : " + description + "\n가 맞습니까?");
+                var check = confirm("강의명 : " + name + "\n강의 정보 : " + description + "\n강의 진행 시간 : " + time + "\n가 맞습니까?");
+                
+                var html = '<div class="column">' +
+                            '<div class="card">' +
+                                '<img src="img1.jpg" alt="java" style="width:50%">' +
+                                '<div class="container">' +
+                                    '<h2>손윤식</h2>' +
+                                    '<p class="title">'+name+'</p>' +
+                                    '<p>'+description+'</p>' +
+                                    '<p>미팅시간 : '+time+'</p>' +
+                                    '<p><button class="button">화상화의 참여</button></p>' +
+                                '</div>'+
+                            '</div>' +
+                            '</div>';
+                
                 if(check){
-                    pagemove();
+                    //pagemove();
+                    $('.slides').append(html); 
                 }
                 else{
                     alert("다시 시도해주세요");
                 }
             }
             function pagemove(){
-                location.href = "/index";
+                //location.href = "/index";
+                $("")
             }
+
+
+                $(document).ready(function(){
+                    $("button").on('click', function(e){
+                        e.preventDefault();
+                        $('.slides').append(html); 
+                    });
+                });
         </script>
     </div>
 </body>
