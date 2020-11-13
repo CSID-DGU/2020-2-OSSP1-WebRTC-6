@@ -71,7 +71,7 @@ function createButtonClickHandler() {
 function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
-    video.setAttribute('controls', true);
+    //video.setAttribute('controls', true); //재생버튼 및 재생시간
     participants.insertBefore(video, participants.firstChild);
 
     getUserMedia({
@@ -81,7 +81,7 @@ function captureUserMedia(callback) {
             callback && callback();
 
             video.setAttribute('muted', true);
-            rotateVideo(video);
+            //rotateVideo(video); 한바뀌 도는 넘 
         },
         onerror: function() {
             alert('unable to get access to your webcam.');
