@@ -1,4 +1,10 @@
+body{
+      background: black;
+      font-family:"Nanum Gothic",sans-serif;
+  }
+
 audio, video {
+    margin-top: 10px;
     -moz-transition: all 1s ease;
     -ms-transition: all 1s ease;
     
@@ -50,10 +56,24 @@ li {
   }
   
   .navbar {
-    width: 50%;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 550px;
+    left:50%; 
+    margin-top: -40px;
+    margin-left : -275px;
+    overflow: hidden;
+    background-color: #121212;
+    z-index: 1100;
+    position: relative;
+    opacity: 0.9;
+    border-radius: 7px;
+    text-align: center;
+    display: none;
+  }
+  
+.left_nav { 
+    width: fit-content;
+    margin-top : 10px;
+    margin-left : 10px;
     overflow: hidden;
     background-color: #121212;
     z-index: 1100;

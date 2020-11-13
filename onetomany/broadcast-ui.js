@@ -106,6 +106,8 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
+    var left_nav = document.getElementsByClassName('left_nav')
+    left_nav[0].style.display = 'block';
     var navbar = document.getElementsByClassName('navbar');
     navbar[0].style.display = 'block';
 }
@@ -120,6 +122,6 @@ function rotateVideo(video) {
 (function() {
     var uniqueToken = document.getElementById('unique-token');
     if (uniqueToken)
-        if (location.hash.length > 2) uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:center;"><a href="' + location.href + '" target="_blank">Share this link</a></h2>';
+        if (location.hash.length > 2) uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:right;font-size:12px"><a href="' + location.href + '" target="_blank">Share this link</a></h2>';
         else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace( /\./g , '-');
 })();

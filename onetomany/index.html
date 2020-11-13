@@ -13,6 +13,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
         <!-- <link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css"> -->
         <link href="/style.css" rel="stylesheet" />
         
@@ -24,13 +26,14 @@
 
     <body>
         <article>
-            <h1>가짜프로그래머 WebRTC 화상회의 테스트 UI</h1>
+            <h1 style="color:white;text-align:center">가짜프로그래머 WebRTC 화상회의 테스트 UI</h1>
             
             <!-- <div class="github-stargazers"></div> -->
 
             <table class="visible">
                 <tr>
                     <td style="text-align: right;">
+                        <tx style="color:white">creat new broadcast here</tx>
                         <input type="text" id="conference-name" placeholder="Broadcast Name">
                     </td>
                     <td>
@@ -38,7 +41,7 @@
                     </td>
                 </tr>
             </table>
-            <table id="rooms-list" class="visible"></table>
+            <table id="rooms-list" class="visible" style="color:white;"></table>
 
             <table class="visible">
                 <tr>
@@ -50,12 +53,18 @@
                 </tr>
             </table>
 
+            <div class="left_nav">
+                <button id="exit" class="basicBtns"><i class="fas fa-sign-out-alt"></i></button>
+                <button id="fullscreen" class="basicBtns"><i class="fas fa-expand"></i></i></button>
+            </div>
+
             <div class="navbar">
                 <button id="record" class="basicBtns"><i class="fas fa-record-vinyl"></i></button> <!--녹화 시작/정지-->
                 <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button> <!--다운로드-->
                 <button class="basicBtns" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button> <!--마이크온오프-->
                 <button class="basicBtns" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
                 <button class="basicBtns" onclick="showWhiteBoard()"><i class="fas fa-palette fa-lg"></i></button> <!--화이트보드-->
+                <button id="screenshare" class="basicBtns"><i class="fas fa-desktop"></i></button>
             </div>
 
             <div id="participants"></div>
