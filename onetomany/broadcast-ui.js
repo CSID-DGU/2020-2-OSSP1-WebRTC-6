@@ -109,7 +109,7 @@ function hideUnnecessaryStuff() {
         visibleElements[i].style.display = 'none';
     }
     var non_visual = document.getElementsByClassName('non-visual');
-    non_visual[0].style.display = 'block'; //hide peer-connection page factor
+    non_visual[0].style.display = 'block'; //hide peer connection page factor
 }
 
 function rotateVideo(video) {
