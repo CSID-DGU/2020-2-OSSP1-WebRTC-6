@@ -42,19 +42,43 @@ li {
     padding: .5em;
 }
 
+.non-visual{
+  display: none;
+}
 
-.basicBtns{
-    background-color: #121212;
-    border: none;
-    width: 40px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 15px;
-    margin: 10px 4px;
-    cursor: pointer;
-    color: white;
+  .wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(200px, auto);
   }
-  
+    .content{
+      grid-column: 1 / 3;
+      grid-row: 1 / 4 ;
+    }
+    .localvideo{
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .chat{
+      grid-column: 3;
+      grid-row: 2/4;
+      background-color: whitesmoke;
+      height: 200px;
+    }
+
+  .basicBtns{
+      background-color: #121212;
+      border: none;
+      width: 40px;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 15px;
+      margin: 10px 4px;
+      cursor: pointer;
+      color: white;
+    }
+    
   .navbar {
     width: 550px;
     left:50%; 
@@ -67,7 +91,6 @@ li {
     opacity: 0.9;
     border-radius: 7px;
     text-align: center;
-    display: none;
   }
   
 .left_nav { 
@@ -81,5 +104,4 @@ li {
     opacity: 0.9;
     border-radius: 7px;
     text-align: center;
-    display: none;
   }

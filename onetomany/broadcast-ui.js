@@ -32,7 +32,7 @@ var config = {
         participants.insertBefore(video, participants.firstChild);
 
         video.play();
-        // rotateVideo(video);
+        //rotateVideo(video);
     },
     onRoomFound: function(room) {
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -72,8 +72,9 @@ function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
     //video.setAttribute('controls', true); //재생버튼 및 재생시간
-    participants.insertBefore(video, participants.firstChild);
-
+    //participants.insertBefore(video, participants.firstChild);
+    localvideo.insertBefore(video, localvideo.firstChild); //insert video in localvideo tag 
+    
     getUserMedia({
         video: video,
         onsuccess: function(stream) {
@@ -94,6 +95,7 @@ function captureUserMedia(callback) {
 var broadcastUI = broadcast(config);
 
 /* UI specific */
+var localvideo = document.getElementById("localvideo") || document.body;
 var participants = document.getElementById("participants") || document.body;
 var startConferencing = document.getElementById('start-conferencing');
 var roomsList = document.getElementById('rooms-list');
@@ -106,10 +108,8 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
-    var left_nav = document.getElementsByClassName('left_nav')
-    left_nav[0].style.display = 'block';
-    var navbar = document.getElementsByClassName('navbar');
-    navbar[0].style.display = 'block';
+    var non_visual = document.getElementsByClassName('non-visual');
+    non_visual[0].style.display = 'block'; //hide peer-connection page factor
 }
 
 function rotateVideo(video) {
@@ -125,3 +125,5 @@ function rotateVideo(video) {
         if (location.hash.length > 2) uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:right;font-size:12px"><a href="' + location.href + '" target="_blank">Share this link</a></h2>';
         else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace( /\./g , '-');
 })();
+
+
