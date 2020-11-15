@@ -132,11 +132,11 @@ function updateLayout() {
     console.log(numVideos);
 
     if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
-         rowHeight = '48vh';
-        colWidth = '48vw';
+        rowHeight = '40vh';
+        colWidth = '30vw';
     } else if (numVideos > 4) { // 3x3 grid
-        rowHeight = '32vh';
-        colWidth = '32vw';
+        rowHeight = '30vh';
+        colWidth = '20vw';
     }
 
     document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
