@@ -1,14 +1,48 @@
 const express= require('express');
 const app= express();
 const http= require('http');
-const server= http.createServer(app);
+const https= require('https');
+const path = require('path');
+const fs = require('fs');
+const { nextTick } = require('process');
+
+const serverConfig = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+  };
+
+const server= https.createServer(serverConfig, app);
 const port= process.env.PORT || 8080;
 const io= require('socket.io')(server);
 
 let broadcaster;
 
+
 //access public folder
-app.use(express.static(__dirname+"/onetomany"));
+
+app.get('/', function(req,res){
+    res.sendFile(path.join(__dirname, "/onetomany/login.html"));
+  })
+  
+app.get('/index', function(req,res){
+  
+    res.set('Content-Type', 'text/html');
+    res.sendFile(path.join(__dirname, "/onetomany/index.html"));
+    
+})
+
+// app.get('/style.css', function(req,res){
+  
+//       res.set('Content-Type', 'text/css');
+//       res.sendFile(path.join(__dirname, "/onetomany/style.css"));
+//   })
+  
+// app.use(function(req,res,next){
+//     res.sendFile(path.join(__dirname, "/onetomany/login.html"));
+//     next();
+// });
+
+app.use(express.static(__dirname+"/onetomany/"));
 
 //For Public folder
 //Check socket.io connection
