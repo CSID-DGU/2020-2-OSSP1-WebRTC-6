@@ -1,4 +1,5 @@
-var peerConnections;
+var tempStream;
+var canvasStream = document.getElementById('canvas').captureStream(30);
 var config = {
     openSocket: function(config) {
         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
@@ -75,6 +76,7 @@ function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
     video.id="local-video";
+    video.muted = "true"; //본인 마이크 음소거
     //video.setAttribute('controls', true); //재생버튼 및 재생시간
     //participants.insertBefore(video, participants.firstChild);
     localvideo.insertBefore(video, localvideo.firstChild); //insert video in localvideo tag 
@@ -82,10 +84,9 @@ function captureUserMedia(callback) {
     getUserMedia({
         video: video,
         onsuccess: function(stream) {
+            tempStream = stream.getVideoTracks()[0];
             config.attachStream = stream;
             callback && callback();
-
-            video.setAttribute('muted', true);
             //rotateVideo(video); 한바뀌 도는 넘 
         },
         onerror: function() {
@@ -150,4 +151,148 @@ function updateLayout() {
         else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace( /\./g , '-');
 })();
 
+function micOnOff(element) {
+    if(config.attachStream.getAudioTracks()[0].enabled) {
+      config.attachStream.getAudioTracks()[0].enabled = false
+      document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
+    }
+    else {
+      config.attachStream.getAudioTracks()[0].enabled = true;
+      document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
+    }
+  }
+  
+  function cameraOnOff(element) {
+    if(config.attachStream.getVideoTracks()[0].enabled) {
+      config.attachStream.getVideoTracks()[0].enabled = false;
+      document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
+    }
+    else {
+      config.attachStream.getVideoTracks()[0].enabled = true;
+      document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
+    }
+  }
 
+
+//화이트보드 기능
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
+const erase = document.getElementById("jsErase");
+const redpen = document.getElementById("redpen");
+const reset = document.getElementById("reset");
+
+canvas.width = 1100;
+canvas.height = 800;
+//canvas.width = 300;
+//canvas.height = 200;
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.strokeStyle = "#2c2c2c";
+ctx.lineWidth = 2.5;
+
+let painting = false;
+let filling = false;
+
+stopPainting = () => {
+  painting = false;
+};
+
+onMouseMove = e => {
+  const x = e.offsetX;
+  const y = e.offsetY;
+  if (!painting) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  } else {
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+};
+
+startPainting = () => {
+  painting = true;
+};
+handleCanvasClick = () => {
+};
+handleCM = e => {
+  e.preventDefault();
+};
+
+if (canvas) {
+  canvas.addEventListener("mousemove", onMouseMove);
+  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mouseup", stopPainting);
+  canvas.addEventListener("mouseleave", stopPainting);
+  canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("contextmenu", handleCM);
+}
+
+handleRangeChange = e => {
+  const brushWidth = e.target.value;
+  ctx.lineWidth = brushWidth;
+};
+
+if (range) {
+  range.addEventListener("input", handleRangeChange);
+}
+
+//Paint 클릭 시
+handleModeClick = e => {
+  painting = false;
+  ctx.strokeStyle = "#2c2c2c";
+  filling = false;
+};
+//Erase 클릭 시
+handleEraseClick = e => {
+  painting = false;
+  ctx.strokeStyle = "white";
+  filling = false;
+};
+//Redpen 클릭 시
+handleRedPen = e => {
+  painting = false;
+  ctx.strokeStyle = "red";
+  filling = false;
+}
+//Reset 클릭 시
+handleReset = e => {
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+if (mode) {
+  mode.addEventListener("click", handleModeClick);
+}
+if (erase) {
+  erase.addEventListener("click", handleEraseClick);
+}
+if (redpen) {
+  redpen.addEventListener("click", handleRedPen);
+}
+if (reset) {
+  reset.addEventListener("click", handleReset);
+}
+
+function showWhiteBoard() {
+  document.getElementById("whiteBoard").style.display = 'block';
+  
+  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+  config.attachStream.addTrack(canvasStream.getVideoTracks()[0]);
+
+  //arrPeers.forEach(function(element) { 
+  //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  //});
+}
+
+function hideWhiteBoard() {
+  document.getElementById("whiteBoard").style.display = 'none';
+  
+  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+  config.attachStream.addTrack(tempStream);
+  
+  //arrPeers.forEach(function(element) { 
+  //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  //});
+}
