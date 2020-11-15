@@ -12,7 +12,7 @@ audio, video {
     -o-transition: all 1s ease;
     -webkit-transition: all 1s ease;
     transition: all 1s ease;
-    width: 50%;
+    width: 100%;
 }
 
 input {
@@ -47,8 +47,9 @@ li {
 
   .wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3,300px);
+    height: auto;
+    grid-template-columns: 1fr 1fr 400px;
+    grid-template-rows: 300px 300px 300px;
     grid-gap: 10px;
     grid-auto-rows: minmax(10px, auto);
   }
@@ -67,8 +68,30 @@ li {
       grid-row: 2 / 4 ;
       background: whitesmoke;
       text-align: center;
+      justify-items: center;
       font-size: large;
     }
+    .videos{
+      display: grid;
+      grid-gap: 5px;
+      grid-auto-flow: row;
+      
+      grid-template-columns: repeat(auto-fit, minmax(var(--colWidth), 1fr)) ;
+    }
+
+    #peer-video{
+      position: relative;
+      overflow: hidden;
+      max-height: var(--rowHeight);
+      max-width: var(--colWidth);
+    }
+
+    #local-video{
+      width: 400px;
+      height: 300px;
+    }
+
+    
 
   .basicBtns{
       background-color: #121212;

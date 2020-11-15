@@ -1,3 +1,4 @@
+var peerConnections;
 var config = {
     openSocket: function(config) {
         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
@@ -28,8 +29,10 @@ var config = {
     onRemoteStream: function(media) {
         var video = media.video;
         // video.setAttribute('controls', true);
+        video.id="peer-video";
 
         participants.insertBefore(video, participants.firstChild);
+        updateLayout();
 
         video.play();
         //rotateVideo(video);
@@ -71,6 +74,7 @@ function createButtonClickHandler() {
 function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
+    video.id="local-video";
     //video.setAttribute('controls', true); //재생버튼 및 재생시간
     //participants.insertBefore(video, participants.firstChild);
     localvideo.insertBefore(video, localvideo.firstChild); //insert video in localvideo tag 
@@ -117,6 +121,26 @@ function rotateVideo(video) {
     setTimeout(function() {
         video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
     }, 1000);
+}
+
+function updateLayout() {
+    // update CSS grid based on number of diplayed videos
+    var rowHeight = '-webkit-fill-available';
+    var colWidth = '-webkit-fill-available';
+
+    var numVideos = document.getElementById("participants").childElementCount;
+    console.log(numVideos);
+
+    if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
+         rowHeight = '48vh';
+        colWidth = '48vw';
+    } else if (numVideos > 4) { // 3x3 grid
+        rowHeight = '32vh';
+        colWidth = '32vw';
+    }
+
+    document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
+    document.documentElement.style.setProperty(`--colWidth`, colWidth);
 }
 
 (function() {
