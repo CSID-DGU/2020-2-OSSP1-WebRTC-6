@@ -10,7 +10,7 @@ var fs = require('fs');
 
 var argv = minimist(process.argv.slice(2), {
     default: {
-        as_uri: 'https://localhost:8443/',
+        as_uri: 'https://localhost:8080/',
         ws_uri: 'ws://localhost:8888/kurento'
     }
 });
@@ -38,6 +38,17 @@ function nextUniqueId() {
 	idCounter++;
 	return idCounter.toString();
 }
+
+app.get('/', function(req,res){
+	res.sendFile(path.join(__dirname, "/onetomany/login.html"));
+})
+
+app.get('/index', function(req,res){
+
+    res.set('Content-Type', 'text/html');
+    res.sendFile(path.join(__dirname, "/onetomany/index.html"));
+  
+})
 
 //access public folder
 app.use(express.static(__dirname+"/onetomany"));
