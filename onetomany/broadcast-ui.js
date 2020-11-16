@@ -80,9 +80,14 @@ function captureUserMedia(callback) {
     //video.setAttribute('controls', true); //재생버튼 및 재생시간
     //participants.insertBefore(video, participants.firstChild);
     localvideo.insertBefore(video, localvideo.firstChild); //insert video in localvideo tag 
-    
+
+    video_constraints = { 
+      width : { min:320, ideal : 640 },
+      height : { min:180, ideal :360 }
+    }
+
     getUserMedia({
-        video: video,
+        video : video,
         onsuccess: function(stream) {
             tempStream = stream.getVideoTracks()[0];
             config.attachStream = stream;
@@ -133,11 +138,11 @@ function updateLayout() {
     console.log(numVideos);
 
     if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
-        rowHeight = '40vh';
-        colWidth = '30vw';
+        rowHeight = '48vh';
+        colWidth = '38vw';
     } else if (numVideos > 4) { // 3x3 grid
         rowHeight = '30vh';
-        colWidth = '20vw';
+        colWidth = '22.6vw';
     }
 
     document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
