@@ -1,5 +1,7 @@
 var tempStream;
 var canvasStream = document.getElementById('canvas').captureStream(30);
+var capacity = 1;
+
 var config = {
     openSocket: function(config) {
         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
@@ -30,10 +32,11 @@ var config = {
     onRemoteStream: function(media) {
         var video = media.video;
         // video.setAttribute('controls', true);
-        video.id="peer-video";
+        video.id="peer_video";
+        video.setAttribute("onClick","clickevent_peer_video()");
 
         participants.insertBefore(video, participants.firstChild);
-        updateLayout();
+        //updateLayout();
 
         video.play();
         //rotateVideo(video);
@@ -64,11 +67,14 @@ var config = {
 };
 
 function createButtonClickHandler() {
+    capacity = document.getElementById('capacity').value;
+    capacity = Number(capacity);
     captureUserMedia(function() {
         broadcastUI.createRoom({
             roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
         });
     });
+    updateLayout(capacity);
     hideUnnecessaryStuff();
 }
 
@@ -106,6 +112,7 @@ var broadcastUI = broadcast(config);
 
 /* UI specific */
 var localvideo = document.getElementById("localvideo") || document.body;
+var peervideo = document.getElementById("peer_video") || document.body;
 var participants = document.getElementById("participants") || document.body;
 var startConferencing = document.getElementById('start-conferencing');
 var roomsList = document.getElementById('rooms-list');
@@ -129,24 +136,52 @@ function rotateVideo(video) {
     }, 1000);
 }
 
-function updateLayout() {
-    // update CSS grid based on number of diplayed videos
+function updateLayout(num) {
+  // update CSS grid based on number of diplayed videos
     var rowHeight = '-webkit-fill-available';
     var colWidth = '-webkit-fill-available';
+    var col_num = 1 ,row_num=1;
 
-    var numVideos = document.getElementById("participants").childElementCount;
-    console.log(numVideos);
+    // var numVideos = document.getElementById("participants").childElementCount;
+    // console.log(numVideos);
 
-    if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
-        rowHeight = '48vh';
-        colWidth = '38vw';
-    } else if (numVideos > 4) { // 3x3 grid
-        rowHeight = '30vh';
-        colWidth = '22.6vw';
+    // if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
+    //     rowHeight = '48vh';
+    //     colWidth = '38vw';
+    // } else if (numVideos > 4) { // 3x3 grid
+    //     rowHeight = '30vh';
+    //     colWidth = '22.6vw';
+    // }
+
+    if(num>1 && num<=4){
+      rowHeight = '1fr';
+      colWidth = '1fr';
+      col_num = '2';
+      row_num = '2';
+    }
+    else if (num > 4 && num <= 9) {
+    rowHeight = '1fr';
+    colWidth = '1fr';
+      col_num = '3';
+      row_num = '3';
+    }
+    else if (num >9 && num <= 16) {
+      rowHeight = '1fr'
+      colWidth = '1fr'
+      col_num = '4';
+      row_num = '4';
+    }
+    else if (num>16){
+      colWidth = '1fr'
+      rowHeight = '1fr'
+      col_num = '5';
+      row_num = '6';
     }
 
     document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
     document.documentElement.style.setProperty(`--colWidth`, colWidth);
+    document.documentElement.style.setProperty(`--row__num`, row_num);
+    document.documentElement.style.setProperty(`--col_num`, col_num);
 }
 
 (function() {
@@ -300,4 +335,35 @@ function hideWhiteBoard() {
   //arrPeers.forEach(function(element) { 
   //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
   //});
+}
+
+function clickevent_peer_video() {      //add button in peer-video (개발중)
+  document.getElementById("peer_video").style.opacity = 0.7;
+  
+  // var warning = document.createElement("bt");
+  // warning.className = "video_btn";
+  // warning.textContent = "경고"
+
+  // var kick = document.createElement("bt");
+  // kick.className = "video_btn";
+  // kick.textContent = "강퇴"
+
+  // var chat_ban = document.createElement("bt");
+  // chat_ban.className = "video_btn";
+  // chat_ban.textContent = "채팅금지"
+
+  // peer_video.insertBefore(warning, peer_video.firstChild);
+  // peer_video.insertBefore(kick, peer_video.firstChild);
+  // peer_video.insertBefore(chat_ban, peer_video.firstChild);
+
+
+  $("#peer_video").append("<button class='video_btn'>경고</button>");
+  $("#peer_video").append("<button class='video_btn'>강퇴</button>");
+  $("#peer_video").append("<button class='video_btn'>채팅금지</button>");
+  
+
+  setTimeout(function () {
+    $('bt').remove();
+    document.getElementById("peer_video").style.opacity = 1;
+  }, 5000);
 }
