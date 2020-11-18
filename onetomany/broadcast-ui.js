@@ -30,16 +30,27 @@ var config = {
         socket.on('message', config.onmessage);
     },
     onRemoteStream: function(media) {
-        var video = media.video;
-        // video.setAttribute('controls', true);
-        video.id="peer_video";
-        video.setAttribute("onClick","clickevent_peer_video()");
+      var video = media.video;
+      // video.setAttribute('controls', true);
+      $(".videos").append("<div class='video_content'></div>");
+      video_content = document.getElementsByClassName("video_content");
+      
+      var index = video_content.length - 1;
+      var id = "peer_video" + index.toString();
+      
+      video.setAttribute("class","peer_video");
+      video.id = id;
+      video.setAttribute("onClick","clickevent_peer_video(this.id)");
 
-        participants.insertBefore(video, participants.firstChild);
-        //updateLayout();
+      //video_content[index].setAttribute("id", id);
+      video_content[index].insertBefore(video, video_content[index].firstChild);
 
-        video.play();
-        //rotateVideo(video);
+      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>경고</button>");
+      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>강퇴</button>");
+      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>채팅금지</button>");
+
+      video.play();
+      //rotateVideo(video);
     },
     onRoomFound: function(room) {
         var alreadyExist = document.getElementById(room.broadcaster);
@@ -81,7 +92,7 @@ function createButtonClickHandler() {
 function captureUserMedia(callback) {
     var video = document.createElement('video');
     video.setAttribute('autoplay', true);
-    video.id="local-video";
+    video.id="local_video";
     video.muted = "true"; //본인 마이크 음소거
     //video.setAttribute('controls', true); //재생버튼 및 재생시간
     //participants.insertBefore(video, participants.firstChild);
@@ -113,7 +124,7 @@ var broadcastUI = broadcast(config);
 /* UI specific */
 var localvideo = document.getElementById("localvideo") || document.body;
 var peervideo = document.getElementById("peer_video") || document.body;
-var participants = document.getElementById("participants") || document.body;
+var video_content = document.getElementById("video_content") || document.body;
 var startConferencing = document.getElementById('start-conferencing');
 var roomsList = document.getElementById('rooms-list');
 
@@ -337,33 +348,14 @@ function hideWhiteBoard() {
   //});
 }
 
-function clickevent_peer_video() {      //add button in peer-video (개발중)
-  document.getElementById("peer_video").style.opacity = 0.7;
+function clickevent_peer_video(id) {      //add button in peer-video (개발중)
+  document.getElementById(id).style.opacity = 0.7;
+  var query = "#"+id;
+  $(query).parent(".video_content").children(".video_btn").css("opacity","1");
+  //btn.style.opacity = 1;
   
-  // var warning = document.createElement("bt");
-  // warning.className = "video_btn";
-  // warning.textContent = "경고"
-
-  // var kick = document.createElement("bt");
-  // kick.className = "video_btn";
-  // kick.textContent = "강퇴"
-
-  // var chat_ban = document.createElement("bt");
-  // chat_ban.className = "video_btn";
-  // chat_ban.textContent = "채팅금지"
-
-  // peer_video.insertBefore(warning, peer_video.firstChild);
-  // peer_video.insertBefore(kick, peer_video.firstChild);
-  // peer_video.insertBefore(chat_ban, peer_video.firstChild);
-
-
-  $("#peer_video").append("<button class='video_btn'>경고</button>");
-  $("#peer_video").append("<button class='video_btn'>강퇴</button>");
-  $("#peer_video").append("<button class='video_btn'>채팅금지</button>");
-  
-
   setTimeout(function () {
-    $('bt').remove();
-    document.getElementById("peer_video").style.opacity = 1;
+    document.getElementById(id).style.opacity = 1;
+    $(query).parent(".video_content").children(".video_btn").css("opacity", "0");
   }, 5000);
 }
