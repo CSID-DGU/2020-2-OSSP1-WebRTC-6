@@ -349,7 +349,7 @@ function hideWhiteBoard() {
 }
 
 function clickevent_peer_video(id) {      //add button in peer-video (개발중)
-  document.getElementById(id).style.opacity = 0.7;
+  document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".video_btn").css("opacity","1");
   //btn.style.opacity = 1;
