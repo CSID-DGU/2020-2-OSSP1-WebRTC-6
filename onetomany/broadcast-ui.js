@@ -99,8 +99,8 @@ function captureUserMedia(callback) {
     localvideo.insertBefore(video, localvideo.firstChild); //insert video in localvideo tag 
 
     video_constraints = { 
-      width : { min:320, ideal : 640 },
-      height : { min:180, ideal :360 }
+      width : { min:320, ideal : 320 },
+      height : { min:180, ideal :180 }
     }
 
     getUserMedia({
