@@ -191,7 +191,7 @@ function updateLayout(num) {
 
     document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
     document.documentElement.style.setProperty(`--colWidth`, colWidth);
-    document.documentElement.style.setProperty(`--row__num`, row_num);
+    document.documentElement.style.setProperty(`--row_num`, row_num);
     document.documentElement.style.setProperty(`--col_num`, col_num);
 }
 

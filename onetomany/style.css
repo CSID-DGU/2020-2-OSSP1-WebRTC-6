@@ -80,6 +80,7 @@ padding: .5em;
 
     .videos{
       display: grid;
+      height: 95%;
       grid-gap: 5px;
       /* grid-auto-rows: var(--rowHeight);
       grid-auto-columns: minmax(var(--colWidth)); */
