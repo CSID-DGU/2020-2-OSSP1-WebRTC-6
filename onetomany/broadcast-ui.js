@@ -359,3 +359,48 @@ function clickevent_peer_video(id) {      //add button in peer-video (개발중)
     $(query).parent(".video_content").children(".video_btn").css("opacity", "0");
   }, 5000);
 }
+
+//자리비움
+var isLeaving = false;
+function leaving() {
+  var leaveIcon = document.getElementById('leaveIcon');
+  var micIcon = document.getElementById('micIcon');
+  var cameraIcon = document.getElementById('cameraIcon');
+
+  var micBtn = document.getElementById('micBtn');
+  var cameraBtn = document.getElementById('cameraBtn');
+
+  if(!isLeaving) {  //자리비움 실행
+    leaveIcon.style.color="#FA4949";
+    micIcon.style.color="#FA4949";
+    cameraIcon.style.color="#FA4949";
+
+    micBtn.disabled = 'disabled';
+    cameraBtn.disabled = 'disabled';
+
+    if(config.attachStream.getAudioTracks()[0].enabled) {
+      config.attachStream.getAudioTracks()[0].enabled = false
+      document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
+    }
+    if(config.attachStream.getVideoTracks()[0].enabled) {
+      config.attachStream.getVideoTracks()[0].enabled = false;
+      document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
+    }
+  }
+  else {  //자리비움 취소
+    leaveIcon.style.color="white";
+    micIcon.style.color="white";
+    cameraIcon.style.color="white";
+
+    micBtn.disabled = false;
+    cameraBtn.disabled = false;
+
+    config.attachStream.getAudioTracks()[0].enabled = true;
+    document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
+    config.attachStream.getVideoTracks()[0].enabled = true;
+    document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
+  }
+  
+  isLeaving? isLeaving = false : isLeaving = true;
+}
+
