@@ -5,6 +5,7 @@ var app= express();
 var https= require('https');
 var kurento = require('kurento-client');
 var minimist = require('minimist');
+var firebase = require('firebase');
 var ws = require('ws');
 var fs = require('fs');
 
@@ -36,6 +37,16 @@ var server = https.createServer(options, app).listen(port, function() {
 var io= require('socket.io')(server);
 
 //access folder
+
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + './view'))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+var index = require('./routes/index');
+
+
+app.use('/', index);
 app.use(express.static(__dirname+"/onetomany"));
 
 /*
