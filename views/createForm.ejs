@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>회원가입</title>
+
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+
+</head>
+<body>
+    <h2>생성할 아이디와 비번 입력하시오</h2>
+    <form name="form2" action="createUser" method="post">
+        <table style="width:600px">
+            <colgroup>
+                <col width='15%' />
+                <col width='*%' />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>ID</td> 
+                    <td><input type="text" name="id" size="20" maxlength="20"></td> 
+                </tr>
+                <tr>
+                    <td>Password</td> 
+                    <td><input type="password" name="passwd" size="20" maxlength="20"></td> 
+                </tr>
+            </tbody>
+        </table>
+        <a href="#" onclick="form2.submit()">회원가입 생성</a>
+    </form>
+      
+</body>
+</html>
+

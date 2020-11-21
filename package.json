@@ -17,6 +17,7 @@
   "author": "Prithish Pritam Biswas",
   "license": "ISC",
   "dependencies": {
+    "alert": "^5.0.6",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "firebase": "^8.1.1",

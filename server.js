@@ -5,7 +5,23 @@ var app= express();
 var https= require('https');
 var kurento = require('kurento-client');
 var minimist = require('minimist');
+
 var firebase = require('firebase');
+
+var firebaseConfig = {
+    apiKey: "AIzaSyAM-8-3iuCf1P8O8fvrO0gLZ-bffdMf2JE",
+    authDomain: "webrtc-110d1.firebaseapp.com",
+    databaseURL: "https://webrtc-110d1.firebaseio.com",
+    projectId: "webrtc-110d1",
+    storageBucket: "webrtc-110d1.appspot.com",
+    messagingSenderId: "621543592690",
+    appId: "1:621543592690:web:76aca8f54baf63ecdcb66b",
+    measurementId: "G-FFQ47LWF90"
+};
+firebase.initializeApp(firebaseConfig);
+
+require("firebase/auth");
+
 var ws = require('ws');
 var fs = require('fs');
 
@@ -52,6 +68,7 @@ app.use(express.static(__dirname+"/onetomany"));
 /*
  * Rooms related methods
  */
+
 
 function getRoom(socket) {
 	if (rooms[socket.room] == undefined) {
