@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login Page</title>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+    <style type="text/css">
+        .font_01{
+            font-family: 'Jua', sans-serif;
+            font-size:45px;
+            font-weight:medium;
+            line-height:1.5em;
+        }
+        .font_02{
+            font-family: 'Nanum Gothic Coding', monospace;
+            font-size:20px;
+            font-weight:medium;
+        }
+        #box1{
+            background-color: #E2E2E2;
+            padding-left:850px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="font_01">
+        <br><br>
+        <img src="https://www.flaticon.com/svg/static/icons/svg/1436/1436733.svg" width=200px; height=200px;><br>
+        WebRTC 화상회의<br>
+        가짜프로그래머<br>
+    </div>
+    <form name="form1" action="loginChk" method="post">
+        <table style="width:600px">
+            <colgroup>
+                <col width='15%' />
+                <col width='*%' />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>ID</td> 
+                    <td><input type="text" name="id" size="20" maxlength="20"></td> 
+                </tr>
+                <tr>
+                    <td>Password</td> 
+                    <td><input type="password" name="passwd" size="20" maxlength="20"></td> 
+                </tr>
+            </tbody>
+        </table>
+        <a href="#" onclick="form1.submit()">Login</a>
+    </form>    
+</body>
+</html>
+

@@ -17,7 +17,9 @@
   "author": "Prithish Pritam Biswas",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "firebase": "^8.1.1",
     "kurento-client": "^6.15.0",
     "socket.io": "^2.3.0"
   },

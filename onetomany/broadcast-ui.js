@@ -429,3 +429,106 @@ function toggleFullScreen() { //전체화면
     }
   }
 }
+
+var success;
+var bg = document.createElement('div');
+var modal = document.getElementById('testConcentration')
+function testConcentration() {
+  success = false;
+  var zIndex = 9999;
+  bg.setStyle({
+      position: 'fixed',
+      zIndex: zIndex,
+      left: '0px',
+      top: '0px',
+      width: '100%',
+      height: '100%',
+      overflow: 'auto',
+      backgroundColor: 'rgba(0,0,0,0.4)'
+  });
+  document.body.append(bg);
+
+  modal.setStyle({
+      position: 'fixed',
+      display: 'block',
+      boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+      zIndex: zIndex + 1,
+
+      // div center 정렬
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      msTransform: 'translate(-50%, -50%)',
+      webkitTransform: 'translate(-50%, -50%)'
+  });
+
+  document.getElementById("randomNumber").innerHTML=makeRandomNumber();
+
+
+  //타이머
+  var time = 15;  //타임 설정
+  var min = "";
+  var sec = "";
+  var timer = setInterval(function() {
+    min = parseInt(time / 60);
+    sec = time % 60;
+
+    if(min < 10 && sec < 10) {
+      document.getElementById("timer").innerHTML = "0" + min + " : 0" + sec;
+    }
+    else if (min < 10) {
+      document.getElementById("timer").innerHTML = "0" + min + " : " + sec;
+    }
+    else if (sec < 10) {
+      document.getElementById("timer").innerHTML = min + " : " + "0" + sec;
+    }
+    else {
+      document.getElementById("timer").innerHTML = min + " : " + sec;
+    }
+
+    time--;
+
+    if(success == true) {  //잘 입력했으면 타이머 중지
+      clearInterval(timer);
+    }
+    if(time < 0) {  //타임오버
+      clearInterval(timer);
+      document.getElementById("timer").innerHTML = "집중 안해요?";
+    }
+  }, 1000);
+}
+
+// Element 에 style 한번에 오브젝트로 설정하는 함수 추가
+Element.prototype.setStyle = function(styles) {
+  for (var k in styles) this.style[k] = styles[k];
+  return this;
+};
+
+function maxLengthCheck(object){
+  if (object.value.length > object.maxLength){
+    object.value = object.value.slice(0, object.maxLength);
+  }    
+}
+
+var randomNumber;
+function makeRandomNumber() {
+  randomNumber = Math.floor(Math.random() * 9 + 1);  //1~9까지
+ 
+  return randomNumber;
+}
+
+function submit_concentration() {
+  var inputNumber = document.getElementById('input_randomNumber').value;
+
+  if(inputNumber == randomNumber) {
+    success = true;
+    bg.remove();
+    modal.style.display = 'none';
+    document.getElementById('guideWord').innerHTML = "위 숫자를 입력해주세요.";
+  }
+  else {
+    document.getElementById('guideWord').innerHTML = "틀렸습니다";
+  }
+  document.getElementById('input_randomNumber').value="";
+}
