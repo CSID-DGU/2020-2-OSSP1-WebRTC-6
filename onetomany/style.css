@@ -53,9 +53,9 @@ padding: .5em;
 
  .wrapper {
     display: grid;
-    height: auto;
+    height: 92vh;
     grid-template-columns: 1fr 1fr 400px;
-    grid-template-rows: 270px 300px 300px;
+    grid-template-rows: 230px 1fr 1fr;
     grid-gap: 7px;
     grid-auto-rows: minmax(10px, auto);
   }
@@ -106,17 +106,18 @@ padding: .5em;
       }
 
     #local_video{
-      width: 400px;
-      height: 300px;
+      max-width: 400px;
+      max-height: 300px;
     }
 
 .video_btn{
   border-radius: 7px;
   position: relative;
-  display: inline;
+  display: inline-block;
+  width: var(--colWidth);
   left : 25%;
-  margin-top: 30%;
-  margin-left: 5px;
+  top: 50%;
+  margin-left: 3px;
   z-index: 100;
   font-size:15px;
   cursor : pointer;

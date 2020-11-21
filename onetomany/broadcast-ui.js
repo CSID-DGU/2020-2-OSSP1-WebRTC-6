@@ -348,7 +348,7 @@ function hideWhiteBoard() {
   //});
 }
 
-function clickevent_peer_video(id) {      //add button in peer-video (개발중)
+function clickevent_peer_video(id) {      //add button in peer-video
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".video_btn").css("opacity","1");
@@ -404,3 +404,28 @@ function leaving() {
   isLeaving? isLeaving = false : isLeaving = true;
 }
 
+function toggleFullScreen() { //전체화면
+  let elem = document.querySelector("body");
+
+  if (!document.fullscreenElement) {
+    if (elem.requestFullScreen) {
+      elem.requestFullScreen();
+    } else if (elem.webkitRequestFullScreen) {
+      elem.webkitRequestFullScreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen(); // IE
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozExitFullscreen) {
+      document.mozExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen(); // IE
+    }
+  }
+}
