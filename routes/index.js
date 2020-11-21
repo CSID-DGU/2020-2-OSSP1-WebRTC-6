@@ -36,7 +36,7 @@ router.post('/loginChk', function(req, res, next) {
            res.sendFile(path.join(__dirname, "../onetomany/index.html"));
        })
       .catch(function(error) {
-          res.redirect('loginForm');
+          res.render('loginForm');
       });   
 });
 
