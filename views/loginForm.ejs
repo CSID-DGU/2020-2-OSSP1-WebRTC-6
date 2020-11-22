@@ -2,31 +2,137 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Login Page</title>
-
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
     <style type="text/css">
+        body,html{
+            margin: 0;
+            padding:0;
+            height:100%;
+        }
+        
         .font_01{
-            font-family: 'Jua', sans-serif;
+            font-family: 'Goldman', cursive;
             font-size:45px;
             font-weight:medium;
-            line-height:1.5em;
+            color:white;
         }
         .font_02{
-            font-family: 'Nanum Gothic Coding', monospace;
-            font-size:20px;
+            font-family: 'Do Hyeon', sans-serif;
+            font-size:45px;
             font-weight:medium;
+            color:white;
         }
+        
+        .bgimg{
+            border:0;
+            padding:0;
+            background-image: url('https://wi.wallpapertip.com/wsimgs/83-838362_web-developer.jpg');
+            min-height:100%;
+            background-position: center;
+            background-size: cover;
+        }
+
         #box1{
             background-color: #E2E2E2;
             padding-left:850px;
         }
+
+        #box2{
+            font-family: 'Nanum Gothic Coding';
+            border-radius: 12px;
+            background: #BFC2C3;
+        }
+        #box3{
+            background-color: #ffffff;
+            background-color: rgba(255,255,255,0.5);
+            border-radius:10px;
+        }
+        /* .form{
+            height:300px;
+            width:600px;
+            background-color: rgba(255,255,255,0.5);
+        }
+        .form .id{
+            height:50px;
+            width:400px;
+            border-radius:12px;
+            background-color: #ffffff;
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        .form .password{
+            height:50px;
+            width:400px;
+            border-radius:12px;
+            background-color: #ffffff;
+            background-color: rgba(255,255,255,0.5);
+        }
+        
+        .form .job{
+            height:50px;
+            width:400px;
+            border-radius:12px;
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        .form #submit{
+            height:30px;
+            width:55px;
+            border-radius:12px;
+            background-color:#B3DDF2;
+        } */
+
+        /* #contact-form input[type='id'], #contact-form input[type='password'], #contact-form input[type='job']{
+            border-radius:10px;
+            height:70px;
+            width:400px;
+            background-color: transparent;
+        }
+
+        #contact-form input[type='submit']{
+        padding: 12px 18px;
+        color:#fff;
+        background: #fa6e3e;
+        border:0;
+        border-radius: 5px;
+        float:right;
+        display:block;
+        } */
     </style>
 
 </head>
 <body>
-    <div class="font_01">
+    <div class="bgimg">
+        <br><br><br><br><br><br>
+        <center>
+            <div class="font_01">
+            WebRTC
+            </div>
+            <div class="font_02">
+            화상회의<br>
+            가짜프로그래머
+            </div>
+            <div class="form">
+                <form action="" method="POST">
+                    <br>
+                    <input type="id" id="id" name="id" value="User e-mail id" style="width:150px; height: 30px; background-color: rgba(255,255,255,0.5); border-radius: 5px;"><br><br>
+                    <input type="text" id="password" name="password" value="password" style="width:150px; height: 30px; background-color: rgba(255,255,255,0.5); border-radius: 5px;"><br><br>
+
+                    <!-- <input type="text" id="id" name="id" value="User id"><br>
+                    <input type="password" id="password" name="password" value="password"><br>
+                    <input type="job" id="job" name="job" value="강사 또는 학생 으로만 작성해주세요"><br><br>-->
+                    <a href="#" onclick="form1.submit()">Login</a><br><br>
+<!--                    <input type="submit" id="submit" value="로그인" style="width:80px;"><br><br>-->
+                    <font style="color:white">※ 아직 계정이 없으신가요? </font><br><br>
+                    <button onclick="moveCreate()">회원가입</button>
+                </form>
+            </div>
+        </center>     
+    </div>
+    
+    <!-- <div class="font_01">
         <br><br>
         <img src="https://www.flaticon.com/svg/static/icons/svg/1436/1436733.svg" width=200px; height=200px;><br>
         WebRTC 화상회의<br>
@@ -50,14 +156,12 @@
             </tbody>
         </table>
         <a href="#" onclick="form1.submit()">Login</a>
+    </form>     -->
     </form>
-    <button onclick="moveCreate()">회원가입</button>
     <script type= "text/javascript">
         function moveCreate(){
-            location.href = "/creatForm";
+        location.href = "/creatForm";
         }
-    </script>   
-      
+    </script> 
 </body>
 </html>
-

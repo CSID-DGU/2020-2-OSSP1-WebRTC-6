@@ -1,37 +1,80 @@
 <!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>회원가입</title>
+<title>Sign up Page</title>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <style type="text/css">
+        body,html{
+            margin: 0;
+            padding:0;
+            height:100%;
+        }
+        
+        .font_01{
+            font-family: 'Goldman', cursive;
+            font-size:45px;
+            font-weight:medium;
+            color:white;
+        }
+        .font_02{
+            font-family: 'Do Hyeon', sans-serif;
+            font-size:45px;
+            font-weight:medium;
+            color:white;
+        }
+        
+        .bgimg{
+            border:0;
+            padding:0;
+            background-image: url('https://wi.wallpapertip.com/wsimgs/83-838362_web-developer.jpg');
+            min-height:100%;
+            background-position: center;
+            background-size: cover;
+        }
 
-<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+        #box1{
+            background-color: #E2E2E2;
+            padding-left:850px;
+        }
 
-<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+        #box2{
+            font-family: 'Nanum Gothic Coding';
+            border-radius: 12px;
+            background: #BFC2C3;
+        }
+        #box3{
+            background-color: #ffffff;
+            background-color: rgba(255,255,255,0.5);
+            border-radius:10px;
+        }
 
-<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    </style>
 
 </head>
 <body>
-    <h2>생성할 아이디와 비번 입력하시오</h2>
-    <form name="form2" action="createUser" method="post">
-        <table style="width:600px">
-            <colgroup>
-                <col width='15%' />
-                <col width='*%' />
-            </colgroup>
-            <tbody>
-                <tr>
-                    <td>ID</td> 
-                    <td><input type="text" name="id" size="20" maxlength="20"></td> 
-                </tr>
-                <tr>
-                    <td>Password</td> 
-                    <td><input type="password" name="passwd" size="20" maxlength="20"></td> 
-                </tr>
-            </tbody>
-        </table>
-        <a href="#" onclick="form2.submit()">회원가입 생성</a>
-    </form>
-      
+    <div class="bgimg">
+        <br><br><br><br><br><br>
+        <center>
+            <div class="font_01">
+            WebRTC<br>
+            Sign up<br>
+            </div><br><br>
+            <div class="form">
+                <form action="" method="POST">
+                    <br>
+                    <input type="id" id="id" name="id" value="User e-mail id" style="width:150px; height: 30px; background-color: rgba(255,255,255,0.5); border-radius: 5px;"><br><br>
+                    <input type="text" id="password" name="password" value="password" style="width:150px; height: 30px; background-color: rgba(255,255,255,0.5); border-radius: 5px;"><br><br>
+                    <input type="job" id="job" name="job" value="job" style="width:150px; height: 30px; background-color: rgba(255,255,255,0.5); border-radius: 5px;"><br><br>
+                    <font style="color:white">※  강사 또는 학생 으로만 작성해주세요</font><br>
+                    <a href="#" onclick="form2.submit()">회원가입 생성</a>
+                </form>
+            </div>
+        </center>     
+    </div>
 </body>
 </html>
-
