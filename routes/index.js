@@ -17,14 +17,13 @@ router.get('/creatForm', function(req,res,next){
 })
 
 router.post('/loginChk', function(req, res, next) {
-    console.log("test2");
-    console.log(req.body.id);
 
     firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd)
        .then(function(firebaseUser) {
            //res.redirect('boardList');
-           res.set('Content-Type', 'text/html');
-           res.sendFile(path.join(__dirname, "../onetomany/index.html"));
+        //    res.set('Content-Type', 'text/html');
+        //    res.sendFile(path.join(__dirname, "../onetomany/index.html"));
+        res.render('index');
        })
       .catch(function(error) {
         switch(error.code){ 

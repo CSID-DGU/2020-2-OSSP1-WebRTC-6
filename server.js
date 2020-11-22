@@ -65,6 +65,10 @@ var index = require('./routes/index');
 app.use('/', index);
 app.use(express.static(__dirname+"/onetomany"));
 
+app.get('/loginchk', function(req,res){
+	res.render('index');
+})
+
 /*
  * Rooms related methods
  */
