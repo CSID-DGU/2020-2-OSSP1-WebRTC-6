@@ -20,7 +20,10 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+
 require("firebase/auth");
+require("firebase/firestore");
+
 
 var ws = require('ws');
 var fs = require('fs');
@@ -66,6 +69,25 @@ app.use('/', index);
 app.use(express.static(__dirname+"/onetomany"));
 
 app.get('/loginchk', function(req,res){
+	
+	// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  	// 	.then(function() {
+	// 		res.render('index');	  
+    // // Existing and future Auth states are now persisted in the current
+    // // session only. Closing the window would clear any existing state even
+    // // if a user forgets to sign out.
+    // // ...
+    // // New sign-in will be persisted with session persistence.
+	// 		//return firebase.auth().signInWithEmailAndPassword(email, password);
+  	// 		})
+  	// .catch(function(error) {
+    // // // Handle Errors here.
+    // // var errorCode = error.code;
+	// // var errorMessage = error.message;
+	// //console.log(error.code);
+	// res.send("Tlqkf");
+	// res.render('loginForm');
+  	// });
 	res.render('index');
 })
 
