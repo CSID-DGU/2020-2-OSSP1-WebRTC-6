@@ -22,7 +22,7 @@
 
 ~~~
 git clone newdevelop https://github.com/CSID-DGU/2020-2-OSSP1-WebRTC-6.git   
-cd 2020-2-OSSP1-WebRTC-6.git
+cd 2020-2-OSSP1-WebRTC-6
 npm install kurento-client
 npm install
 npm start
@@ -31,7 +31,11 @@ npm start
 
 웹 페이지에서    
 https://localhost:8443
-입력 후 실행   
+입력 후 실행
+
+회원가입   
+이름 이메일 비밀번호 직업 선택 후   
+로그인
 
 
 * * *
