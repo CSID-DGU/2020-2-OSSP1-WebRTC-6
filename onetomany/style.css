@@ -53,7 +53,7 @@ padding: .5em;
 
  .wrapper {
     display: grid;
-    height: 92vh;
+    height: 100vh;
     grid-template-columns: 1fr 1fr 400px;
     grid-template-rows: 230px 1fr 1fr;
     grid-gap: 7px;
@@ -80,7 +80,7 @@ padding: .5em;
 
     .videos{
       display: grid;
-      height: 95%;
+      height: 100%;
       grid-gap: 5px;
       /* grid-auto-rows: var(--rowHeight);
       grid-auto-columns: minmax(var(--colWidth)); */

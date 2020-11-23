@@ -136,6 +136,9 @@ function hideUnnecessaryStuff() {
     for (var i = 0; i < length; i++) {
         visibleElements[i].style.display = 'none';
     }
+    var header = document.getElementsByTagName('h1');
+    header[0].style.display = 'none';
+
     var non_visual = document.getElementsByClassName('non-visual');
     non_visual[0].style.display = 'block'; //hide peer connection page factor
 }
