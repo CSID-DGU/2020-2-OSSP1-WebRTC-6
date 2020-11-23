@@ -535,3 +535,125 @@ function submit_concentration() {
   }
   document.getElementById('input_randomNumber').value="";
 }
+
+
+//녹화 기능
+let recordedBlobs;
+var recordStart = true;
+var recordButton = document.getElementById("record");
+recordButton.addEventListener("click", ()=>{
+    if (recordStart == true) {
+      recordStart = false;
+      startRecording();
+      recordButton.style.color = "red";
+    } else {
+      recordStart = true;
+      stopRecording();
+      downloadButton.disabled = false;
+      recordButton.style.color = "white";
+    }
+})
+
+
+function getDateFormat(date, delimiter) { //날짜 구하기 > filename
+  var newDate = new Date();
+  if (date != null) newDate = date;
+
+  var yy = newDate.getFullYear();
+  var mm = newDate.getMonth() + 1;
+  if (mm < 10) mm = "0" + mm;
+
+  var dd = newDate.getDate();
+  if (dd < 10) dd = "0" + dd;
+
+  if (delimiter == null) delimiter = "";
+  return yy + delimiter + mm + delimiter + dd;
+}
+
+const downloadButton = document.querySelector('button#download');
+downloadButton.addEventListener('click', () => {
+  const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  file_name = getDateFormat(new Date());
+  file_name.concat(".webm");
+  a.download = file_name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+});
+
+function handleDataAvailable(event) {
+  console.log('handleDataAvailable', event);
+  if (event.data && event.data.size > 0) {
+    recordedBlobs.push(event.data);
+  }
+}
+
+// function download() {
+//   var blob = new Blob(recordedChunks, {
+//     type: "video/webm"
+//   });
+//   var url = URL.createObjectURL(blob);
+//   var a = document.createElement("a");
+//   document.body.appendChild(a);
+//   a.style = "display: none";
+//   a.href = url;
+//   a.download = "test.webm";
+//   a.click();
+//   window.URL.revokeObjectURL(url);
+// }
+
+function startRecording() {
+  var record_option = {
+    audio: true ,
+    video: true
+  }
+  recordedBlobs = [];
+  var canvas = document.getElementById("recording_area")
+  // Optional frames per second argument.
+  var stream = canvas.captureStream(25);
+  var recordedChunks = [];
+
+  console.log(stream);
+  var options = { mimeType: "video/webm; codecs=vp9" };
+  if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+    console.error(`${options.mimeType} is not supported`);
+    options = { mimeType: 'video/webm;codecs=vp8,opus' };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      console.error(`${options.mimeType} is not supported`);
+      options = { mimeType: 'video/webm' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.error(`${options.mimeType} is not supported`);
+        options = { mimeType: '' };
+      }
+    }
+  }
+
+  try {
+    mediaRecorder = new MediaRecorder(stream, options);
+  } catch (e) {
+    console.error('Exception while creating MediaRecorder:', e);
+    errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+    return;
+  }
+
+  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+  // downloadButton.disabled = true;
+  mediaRecorder.onstop = (event) => {
+    console.log('Recorder stopped: ', event);
+    console.log('Recorded Blobs: ', recordedBlobs);
+  };
+  mediaRecorder.ondataavailable = handleDataAvailable;
+  mediaRecorder.start();
+  console.log('MediaRecorder started', mediaRecorder);
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
+}

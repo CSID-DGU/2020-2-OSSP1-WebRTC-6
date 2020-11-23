@@ -164,6 +164,13 @@ border-radius: 7px;
 text-align: center;
 }
 
+#recording_area{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+
 /*여기부터 화이트보드*/
 #canvas {
 background-color: white;
