@@ -615,7 +615,7 @@ function startRecording() {
     video: true
   }
   recordedBlobs = [];
-  var canvas = document.getElementById("recording_area")
+  var canvas = document.getElementById("local_video")
   // Optional frames per second argument.
   var stream = canvas.captureStream(25);
   var recordedChunks = [];
@@ -657,3 +657,4 @@ function startRecording() {
 function stopRecording() {
   mediaRecorder.stop();
 }
+
