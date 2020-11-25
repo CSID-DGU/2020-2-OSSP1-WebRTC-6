@@ -28,7 +28,8 @@ router.get('/creatForm', function(req,res,next){
 const signEmail = () => {
     firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd)
     .then(function(firebaseUser) {
-     res.render('index');
+
+        res.render('index');
     })
    .catch(function(error) {
      switch(error.code){ 
@@ -56,9 +57,32 @@ router.post('/loginChk', function(req, res, next) {
 
     firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd)
        .then(function(firebaseUser) {
-        res.render('index');
+
+        //var user = firebase.auth().currentUser;
+        let userDB = db.collection('users');
+        let query = userDB.where('email', '==', req.body.id).get()
+        .then(snapshot => {
+            if(snapshot.empty){
+                console.log('No matching documents');
+                return;
+            }
+            snapshot.forEach(doc => {
+                //name, job, email 값 불러오고 싶으면
+                //doc.data().name // doc.data().job // doc.data().email
+                userName = doc.data().name;
+                console.log(doc.id, '=>', doc.data());
+                res.render('index', { data : userName, error: false });
+            })
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+        });
+
+        //res.render('index', { data : userName, error: false });
+        //res.render('index');
        })
       .catch(function(error) {
+          console.log(error.code);
         switch(error.code){ 
             case "auth/invalid-email": 
                 alert('유효하지 않은 메일입니다'); 
@@ -73,6 +97,8 @@ router.post('/loginChk', function(req, res, next) {
                 alert("잘못된 패스워드 입니다."); 
                 break; 
             }
+            
+          var userName = "Jang";  
       
           res.render('loginForm');
       });  

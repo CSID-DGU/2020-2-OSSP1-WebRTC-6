@@ -26,7 +26,12 @@
 
     <body>
         <article>
-            <h1 style="color:white;text-align:center">가짜프로그래머 WebRTC 화상회의 테스트 UI</h1>
+            <h1 style="color:white;text-align:center">가짜프로그래머 WebRTC 화상회의  : <%if(locals.err){%>
+                <%=err%>
+            <%}else if(locals.data){%>
+                <%=data%>
+            <%}%>
+            님 </h1>
             
             <!-- <div class="github-stargazers"></div> -->
 

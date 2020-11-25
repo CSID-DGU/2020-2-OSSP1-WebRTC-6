@@ -7,6 +7,7 @@ var kurento = require('kurento-client');
 var minimist = require('minimist');
 
 var firebase = require('firebase');
+var alert = require('alert');
 
 var firebaseConfig = {
     apiKey: "AIzaSyAM-8-3iuCf1P8O8fvrO0gLZ-bffdMf2JE",
@@ -23,6 +24,7 @@ firebase.initializeApp(firebaseConfig);
 
 require("firebase/auth");
 require("firebase/firestore");
+const db = firebase.firestore();
 
 
 var ws = require('ws');
@@ -69,27 +71,33 @@ app.use('/', index);
 app.use(express.static(__dirname+"/onetomany"));
 
 app.get('/loginchk', function(req,res){
-	
-	// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-  	// 	.then(function() {
-	// 		res.render('index');	  
-    // // Existing and future Auth states are now persisted in the current
-    // // session only. Closing the window would clear any existing state even
-    // // if a user forgets to sign out.
-    // // ...
-    // // New sign-in will be persisted with session persistence.
-	// 		//return firebase.auth().signInWithEmailAndPassword(email, password);
-  	// 		})
-  	// .catch(function(error) {
-    // // // Handle Errors here.
-    // // var errorCode = error.code;
-	// // var errorMessage = error.message;
-	// //console.log(error.code);
-	// res.send("Tlqkf");
-	// res.render('loginForm');
-  	// });
-	res.render('index');
-})
+	//check curreent user 		
+		var user = firebase.auth().currentUser;
+		var userName;
+			if (user) {
+				console.log(user.uid);
+				let userDB = db.collection('users');
+				let query = userDB.where('email', '==', user.email).get()
+				.then(snapshot => {
+					if(snapshot.empty){
+						console.log('No matching documents');
+						return;
+					}
+					snapshot.forEach(doc => {
+						userName = doc.data().name;
+						console.log("UserName1 is : " + userName);
+						console.log(doc.id, '=>', doc.data());
+						res.render('index', { data : userName, error: false });
+					})
+				})
+				.catch(err => {
+					console.log('Error getting documents', err);
+				});
+			} else {
+				alert("로그인을 해주세요");
+				res.render('loginForm');
+			}    
+	})
 
 /*
  * Rooms related methods
