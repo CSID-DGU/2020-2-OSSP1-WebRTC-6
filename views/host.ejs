@@ -26,12 +26,12 @@
 
     <body>
         <article>
-            <h1 style="color:white;text-align:center">가짜프로그래머 WebRTC 화상회의  : <%if(locals.err){%>
+            <h1 style="color:white;text-align:center">가짜프로그래머 WebRTC 화상회의(Host)  : <%if(locals.err){%>
                 <%=err%>
-            <%}else if(locals.userInfo){%>
-                <%=userInfo.name%> 님 , 직업 : <%=userInfo.job%>
+            <%}else if(locals.data){%>
+                <%=data%>
             <%}%>
-            </h1>
+            님 </h1>
             
             <!-- <div class="github-stargazers"></div> -->
 
