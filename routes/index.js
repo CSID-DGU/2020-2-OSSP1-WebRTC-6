@@ -25,32 +25,21 @@ router.get('/creatForm', function(req,res,next){
     res.render("createForm");
 })
 
-const signEmail = () => {
-    firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd)
-    .then(function(firebaseUser) {
-
-        res.render('index');
+const signEmail = (email,password) => {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(function() {
+      // Existing and future Auth states are now persisted in the current
+      // session only. Closing the window would clear any existing state even
+      // if a user forgets to sign out.
+      // ...
+      // New sign-in will be persisted with session persistence.
+      return firebase.auth().signInWithEmailAndPassword(email, password);
     })
-   .catch(function(error) {
-     switch(error.code){ 
-         case "auth/invalid-email": 
-             alert('유효하지 않은 메일입니다'); 
-             break; 
-         case "auth/user-disabled": 
-             alert('사용이 정지된 유저 입니다.') 
-             break; 
-         case "auth/user-not-found": 
-             alert('사용자를 찾을 수 없습니다.') 
-             break; 
-         case "auth/wrong-password": 
-             alert("잘못된 패스워드 입니다."); 
-             break; 
-         }
-   
-       res.render('loginForm');
-   });   
-   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-   .then(signEmail.bind(this))
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
 }
 
 router.post('/loginChk', function(req, res, next) {
@@ -67,11 +56,11 @@ router.post('/loginChk', function(req, res, next) {
                 return;
             }
             snapshot.forEach(doc => {
-                //name, job, email 값 불러오고 싶으면
-                //doc.data().name // doc.data().job // doc.data().email
-                userName = doc.data().name;
-                console.log(doc.id, '=>', doc.data());
-                res.render('index', { data : userName, error: false });
+                userInfo = {name: doc.data().name,
+                    job : doc.data().job}
+            //인증 상태 유형 Session 으로 변경
+            //signEmail(req.body.id, req.body.passwd)        
+            res.render('index', { userInfo : userInfo, error: false });
             })
         })
         .catch(err => {
@@ -97,8 +86,6 @@ router.post('/loginChk', function(req, res, next) {
                 alert("잘못된 패스워드 입니다."); 
                 break; 
             }
-            
-          var userName = "Jang";  
       
           res.render('loginForm');
       });  

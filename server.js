@@ -65,6 +65,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 var index = require('./routes/index');
+const { userInfo } = require('os');
 
 
 app.use('/', index);
@@ -84,10 +85,10 @@ app.get('/loginchk', function(req,res){
 						return;
 					}
 					snapshot.forEach(doc => {
-						userName = doc.data().name;
-						console.log("UserName1 is : " + userName);
-						console.log(doc.id, '=>', doc.data());
-						res.render('index', { data : userName, error: false });
+						var userInfo = {name: doc.data().name,
+									job : doc.data().job}
+						res.render('index', { userInfo : userInfo, error: false });
+						
 					})
 				})
 				.catch(err => {
