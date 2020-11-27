@@ -3,10 +3,10 @@
 
     <head>
         <script>
-            if(!location.hash.replace('#', '').length) {
-                location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
-                location.reload();
-            }
+            // if(!location.hash.replace('#', '').length) {
+            //     location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
+            //     location.reload();
+            // }
         </script>
 
         <title>화상회의 테스트</title>
@@ -26,7 +26,7 @@
 
     <body>
         <article>
-            <h1 style="color:white;text-align:center">가짜프로그래머 viewer 페이지  : <%if(locals.err){%>
+            <h1 style="color:white;text-align:center">가짜프로그래머 viwer 페이지  : <%if(locals.err){%>
                 <%=err%>
             <%}else if(locals.userInfo){%>
                 <%=userInfo.name%> 님 , 직업 : <%=userInfo.job%>
