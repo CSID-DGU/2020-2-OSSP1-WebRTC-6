@@ -74,8 +74,15 @@ var config = {
             });
             hideUnnecessaryStuff();
         };
+    },
+    attachStream : { 
+      onaddtrack : function (event) {
+        var chat = getElementById("chat");
+        chat.textContent = "get add track"
     }
+  }
 };
+
 
 function createButtonClickHandler() {
     capacity = document.getElementById('capacity').value;
@@ -667,9 +674,14 @@ function screenshare_suc(screenStream) {
   config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
   config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
 
-  // arrPeers.forEach(function (element) {
-  //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  // });
+  for(id=0;id<peerConnections.length;id++){
+    var senderlist=peerConnections[id].peer.getSenders();
+    senderlist.forEach(function(sender){
+      peerConnections[id].peer.removeTrack(sender);
+    });
+    peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
+  }
+
 
   // demonstrates how to detect that the user has stopped
   // sharing the screen via the browser UI.
