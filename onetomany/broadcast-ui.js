@@ -658,3 +658,54 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
+//화면공유 기능
+
+function screenshare_suc(screenStream) {
+  screenshare.disabled = true;
+
+  tempStream = config.attachStream.getVideoTracks()[0];
+  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+  config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
+
+  // arrPeers.forEach(function (element) {
+  //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  // });
+
+  // demonstrates how to detect that the user has stopped
+  // sharing the screen via the browser UI.
+  screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+    config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+    config.attachStream.addTrack(tempStream);
+
+    // arrPeers.forEach(function (element) {
+    //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+    // });
+
+    errorMsg('The user has ended sharing the screen');
+    screenshare.disabled = false;
+  });
+}
+
+function screenshare_err(error) {
+  errorMsg(`getDisplayMedia error: ${error.name}`, error);
+}
+
+function errorMsg(msg, error) {
+  const errorElement = document.querySelector('#errorMsg');
+  errorElement.innerHTML += `<p>${msg}</p>`;
+  if (typeof error !== 'undefined') {
+    console.error(error);
+  }
+}
+
+const screenshare = document.getElementById('screenshare');
+screenshare.addEventListener('click', () => {
+  navigator.mediaDevices.getDisplayMedia({ audio: true, video: true })
+    .then(screenshare_suc, screenshare_err);
+});
+
+if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
+  screenshare.disabled = false;
+} else {
+  errorMsg('getDisplayMedia is not supported');
+}
