@@ -325,12 +325,18 @@ if (reset) {
   reset.addEventListener("click", handleReset);
 }
 
+
 function showWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'block';
   
-  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-  config.attachStream.addTrack(canvasStream.getVideoTracks()[0]);
-  
+  //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+  //config.attachStream.addTrack(canvasStream.getVideoTracks()[0]);
+  for (id = 0; id < peerConnections.length; id++) {
+    var senderlist = peerConnections[id].peer.getSenders();
+    senderlist.forEach(function (sender) {
+      sender.replaceTrack(canversStream.getVideoTracks()[0]);
+    })
+  }
 
   //arrPeers.forEach(function(element) { 
   //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
@@ -340,8 +346,12 @@ function showWhiteBoard() {
 function hideWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'none';
   
-  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-  config.attachStream.addTrack(tempStream);
+  for (id = 0; id < peerConnections.length; id++) {
+    var senderlist = peerConnections[id].peer.getSenders();
+    senderlist.forEach(function (sender) {
+      sender.replaceTrack(tempStream);
+    })
+  }
   
   //arrPeers.forEach(function(element) { 
   //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
@@ -646,17 +656,24 @@ function stopRecording() {
 function screenshare_suc(screenStream) {
   screenshare.disabled = true;
 
-  tempStream = config.attachStream.getVideoTracks()[0];
-  config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-  config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
+  tempStream = config.attachStream.getVideoTracks();
+  //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+  //config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
 
 
   for(id=0;id<peerConnections.length;id++){
     var senderlist=peerConnections[id].peer.getSenders();
     senderlist.forEach(function(sender){
-      peerConnections[id].peer.removeTrack(sender);
-    });
-    peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
+      sender.replaceTrack(screenStream.getVideoTracks()[0]);
+    })
+    
+    //senderlist.forEach(function(sender){
+      //peerConnections[id].peer.removeTrack(sender);
+    //});
+    //peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
+    //peerConnections[id].peer.createOffer();
+    //peerConnections[id].peer.setLocalDescription();
+    //peerConnections[id].setRemoteDescription()
   }
 
   // arrPeers.forEach(function (element) {
@@ -669,6 +686,12 @@ function screenshare_suc(screenStream) {
     config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
     config.attachStream.addTrack(tempStream);
 
+    for (id = 0; id < peerConnections.length; id++) {
+      var senderlist = peerConnections[id].peer.getSenders();
+      senderlist.forEach(function (sender) {
+        sender.replaceTrack(tempStream);
+      })
+    }
     // arrPeers.forEach(function (element) {
     //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
     // });
