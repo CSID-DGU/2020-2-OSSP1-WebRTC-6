@@ -163,17 +163,6 @@ function updateLayout(num) {
     var colWidth = '-webkit-fill-available';
     var col_num = 1 ,row_num=1;
 
-    // var numVideos = document.getElementById("participants").childElementCount;
-    // console.log(numVideos);
-
-    // if (numVideos > 1 && numVideos <= 4) { // 2x2 grid
-    //     rowHeight = '48vh';
-    //     colWidth = '38vw';
-    // } else if (numVideos > 4) { // 3x3 grid
-    //     rowHeight = '30vh';
-    //     colWidth = '22.6vw';
-    // }
-
     if(num>1 && num<=4){
       rowHeight = '1fr';
       colWidth = '1fr';
@@ -341,6 +330,7 @@ function showWhiteBoard() {
   
   config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
   config.attachStream.addTrack(canvasStream.getVideoTracks()[0]);
+  
 
   //arrPeers.forEach(function(element) { 
   //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
@@ -602,20 +592,6 @@ function handleDataAvailable(event) {
   }
 }
 
-// function download() {
-//   var blob = new Blob(recordedChunks, {
-//     type: "video/webm"
-//   });
-//   var url = URL.createObjectURL(blob);
-//   var a = document.createElement("a");
-//   document.body.appendChild(a);
-//   a.style = "display: none";
-//   a.href = url;
-//   a.download = "test.webm";
-//   a.click();
-//   window.URL.revokeObjectURL(url);
-// }
-
 function startRecording() {
   var record_option = {
     audio: true ,
@@ -674,6 +650,7 @@ function screenshare_suc(screenStream) {
   config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
   config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
 
+
   for(id=0;id<peerConnections.length;id++){
     var senderlist=peerConnections[id].peer.getSenders();
     senderlist.forEach(function(sender){
@@ -682,6 +659,9 @@ function screenshare_suc(screenStream) {
     peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
   }
 
+  // arrPeers.forEach(function (element) {
+  //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
+  // });
 
   // demonstrates how to detect that the user has stopped
   // sharing the screen via the browser UI.
