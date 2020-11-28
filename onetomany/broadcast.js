@@ -96,6 +96,7 @@ var broadcast = function(config) {
                 video.srcObject = event.streams[0];
                 video.play();
             }
+            
             peerConnections[peerConnections.length] = peer;
         }
         

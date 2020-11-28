@@ -74,8 +74,15 @@ var config = {
             });
             hideUnnecessaryStuff();
         };
+    },
+    attachStream : { 
+      onaddtrack : function (event) {
+        var chat = getElementById("chat");
+        chat.textContent = "get add track"
     }
+  }
 };
+
 
 function createButtonClickHandler() {
     capacity = document.getElementById('capacity').value;
@@ -634,7 +641,6 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
-
 //화면공유 기능
 
 function screenshare_suc(screenStream) {
@@ -643,6 +649,15 @@ function screenshare_suc(screenStream) {
   tempStream = config.attachStream.getVideoTracks()[0];
   config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
   config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
+
+
+  for(id=0;id<peerConnections.length;id++){
+    var senderlist=peerConnections[id].peer.getSenders();
+    senderlist.forEach(function(sender){
+      peerConnections[id].peer.removeTrack(sender);
+    });
+    peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
+  }
 
   // arrPeers.forEach(function (element) {
   //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
@@ -677,7 +692,7 @@ function errorMsg(msg, error) {
 
 const screenshare = document.getElementById('screenshare');
 screenshare.addEventListener('click', () => {
-  navigator.mediaDevices.getDisplayMedia({ audio:true, video: true })
+  navigator.mediaDevices.getDisplayMedia({ audio: true, video: true })
     .then(screenshare_suc, screenshare_err);
 });
 
