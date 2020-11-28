@@ -26,6 +26,13 @@ require("firebase/auth");
 require("firebase/firestore");
 const db = firebase.firestore();
 
+// const userJson = JSON.stringify(currentUser.toJson());
+// //write userJson to disk
+
+// const userData = JSON.parse(userJson);
+// const user = new firebase.User(userData, userData.stsTokenManager, userData);
+// firebase.auth().updateCurrentUser(user);
+
 
 var ws = require('ws');
 var fs = require('fs');
@@ -74,9 +81,9 @@ app.use(express.static(__dirname+"/onetomany"));
 app.get('/loginchk', function(req,res){
 	//check curreent user 		
 		var user = firebase.auth().currentUser;
-		var userName;
+
 			if (user) {
-				console.log(user.uid);
+				console.log("User email is :  "+ user.email+" (server.js)");
 				let userDB = db.collection('users');
 				let query = userDB.where('email', '==', user.email).get()
 				.then(snapshot => {
@@ -87,7 +94,12 @@ app.get('/loginchk', function(req,res){
 					snapshot.forEach(doc => {
 						var userInfo = {name: doc.data().name,
 									job : doc.data().job}
-						res.render('index', { userInfo : userInfo, error: false });
+						if(userInfo.job == "student"){
+							res.render('viewer', { userInfo : userInfo, error: false });
+						}
+						else{
+							res.render('host', { userInfo : userInfo, error: false });
+						}
 						
 					})
 				})

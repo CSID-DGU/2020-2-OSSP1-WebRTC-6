@@ -46,8 +46,8 @@ router.post('/loginChk', function(req, res, next) {
 
     firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd)
        .then(function(firebaseUser) {
+        console.log("login user email is : " + req.body.id+" (index.js)");
 
-        //var user = firebase.auth().currentUser;
         let userDB = db.collection('users');
         let query = userDB.where('email', '==', req.body.id).get()
         .then(snapshot => {
@@ -56,19 +56,22 @@ router.post('/loginChk', function(req, res, next) {
                 return;
             }
             snapshot.forEach(doc => {
-                userInfo = {name: doc.data().name,
-                    job : doc.data().job}
+                userInfo = {name: doc.data().name, job : doc.data().job}
             //인증 상태 유형 Session 으로 변경
-            //signEmail(req.body.id, req.body.passwd)        
-            res.render('index', { userInfo : userInfo, error: false });
+            //signEmail(req.body.id, req.body.passwd)
+
+            if(userInfo.job == "student"){
+                res.render('viewer', { userInfo : userInfo, error: false });
+            }
+            else{
+                res.render('host', { userInfo : userInfo, error: false });
+            }        
+            // res.render('index', { userInfo : userInfo, error: false });
             })
         })
         .catch(err => {
             console.log('Error getting documents', err);
         });
-
-        //res.render('index', { data : userName, error: false });
-        //res.render('index');
        })
       .catch(function(error) {
           console.log(error.code);
@@ -89,21 +92,6 @@ router.post('/loginChk', function(req, res, next) {
       
           res.render('loginForm');
       });  
-    //   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-    //     .then(function() {
-    //         // Existing and future Auth states are now persisted in the current
-    //         // session only. Closing the window would clear any existing state even
-    //         // if a user forgets to sign out.
-    //         // ...
-    //         // New sign-in will be persisted with session persistence.
-    //         return firebase.auth().signInWithEmailAndPassword(req.body.id, req.body.passwd);
-    //     })
-    //     .catch(function(error) {
-    //         // Handle Errors here.
-    //         var errorCode = error.code;
-    //         var errorMessage = error.message;
-    //         res.render('loginForm');
-    //     });
 });
 
 router.post('/createUser', function(req, res, next) {
@@ -129,11 +117,6 @@ router.post('/createUser', function(req, res, next) {
             alert("회원가입성공");
             res.render('loginForm');
         })
-        // .then(function(firebaseUser){
-            
-        //     alert("회원가입성공");
-        //     res.render('loginForm');
-        // })
         .catch(function(error){
             switch(error.code){
                 case "auth/email-already-in-use":
