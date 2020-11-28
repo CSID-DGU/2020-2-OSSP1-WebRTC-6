@@ -1,3 +1,5 @@
+var peerConnections= [];
+
 var broadcast = function(config) {
     var self = {
         userToken: uniqueToken()
@@ -72,6 +74,11 @@ var broadcast = function(config) {
 
                 _config.stream = stream;
                 onRemoteStreamStartsFlowing();
+            },
+            ontrack : function (event) {
+                var video=document.getElementById("peer_video0");
+                video.srcObject = event.streams[0];
+                video.play();
             }
         };
 
@@ -84,8 +91,15 @@ var broadcast = function(config) {
             }
 
             peer = RTCPeerConnection(peerConfig);
+            peer.ontrack = function(event){
+                var video = document.getElementById("peer_video0");
+                video.srcObject = event.streams[0];
+                video.play();
+            }
+            peerConnections[peerConnections.length] = peer;
         }
         
+
         function afterRemoteStreamStartedFlowing() {
             gotstream = true;
 
@@ -93,6 +107,7 @@ var broadcast = function(config) {
                 video: video,
                 stream: _config.stream
             });
+            
 
             /* closing subsocket here on the offerer side */
             if (_config.closeSocket) socket = null;
