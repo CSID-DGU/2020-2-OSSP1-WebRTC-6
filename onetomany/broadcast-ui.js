@@ -113,7 +113,7 @@ function captureUserMedia(callback) {
     getUserMedia({
         video : video,
         onsuccess: function(stream) {
-            tempStream = stream.getVideoTracks()[0];
+            tempStream = stream;
             config.attachStream = stream;
             callback && callback();
             //rotateVideo(video); 한바뀌 도는 넘 
@@ -656,25 +656,18 @@ function stopRecording() {
 function screenshare_suc(screenStream) {
   screenshare.disabled = true;
 
-  tempStream = config.attachStream.getVideoTracks();
-  //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-  //config.attachStream.addTrack(screenStream.getVideoTracks()[0]);
-
+  //tempStream = config.attachStream.getVideoTracks();
 
   for(id=0;id<peerConnections.length;id++){
     var senderlist=peerConnections[id].peer.getSenders();
     senderlist.forEach(function(sender){
       sender.replaceTrack(screenStream.getVideoTracks()[0]);
     })
-    
-    //senderlist.forEach(function(sender){
-      //peerConnections[id].peer.removeTrack(sender);
-    //});
-    //peerConnections[id].peer.addTrack(screenStream.getVideoTracks()[0]);
-    //peerConnections[id].peer.createOffer();
-    //peerConnections[id].peer.setLocalDescription();
-    //peerConnections[id].setRemoteDescription()
   }
+
+  var local_video = document.getElementById("local_video");
+  local_video.srcObject= screenStream;
+  local_video.play();
 
   // arrPeers.forEach(function (element) {
   //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
@@ -683,15 +676,20 @@ function screenshare_suc(screenStream) {
   // demonstrates how to detect that the user has stopped
   // sharing the screen via the browser UI.
   screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-    config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-    config.attachStream.addTrack(tempStream);
+    //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
+    //config.attachStream.addTrack(tempStream);
 
     for (id = 0; id < peerConnections.length; id++) {
       var senderlist = peerConnections[id].peer.getSenders();
       senderlist.forEach(function (sender) {
-        sender.replaceTrack(tempStream);
+        sender.replaceTrack(tempStream.getVideoTracks()[0]);
       })
     }
+
+    var local_video = document.getElementById("local_video");
+    local_video.srcObject = tempStream;
+    local_video.play();
+
     // arrPeers.forEach(function (element) {
     //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
     // });
@@ -706,8 +704,8 @@ function screenshare_err(error) {
 }
 
 function errorMsg(msg, error) {
-  const errorElement = document.querySelector('#errorMsg');
-  errorElement.innerHTML += `<p>${msg}</p>`;
+ //const errorElement = document.querySelector('#errorMsg');
+  //errorElement.innerHTML += `<p>${msg}</p>`;
   if (typeof error !== 'undefined') {
     console.error(error);
   }
