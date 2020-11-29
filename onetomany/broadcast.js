@@ -75,6 +75,7 @@ var broadcast = function(config) {
                 _config.stream = stream;
                 onRemoteStreamStartsFlowing();
             },
+            onChannelMessage : config.onChannelMessage
         };
 
         function initPeer(offerSDP) {

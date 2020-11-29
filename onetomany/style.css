@@ -456,3 +456,28 @@ img{
 #class_input input {
   width: 75%;
 }
+
+
+#toast {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    padding: 15px 20px;
+    transform: translate(-50%, 10px);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 15px;
+    opacity: 0;
+    font-family: inherit;
+    visibility: hidden;
+    transition: opacity .5s, visibility .5s, transform .5s;
+    background: rgba(91, 162, 255, 0.925);
+    color: #fff;
+    z-index: 10000;
+}
+
+#toast.reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0)
+}

@@ -103,12 +103,15 @@ var config = {
           hideUnnecessaryStuff();
       };
   },
-  attachStream : { 
-    onaddtrack : function (event) {
-      var chat = getElementById("chat");
-      chat.textContent = "get add track"
+  onChannelMessage: function (event) {
+    $(".alert_area").append("<div id='toast'></div>")
+    toast(event.data);
+    console.log("alret arrive");
+  },
+
+  onChannelOpened: function (channel) {
+    channel.send('hi there, data ports are ready to transfer data');
   }
-}
 };
 
 
@@ -177,7 +180,7 @@ function hideUnnecessaryStuff() {
 
     var non_visual = document.getElementsByClassName('non-visual');
     non_visual[0].style.display = 'block'; //hide peer connection page factor
-    document.getElementById("open_Concentration").style.display = 'block';
+    //document.getElementById("open_Concentration").style.display = 'block';
 }
 
 function rotateVideo(video) {
@@ -359,18 +362,12 @@ if (reset) {
 function showWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'block';
   
-  //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-  //config.attachStream.addTrack(canvasStream.getVideoTracks()[0]);
   for (id = 0; id < peerConnections.length; id++) {
     var senderlist = peerConnections[id].peer.getSenders();
     senderlist.forEach(function (sender) {
       sender.replaceTrack(canvasStream.getVideoTracks()[0]);
     })
   }
-
-  //arrPeers.forEach(function(element) { 
-  //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  //});
 }
 
 function hideWhiteBoard() {
@@ -382,10 +379,6 @@ function hideWhiteBoard() {
       sender.replaceTrack(tempStream.getVideoTracks()[0]);
     })
   }
-  
-  //arrPeers.forEach(function(element) { 
-  //  peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  //});
 }
 
 function clickevent_peer_video(id) {      //add button in peer-video
@@ -738,8 +731,6 @@ function stopRecording() {
 function screenshare_suc(screenStream) {
   screenshare.disabled = true;
 
-  //tempStream = config.attachStream.getVideoTracks();
-
   for(id=0;id<peerConnections.length;id++){
     var senderlist=peerConnections[id].peer.getSenders();
     senderlist.forEach(function(sender){
@@ -751,15 +742,9 @@ function screenshare_suc(screenStream) {
   local_video.srcObject= screenStream;
   local_video.play();
 
-  // arrPeers.forEach(function (element) {
-  //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-  // });
-
   // demonstrates how to detect that the user has stopped
   // sharing the screen via the browser UI.
   screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-    //config.attachStream.removeTrack(config.attachStream.getVideoTracks()[0]);
-    //config.attachStream.addTrack(tempStream);
 
     for (id = 0; id < peerConnections.length; id++) {
       var senderlist = peerConnections[id].peer.getSenders();
@@ -772,16 +757,13 @@ function screenshare_suc(screenStream) {
     local_video.srcObject = tempStream;
     local_video.play();
 
-    // arrPeers.forEach(function (element) {
-    //   peerConnections[element].pc.createOffer().then(description => createdDescription(description, element));
-    // });
-
     errorMsg('The user has ended sharing the screen');
     screenshare.disabled = false;
   });
 }
 
 function screenshare_err(error) {
+  console.error()
   errorMsg(`getDisplayMedia error: ${error.name}`, error);
 }
 
@@ -789,7 +771,7 @@ function errorMsg(msg, error) {
  //const errorElement = document.querySelector('#errorMsg');
   //errorElement.innerHTML += `<p>${msg}</p>`;
   if (typeof error !== 'undefined') {
-    console.error(error);
+   // console.error(error);
   }
 }
 
@@ -803,4 +785,37 @@ if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
   screenshare.disabled = false;
 } else {
   errorMsg('getDisplayMedia is not supported');
+}
+
+
+//팝업 알림 기능
+
+function sendMessage(msg) {
+  //let obj = {
+  //  "message": msg,
+  //}
+  for(id=0;id<peerConnections.length;id++){
+    peerConnections[id].channel.send(msg);
+  }
+}
+
+function alert_msg(){
+  msg = prompt("알림사항을 입력하세요");
+  sendMessage(msg);
+}
+
+
+let removeToast; 
+function toast(string) {  //toast message function
+  const toast = document.getElementById("toast");
+
+  toast.classList.contains("reveal") ?
+    (clearTimeout(removeToast), removeToast = setTimeout(function () {
+      document.getElementById("toast").classList.remove("reveal")
+    }, 10000)) :
+    removeToast = setTimeout(function () {
+      document.getElementById("toast").classList.remove("reveal")
+    }, 10000)
+  toast.classList.add("reveal"),
+    toast.innerText = string
 }
