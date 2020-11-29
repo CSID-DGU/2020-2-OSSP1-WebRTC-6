@@ -53,48 +53,77 @@ var config = {
       //rotateVideo(video);
     },
     onRoomFound: function(room) {
-        var alreadyExist = document.getElementById(room.broadcaster);
-        if (alreadyExist) return;
+      document.getElementById("no_class").style.display="none";
+      var alreadyExist = document.getElementById(room.broadcaster);
+      if (alreadyExist) return;
 
-        if (typeof roomsList === 'undefined') roomsList = document.body;
+      if (typeof roomsList === 'undefined') roomsList = document.body;
 
-        var tr = document.createElement('tr');
-        tr.setAttribute('id', room.broadcaster);
-        tr.innerHTML = '<td>' + room.roomName + '</td>' +
-            '<td><button class="join" id="' + room.roomToken + '">Join Room</button></td>';
-        roomsList.insertBefore(tr, roomsList.firstChild);
+      var tr = document.createElement('tr');
+      tr.setAttribute('id', room.broadcaster);
+      tr.innerHTML = '<td>' + room.roomName + '</td>' +
+          '<td><button class="join" id="' + room.roomToken + '">Join Room</button></td>';
+      roomsList.insertBefore(tr, roomsList.firstChild);
 
-        tr.onclick = function() {
-            tr = this;
-            captureUserMedia(function() {
-                broadcastUI.joinRoom({
-                    roomToken: tr.querySelector('.join').id,
-                    joinUser: tr.id
-                });
-            });
-            hideUnnecessaryStuff();
-        };
-    },
-    attachStream : { 
-      onaddtrack : function (event) {
-        var chat = getElementById("chat");
-        chat.textContent = "get add track"
-    }
+      tr.onclick = function() {
+          tr = this;
+          captureUserMedia(function() {
+              broadcastUI.joinRoom({
+                  roomToken: tr.querySelector('.join').id,
+                  joinUser: tr.id
+              });
+          });
+          hideUnnecessaryStuff();
+      };
+
+      var html = '<div class="column">' +
+                  '<div class="card">' +
+                      '<img src="img1.jpg" alt="java" style="width:50%">' +
+                      '<div class="container">' +
+                          '<h2>'+room.professorName+'</h2>' +
+                          '<p class="title">'+room.roomName+'</p>' +
+                          '<p>'+room.description+'</p>' +
+                          '<p>미팅시간 : '+room.meetingTime+'</p>' +
+                          '<p><button id="join_btn" class="button">화상회의 참여</button></p>' +
+                      '</div>'+
+                  '</div>' +
+                  '</div>';
+        $('.slides').append(html); 
+
+        var join_btn = document.getElementById('join_btn');
+        join_btn.setAttribute('id', room.broadcaster);
+        join_btn.onclick = function() {
+          join_btn = this;
+          captureUserMedia(function() {
+              broadcastUI.joinRoom({
+                  roomToken: tr.querySelector('.join').id,
+                  joinUser: tr.id
+              });
+          });
+          hideUnnecessaryStuff();
+      };
+  },
+  attachStream : { 
+    onaddtrack : function (event) {
+      var chat = getElementById("chat");
+      chat.textContent = "get add track"
   }
+}
 };
 
 
 function createButtonClickHandler() {
-    capacity = document.getElementById('capacity').value;
-    capacity = Number(capacity);
-    captureUserMedia(function() {
-        broadcastUI.createRoom({
-            roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
-        });
-    });
-    updateLayout(capacity);
-    hideUnnecessaryStuff();
+  capacity = document.getElementById('capacity').value;
+  capacity = Number(capacity);
+  captureUserMedia(function() {
+      broadcastUI.createRoom({
+          roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
+      });
+  });
+  updateLayout(capacity);
+  hideUnnecessaryStuff();
 }
+
 
 function captureUserMedia(callback) {
     var video = document.createElement('video');
@@ -148,6 +177,7 @@ function hideUnnecessaryStuff() {
 
     var non_visual = document.getElementsByClassName('non-visual');
     non_visual[0].style.display = 'block'; //hide peer connection page factor
+    document.getElementById("open_Concentration").style.display = 'block';
 }
 
 function rotateVideo(video) {
@@ -371,7 +401,8 @@ function clickevent_peer_video(id) {      //add button in peer-video
 }
 
 //자리비움
-var isLeaving = false;
+var timer_;
+var leavingText = document.getElementById('leaving_cancle');
 function leaving() {
   var leaveIcon = document.getElementById('leaveIcon');
   var micIcon = document.getElementById('micIcon');
@@ -380,38 +411,88 @@ function leaving() {
   var micBtn = document.getElementById('micBtn');
   var cameraBtn = document.getElementById('cameraBtn');
 
-  if(!isLeaving) {  //자리비움 실행
-    leaveIcon.style.color="#FA4949";
-    micIcon.style.color="#FA4949";
-    cameraIcon.style.color="#FA4949";
+  leaveIcon.style.color="#FA4949";
+  micIcon.style.color="#FA4949";
+  cameraIcon.style.color="#FA4949";
 
-    micBtn.disabled = 'disabled';
-    cameraBtn.disabled = 'disabled';
+  micBtn.disabled = 'disabled';
+  cameraBtn.disabled = 'disabled';
 
-    if(config.attachStream.getAudioTracks()[0].enabled) {
-      config.attachStream.getAudioTracks()[0].enabled = false
-      document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
-    }
-    if(config.attachStream.getVideoTracks()[0].enabled) {
-      config.attachStream.getVideoTracks()[0].enabled = false;
-      document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
-    }
+  if(config.attachStream.getAudioTracks()[0].enabled) {
+    config.attachStream.getAudioTracks()[0].enabled = false
+    document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
   }
-  else {  //자리비움 취소
-    leaveIcon.style.color="white";
-    micIcon.style.color="white";
-    cameraIcon.style.color="white";
-
-    micBtn.disabled = false;
-    cameraBtn.disabled = false;
-
-    config.attachStream.getAudioTracks()[0].enabled = true;
-    document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
-    config.attachStream.getVideoTracks()[0].enabled = true;
-    document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
+  if(config.attachStream.getVideoTracks()[0].enabled) {
+    config.attachStream.getVideoTracks()[0].enabled = false;
+    document.getElementById("cameraIcon").classList.replace('fa-video', 'fa-video-slash');
   }
+  //배경 어둡게
+  bg.setStyle({
+    position: 'fixed',
+    zIndex: 5000,
+    left: '0px',
+    top: '0px',
+    width: '100%',
+    height: '100%',
+    overflow: 'auto',
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  });
+  document.body.append(bg);
+
+  leavingText.setStyle({
+    position: 'fixed',
+    display: 'block',
+    zIndex: 5001,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    msTransform: 'translate(-50%, -50%)',
+    webkitTransform: 'translate(-50%, -50%)'
+  });
+
+  var time_ = 0;
+  var min_ = "";
+  var sec_ = "";
+  var leavingTime = document.getElementById('leaving_time');
+
+  timer_ = setInterval(function() {
+    min_ = parseInt(time_ / 60);
+    sec_ = time_ % 60;
+
+    if(min_ < 10 && sec_ < 10) {
+      leavingTime.innerHTML = "0" + min_ + ":0" + sec_;
+    }
+    else if (min_ < 10) {
+      leavingTime.innerHTML = "0" + min_ + ":" + sec_;
+    }
+    else if (sec_ < 10) {
+      leavingTime.innerHTML = min_ + ":" + "0" + sec_;
+    }
+    else {
+      leavingTime.innerHTML = min_ + ":" + sec_;
+    }
+    time_++;
+  }, 1000);
   
-  isLeaving? isLeaving = false : isLeaving = true;
+}
+
+//자리비움 취소(복귀)
+function leaving_cancle() {
+  leaveIcon.style.color="white";
+  micIcon.style.color="white";
+  cameraIcon.style.color="white";
+
+  micBtn.disabled = false;
+  cameraBtn.disabled = false;
+
+  config.attachStream.getAudioTracks()[0].enabled = true;
+  document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
+  config.attachStream.getVideoTracks()[0].enabled = true;
+  document.getElementById("cameraIcon").classList.replace('fa-video-slash', 'fa-video');
+
+  leavingText.style.display = "none";
+  bg.remove();
+  clearInterval(timer_);
 }
 
 function toggleFullScreen() { //전체화면
@@ -538,10 +619,11 @@ function submit_concentration() {
     document.getElementById('guideWord').innerHTML = "위 숫자를 입력해주세요.";
   }
   else {
-    document.getElementById('guideWord').innerHTML = "틀렸습니다";
+    document.getElementById('guideWord').innerHTML = "올바른 숫자를 입력해주세요.";
   }
   document.getElementById('input_randomNumber').value="";
 }
+
 
 
 //녹화 기능

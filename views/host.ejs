@@ -17,6 +17,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
         <!-- <link rel="stylesheet" href="https://www.webrtc-experiment.com/style.css"> -->
         <link href="/style.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
         
         <!-- <script>
             document.createElement('article');
@@ -26,21 +28,19 @@
 
     <body>
         <article>
-            <h1 style="color:white;text-align:center">가짜프로그래머 host 페이지  : <%if(locals.err){%>
-                <%=err%>
-            <%}else if(locals.userInfo){%>
-                <%=userInfo.name%> 님 , 직업 : <%=userInfo.job%>
-            <%}%>
-            </h1>
-            
-            <!-- <div class="github-stargazers"></div> -->
-
-            <table class="visible">
+            <div class="slider visible">
+                <h1 style="color:white;text-align:center">WebRTC 화상회의 <br>
+                    <%=userInfo.job%> <%=userInfo.name%>님 환영합니다</h1>
+            </div>
+            <p id="professorName" style="display:none"><%=userInfo.name%></p>
+            <table id="class_input" class="visible">
                 <tr>
                     <td style="text-align: right;">
                         <tx style="color:white">creat new broadcast here</tx>
                         <input type="text" id="conference-name" placeholder="수업 이름">
                         <input type="text" id="capacity" placeholder="수업 정원">
+                        <input type="text" id="description" placeholder="수업 안내">
+                        <input type="text" id="meetingTime" placeholder="수업 시간">
                     </td>
                     <td>
                         <button id="start-conferencing">New Broadcast</button>
@@ -49,15 +49,6 @@
             </table>
             <table id="rooms-list" class="visible" style="color:white;"></table>
 
-            <table class="visible"> 
-                <tr>
-                    <td style="text-align: center;">
-                        <h2>
-                            <strong>Private Broadcast</strong> ?? <a href="" target="_blank" title="Open this link in new tab. Then your broadcasting room will be private!"><code><strong id="unique-token">#123456789</strong></code></a>
-                        </h2>
-                    </td>
-                </tr>
-            </table>
             <div class=non-visual><!--invisiable in homepage-->
                     <div class="wrapper"><!--grid UI-->
                         <div class=content><!--remote video-->
@@ -110,7 +101,12 @@
                 <button type="button" onclick="submit_concentration()">제출</button>
                 <p id="guideWord">위 숫자를 입력해주세요.</p>
             </div>
-            <button id="open_Concentration" onclick="testConcentration()">집중도테스트버튼</button>
+            <div id="leaving_cancle">
+                <p id="leaving_name"><%=userInfo.name%></p>
+                <p id="leaving_time"></p>
+                <button type="button" id="leaving_btn" onclick="leaving_cancle()">복귀하기</button>
+            </div>
+            <!--<button id="open_Concentration" onclick="testConcentration()">집중도테스트버튼</button>-->
 
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
             <script src="https://www.webrtc-experiment.com/socket.io.js"> </script>

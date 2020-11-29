@@ -186,7 +186,10 @@ var broadcast = function(config) {
         defaultSocket && defaultSocket.send({
             roomToken: self.roomToken,
             roomName: self.roomName,
-            broadcaster: self.userToken
+            professorName: self.professorName,
+            broadcaster: self.userToken,
+            description: self.description,
+            meetingTime: self.meetingTime
         });
         setTimeout(startBroadcasting, 3000);
     }
@@ -203,6 +206,9 @@ var broadcast = function(config) {
         createRoom: function(_config) {
             self.roomName = _config.roomName || 'Anonymous';
             self.roomToken = uniqueToken();
+            self.professorName = document.getElementById("professorName").innerText;
+            self.description = document.getElementById("description").value;
+            self.meetingTime = document.getElementById("meetingTime").value;
 
             isbroadcaster = true;
             isGetNewRoom = false;

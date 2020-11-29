@@ -26,39 +26,18 @@
 
     <body>
         <article>
-            <h1 style="color:white;text-align:center">가짜프로그래머 viwer 페이지  : <%if(locals.err){%>
-                <%=err%>
-            <%}else if(locals.userInfo){%>
-                <%=userInfo.name%> 님 , 직업 : <%=userInfo.job%>
-            <%}%>
-            </h1>
-            
-            <!-- <div class="github-stargazers"></div> -->
-
-            <!-- <table class="visible">
-                <tr>
-                    <td style="text-align: right;">
-                        <tx style="color:white">creat new broadcast here</tx>
-                        <input type="text" id="conference-name" placeholder="수업 이름">
-                        <input type="text" id="capacity" placeholder="수업 정원">
-                    </td>
-                    <td>
-                        <button id="start-conferencing">New Broadcast</button>
-                    </td>
-                </tr>
-            </table> -->
-            <h2 style="color:white" class = "visible">화상미팅룸 리스트</h2>
-            <table id="rooms-list" class="visible" style="color:white;"></table>
-
-            <!-- <table class="visible"> 
-                <tr>
-                    <td style="text-align: center;">
-                        <h2>
-                            <strong>Private Broadcast</strong> ?? <a href="" target="_blank" title="Open this link in new tab. Then your broadcasting room will be private!"><code><strong id="unique-token">#123456789</strong></code></a>
-                        </h2>
-                    </td>
-                </tr>
-            </table> -->
+            <div class="slider visible">
+                <h1 style="color:white">WebRTC 화상회의 <br>
+                    <%=userInfo.job%> <%=userInfo.name%>님 환영합니다</h1>
+                <h2 style="color:white;">미팅 룸 목록</h2>
+                <p></p>
+                <p style="display:none"><%=userInfo.name%></p>
+                <div class="slides">
+                    <h1 id="no_class" style="color:white">진행중인 강의가 없습니다</h1>
+                </div>
+                <br><br>
+            </div>
+            <table style="display:none" id="rooms-list" class="visible" style="color:white;"></table>
             <div class=non-visual><!--invisiable in homepage-->
                     <div class="wrapper"><!--grid UI-->
                         <div class=content><!--remote video-->
@@ -66,6 +45,7 @@
                                 <button id="exit" class="basicBtns"><i class="fas fa-sign-out-alt"></i></button><!--exit peer connection func bnt-->
                                 <button id="fullscreen" class="basicBtns" onclick="toggleFullScreen()"><i class="fas fa-expand"></i></i></button><!--full screen func bnt-->
                             </div>
+
 
                             <div class="navbar">
                                 <button id="record" class="basicBtns"><i class="fas fa-record-vinyl"></i></button> <!--녹화 시작/정지-->
@@ -111,8 +91,14 @@
                 <button type="button" onclick="submit_concentration()">제출</button>
                 <p id="guideWord">위 숫자를 입력해주세요.</p>
             </div>
-            <button id="open_Concentration" onclick="testConcentration()">집중도테스트버튼</button>
-
+            <div id="leaving_cancle">
+                <p id="leaving_name"><%=userInfo.name%></p>
+                <p id="leaving_time"></p>
+                <button type="button" id="leaving_btn" onclick="leaving_cancle()">복귀하기</button>
+            </div>
+            
+            <!--<button id="open_Concentration" onclick="testConcentration()">집중도테스트버튼</button>-->
+            
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
             <script src="https://www.webrtc-experiment.com/socket.io.js"> </script>
             <script src="https://www.webrtc-experiment.com/RTCPeerConnection-v1.5.js"> </script>
