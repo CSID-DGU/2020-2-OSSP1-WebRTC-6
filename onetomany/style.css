@@ -1,6 +1,9 @@
+html{font-size:10px}
+
 body{
   background: #181818;
   font-family:"Nanum Gothic",sans-serif;
+  font-size:1.6rem;
 }
 
 audio, video {
@@ -51,7 +54,8 @@ padding: .5em;
 
 .non-visual{ display: none; }
 
- .wrapper {
+/* gird dispaly setting*/
+ .wrapper { 
     display: grid;
     height: 100vh;
     grid-template-columns: 1fr 1fr 400px;
@@ -59,17 +63,18 @@ padding: .5em;
     grid-gap: 7px;
     grid-auto-rows: minmax(10px, auto);
   }
-    .content{
+    .content{ /*peer video and navbar*/
       grid-column: 1 / 3;
       grid-row: 1 / 4 ;
     }
-    #localvideo{
+
+    #localvideo{ /*local_video*/
       grid-column: 3;
       grid-row: 1;
       align-self:stretch;
       justify-self: stretch;
     }
-    #chat{
+    #chat{ /*chatting area*/
       grid-column: 3;
       grid-row: 2 / 4 ;
       background: aliceblue;
@@ -78,18 +83,13 @@ padding: .5em;
       font-size: 20pt;
     }
 
-    .videos{
+    .videos{ /*peer-video area setting*/
       display: grid;
       height: 100%;
       grid-gap: 5px;
-      /* grid-auto-rows: var(--rowHeight);
-      grid-auto-columns: minmax(var(--colWidth)); */
       grid-auto-flow: row;
-      /*grid-template-columns: repeat(auto-fit, minmax(var(--colWidth), 1fr));*/
       grid-template-columns: repeat(var(--col_num), var(--colWidth));
       grid-template-rows: repeat(var(--row_num), var(--rowHeight));
-      /* grid-auto-columns: repeat(auto-fit, minmax(var(--colWidth), 1fr));
-      grid-auto-rows: repeat(auto-fit, minmax(var(--rowHeight),1fr)); */
     }
     
       .video_content{
@@ -110,21 +110,33 @@ padding: .5em;
       max-height: 300px;
     }
 
-.video_btn{
-  border-radius: 7px;
+.flex_container{
+  display:flex;
+  justify-content: center;
+  justify-items: center;
+  margin-top : 40%;
+}
+
+.video_btn{ /*peer-video button setting*/
+  border-radius: calc((var(--row_num))*10px);
   position: relative;
   display: inline-block;
-  width: var(--colWidth);
-  left : 25%;
-  top: 50%;
-  margin-left: 3px;
+  margin-left: 1%;
   z-index: 100;
-  font-size:15px;
+  font-size: var(--font_num);
+  font-family: inherit;
   cursor : pointer;
   background-color: white;
+  border : 0;
+  outline: 0;
   color : black;
   }
+.video_btn:hover{
+  background-color: rgb(148, 207, 255);
+}
     
+
+/*---other button setting---*/
 .basicBtns{
   background-color: #121212;
   border: none;

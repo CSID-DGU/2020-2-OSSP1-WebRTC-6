@@ -45,10 +45,12 @@ var config = {
       //video_content[index].setAttribute("id", id);
       video_content[index].insertBefore(video, video_content[index].firstChild);
 
-      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>경고</button>");
-      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>강퇴</button>");
-      $(".video_content:last").append("<button class='video_btn' style='opacity:0'>채팅금지</button>");
+      $(".video_content:last").append("<div class='flex_container'></div>");
 
+      $(".flex_container:last").append("<button class='video_btn' id='warning' style='opacity:0'>경고</button>");
+      $(".flex_container:last").append("<button class='video_btn' id='kick' style='opacity:0'>강퇴</button>");
+      $(".flex_container:last").append("<button class='video_btn' id='forbidden_chat' style='opacity:0'>채팅금지</button>");
+     
       video.play();
       //rotateVideo(video);
     },
@@ -194,37 +196,42 @@ function updateLayout(num) {
   // update CSS grid based on number of diplayed videos
     var rowHeight = '-webkit-fill-available';
     var colWidth = '-webkit-fill-available';
-    var col_num = 1 ,row_num=1;
+    var col_num = '1' ,row_num='1';
 
     if(num>1 && num<=4){
       rowHeight = '1fr';
       colWidth = '1fr';
       col_num = '2';
       row_num = '2';
+      font_num = '3rem'
     }
     else if (num > 4 && num <= 9) {
-    rowHeight = '1fr';
-    colWidth = '1fr';
+      rowHeight = '1fr';
+      colWidth = '1fr';
       col_num = '3';
-      row_num = '3';
+      ow_num = '3';
+      font_num = '2.5rem'
     }
     else if (num >9 && num <= 16) {
       rowHeight = '1fr'
       colWidth = '1fr'
       col_num = '4';
       row_num = '4';
+      font_num = '2rem'
     }
     else if (num>16){
       colWidth = '1fr'
       rowHeight = '1fr'
       col_num = '5';
       row_num = '6';
+      font_num = '1.6rem'
     }
 
     document.documentElement.style.setProperty(`--rowHeight`, rowHeight);
     document.documentElement.style.setProperty(`--colWidth`, colWidth);
     document.documentElement.style.setProperty(`--row_num`, row_num);
     document.documentElement.style.setProperty(`--col_num`, col_num);
+  document.documentElement.style.setProperty(`--font_num`, font_num);
 }
 
 (function() {
@@ -384,12 +391,12 @@ function hideWhiteBoard() {
 function clickevent_peer_video(id) {      //add button in peer-video
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
-  $(query).parent(".video_content").children(".video_btn").css("opacity","1");
+  $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity","1");
   //btn.style.opacity = 1;
   
   setTimeout(function () {
     document.getElementById(id).style.opacity = 1;
-    $(query).parent(".video_content").children(".video_btn").css("opacity", "0");
+    $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity", "0");
   }, 5000);
 }
 
