@@ -75,11 +75,6 @@ var broadcast = function(config) {
                 _config.stream = stream;
                 onRemoteStreamStartsFlowing();
             },
-            ontrack : function (event) {
-                var video=document.getElementById("peer_video0");
-                video.srcObject = event.streams[0];
-                video.play();
-            }
         };
 
         function initPeer(offerSDP) {
@@ -91,13 +86,6 @@ var broadcast = function(config) {
             }
 
             peer = RTCPeerConnection(peerConfig);
-            peer.peer.ontrack = function(event){
-                var video = document.getElementById("peer_video0");
-                if(video){
-                    video.srcObject = event.streams[0];
-                    video.play();
-                }
-            }
             peerConnections[peerConnections.length] = peer;
         }
         

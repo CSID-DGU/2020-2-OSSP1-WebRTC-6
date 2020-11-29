@@ -334,7 +334,7 @@ function showWhiteBoard() {
   for (id = 0; id < peerConnections.length; id++) {
     var senderlist = peerConnections[id].peer.getSenders();
     senderlist.forEach(function (sender) {
-      sender.replaceTrack(canversStream.getVideoTracks()[0]);
+      sender.replaceTrack(canvasStream.getVideoTracks()[0]);
     })
   }
 
@@ -349,7 +349,7 @@ function hideWhiteBoard() {
   for (id = 0; id < peerConnections.length; id++) {
     var senderlist = peerConnections[id].peer.getSenders();
     senderlist.forEach(function (sender) {
-      sender.replaceTrack(tempStream);
+      sender.replaceTrack(tempStream.getVideoTracks()[0]);
     })
   }
   
