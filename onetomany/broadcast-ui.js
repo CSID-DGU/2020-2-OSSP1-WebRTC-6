@@ -50,12 +50,19 @@ var config = {
      // video_content[index].setAttribute("id", id);
       video_content[index].insertBefore(video, video_content[index].firstChild);
 
-      $(".video_content:last").append("<div class='flex_container'></div>");
+
 
       if (userInfo.job == "professor") {
-        $(".flex_container:last").append("<button class='video_btn' id='warning' style='opacity:0'>경고</button>");
-        $(".flex_container:last").append("<button class='video_btn' id='kick' style='opacity:0'>강퇴</button>");
-        $(".flex_container:last").append("<button class='video_btn' id='forbidden_chat' style='opacity:0'>채팅금지</button>");
+        var user_name = "<div id='name' style='opacity:0'>"+userInfo.name+"</div>"
+        $(".video_content:last").append(user_name);
+        $(".video_content:last").append("<div class='flex_container'></div>");
+      
+        var btn_warn = "<button class='video_btn' onclick='warning_event(this.id)' id='"+index+"' style='opacity:0'>경고</button>";
+        var btn_kick = "<button class='video_btn' onclick='kick_event(this.id)' id='"+index+"' style='opacity:0'>강퇴</button>";
+        var btn_ban_chat = "<button class='video_btn' onclick='ban_chat_event(this.id)' id='"+index+"' style='opacity:0'>채팅금지</button>";
+        $(".flex_container:last").append(btn_warn);
+        $(".flex_container:last").append(btn_kick);
+        $(".flex_container:last").append(btn_ban_chat);
       }
       video.play();
       //rotateVideo(video);
@@ -103,8 +110,8 @@ var config = {
         var join_btn = document.getElementById('join_btn');
         join_btn.setAttribute('id', room.broadcaster);
         join_btn.onclick = function() {
-          join_btn = this;
-          captureUserMedia(function() {
+        join_btn = this;
+        captureUserMedia(function() {
               broadcastUI.joinRoom({
                   roomToken: tr.querySelector('.join').id,
                   joinUser: tr.id
@@ -436,11 +443,13 @@ function clickevent_peer_video(id) {      //add button in peer-video
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity","1");
+  $(query).parent(".video_content").children("#name").css("opacity","1");
   //btn.style.opacity = 1;
   
   setTimeout(function () {
     document.getElementById(id).style.opacity = 1;
     $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity", "0");
+    $(query).parent(".video_content").children("#name").css("opacity","0");
   }, 5000);
 }
 
@@ -873,10 +882,12 @@ function toast(string) {  //toast message function
     toast.innerText = string
 }
 
-//경고 기능(개발중)
-// const warning = document.getElementById('warning'); 
-// warning.addEventListener('click',()=>{
-//   for (id = 0; id < peerConnections.length; id++) {
-//     peerConnections[id].channel.send(obj);
-//   }
-// })
+//경고 기능
+function warning_event(id){
+  var id = parseInt(id)
+  obj = {
+    "type" : "warning",
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj);
+}
