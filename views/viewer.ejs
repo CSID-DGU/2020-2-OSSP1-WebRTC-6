@@ -34,7 +34,7 @@
                 <h2 style="color:white;">미팅 룸 목록</h2>
 
                 <p id="job" style="display:none"><%=userInfo.job%></p>
-                <p style="display:none"><%=userInfo.name%></p>
+                <p id="studentName" style="display:none"><%=userInfo.name%></p>
                 <div class="slides">
                     <h1 id="no_class" style="color:white">진행중인 강의가 없습니다</h1>
                 </div>
@@ -55,8 +55,6 @@
                                 <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button> <!--다운로드-->
                                 <button class="basicBtns" id="micBtn" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button> <!--마이크온오프-->
                                 <button class="basicBtns" id="cameraBtn" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
-                                <button class="basicBtns" onclick="showWhiteBoard()"><i class="fas fa-palette fa-lg"></i></button> <!--화이트보드-->
-                                <button id="screenshare" class="basicBtns"><i class="fas fa-desktop"></i></button>
                                 <button class="basicBtns" onclick="leaving()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>
                             </div>
 
@@ -64,27 +62,9 @@
 
                             <div class=videos id="participants"></div>
                         </div>
-                        <div id="whiteBoard">
-                            <input type="button" id="exitCanvas" class="canvasUI" value="x" onclick="hideWhiteBoard()" />
-                            <canvas id="canvas" class="canvasUI"></canvas>
-                            <div id="canvasBtns" class="canvasUI">
-                            
-                            <button id="jsMode" class="canvasBtns">Paint</button>
-                            <button id="jsErase" class="canvasBtns">Erase</button>
-                            <button id="redpen" class="canvasBtns">Redpen</button>
-                            <button id="reset" class="canvasBtns">Reset</button>
-                            <input
-                                type="range"
-                                name=""
-                                id="jsRange"
-                                min="0.1"
-                                max="10.0"
-                                value="5.0"
-                                step="0.1"
-                            />
-                            </div>
+                        <div id=localvideo>
+                            <canvas id="leave"></canvas>
                         </div>
-                        <div id=localvideo></div>
                         <div id=chat>chatting area</div>
 
                     </div>

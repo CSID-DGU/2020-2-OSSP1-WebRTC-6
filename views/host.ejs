@@ -67,7 +67,6 @@
                                 <button class="basicBtns" id="cameraBtn" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
                                 <button class="basicBtns" onclick="showWhiteBoard()"><i class="fas fa-palette fa-lg"></i></button> <!--화이트보드-->
                                 <button id="screenshare" class="basicBtns"><i class="fas fa-desktop"></i></button>
-                                <button class="basicBtns" onclick="leaving()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>
                                 <button class="basicBtns" onclick="alert_msg()" id="alert_msg"><i class="fas fa-sticky-note"></i></button><!--알림메세지 전송-->
                             </div>
 
@@ -106,11 +105,7 @@
                 <button type="button" onclick="submit_concentration()">제출</button>
                 <p id="guideWord">위 숫자를 입력해주세요.</p>
             </div>
-            <div id="leaving_cancle">
-                <p id="leaving_name"><%=userInfo.name%></p>
-                <p id="leaving_time"></p>
-                <button type="button" id="leaving_btn" onclick="leaving_cancle()">복귀하기</button>
-            </div>
+            
             <!--<button id="open_Concentration" onclick="testConcentration()">집중도테스트버튼</button>-->
 
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
