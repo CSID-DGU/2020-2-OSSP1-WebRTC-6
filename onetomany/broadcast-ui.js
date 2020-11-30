@@ -1,3 +1,5 @@
+//const { query } = require("express");
+
 var tempStream;
 var canvasStream = document.getElementById('canvas').captureStream(30);
 var capacity = 1;
@@ -130,6 +132,10 @@ var config = {
     else if(data.type == "warning"){
       $(".alert_area").append("<div id='toast'></div>")
       toast("※[경고]강의자가 경고를 보냈습니다※");
+    }
+    else if(data.type == "kick"){
+      $(".alert_area").append("<div id='toast'></div>")
+      toast("강제 퇴장 당하셨습니다 [연결 종료] ");
     }
 
   },
@@ -439,7 +445,8 @@ function hideWhiteBoard() {
   }
 }
 
-function clickevent_peer_video(id) {      //add button in peer-video
+//add button in peer-video
+function clickevent_peer_video(id) {      
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity","1");
@@ -890,4 +897,16 @@ function warning_event(id){
   }
   obj = JSON.stringify(obj)
   peerConnections[id].channel.send(obj);
+}
+
+function kick_event(id){
+  var id = parseInt(id)
+  obj = {
+    "type": "kick",
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj)
+  peerConnections[id].peer.close();
+  var query = "#"+id;
+  $(query).parent(".video_content").children(".peer_video").remove(".peer_video");
 }
