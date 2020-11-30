@@ -114,7 +114,7 @@ padding: .5em;
   font-size: calc(2*var(--font_num));
   text-align: center;
   font-family: inherit;
-  margin-top:30%;
+  margin-top:15%;
   overflow: hidden;
   z-index: 55;
   color : black;
