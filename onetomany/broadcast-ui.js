@@ -108,12 +108,10 @@ var config = {
         $('.slides').append(html); 
 
         var join_btn = document.getElementById('join_btn');
-        if(join_btn){
         join_btn.setAttribute('id', room.broadcaster);
         join_btn.onclick = function() {
-          join_btn = this;
-        }
-          captureUserMedia(function() {
+        join_btn = this;
+        captureUserMedia(function() {
               broadcastUI.joinRoom({
                   roomToken: tr.querySelector('.join').id,
                   joinUser: tr.id
