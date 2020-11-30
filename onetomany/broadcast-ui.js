@@ -289,6 +289,9 @@ const erase = document.getElementById("jsErase");
 const redpen = document.getElementById("redpen");
 const reset = document.getElementById("reset");
 
+canvas.width = 1100;
+canvas.height = 800;
+
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -377,13 +380,38 @@ if (reset) {
   reset.addEventListener("click", handleReset);
 }
 
+/*  화이트보드가 크롬창 크기 따라 움직이는 코드이지만
+창 크기를 움직이면 화이트보드가 초기화됨 
+function whiteBoardResize() {
+  canvas.width = document.getElementById("participants").offsetWidth;
+  canvas.height = document.getElementById("participants").offsetHeight;
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
+  document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
+  document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
+}
+
+window.onresize = function() {
+  whiteBoardResize();
+}
+*/
 
 function showWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'block';
-  console.log(document.getElementById("participants").offsetWidth);
 
-  //canvas.width = document.getElementById("participants").offsetWidth;
-  //canvas.height = document.getElementById("participants").offsetHeight;
+  canvas.width = document.getElementById("participants").offsetWidth;
+  canvas.height = document.getElementById("participants").offsetHeight;
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
+  document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
+  document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
+
   
   for (id = 0; id < peerConnections.length; id++) {
     var senderlist = peerConnections[id].peer.getSenders();
