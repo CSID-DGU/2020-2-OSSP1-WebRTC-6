@@ -2,6 +2,9 @@ var tempStream;
 var canvasStream = document.getElementById('canvas').captureStream(30);
 var capacity = 1;
 
+userInfo = userInfo.replace(/&#34;/gi,'\"');
+userInfo =JSON.parse(userInfo);
+
 var config = {
     openSocket: function(config) {
         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
@@ -40,17 +43,20 @@ var config = {
       
       video.setAttribute("class","peer_video");
       video.id = id;
-      video.setAttribute("onClick","clickevent_peer_video(this.id)");
+      if (userInfo.job == "professor"){
+        video.setAttribute("onClick","clickevent_peer_video(this.id)");
+      }
 
-      //video_content[index].setAttribute("id", id);
+     // video_content[index].setAttribute("id", id);
       video_content[index].insertBefore(video, video_content[index].firstChild);
 
       $(".video_content:last").append("<div class='flex_container'></div>");
 
-      $(".flex_container:last").append("<button class='video_btn' id='warning' style='opacity:0'>경고</button>");
-      $(".flex_container:last").append("<button class='video_btn' id='kick' style='opacity:0'>강퇴</button>");
-      $(".flex_container:last").append("<button class='video_btn' id='forbidden_chat' style='opacity:0'>채팅금지</button>");
-     
+      if (userInfo.job == "professor") {
+        $(".flex_container:last").append("<button class='video_btn' id='warning' style='opacity:0'>경고</button>");
+        $(".flex_container:last").append("<button class='video_btn' id='kick' style='opacity:0'>강퇴</button>");
+        $(".flex_container:last").append("<button class='video_btn' id='forbidden_chat' style='opacity:0'>채팅금지</button>");
+      }
       video.play();
       //rotateVideo(video);
     },
