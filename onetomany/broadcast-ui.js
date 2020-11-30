@@ -112,9 +112,17 @@ var config = {
       };
   },
   onChannelMessage: function (event) {
-    $(".alert_area").append("<div id='toast'></div>")
-    toast(event.data);
-    console.log("alret arrive");
+    data = JSON.parse(event.data);
+    if(data.type == "notify"){
+      $(".alert_area").append("<div id='toast'></div>")
+      toast(data.message);
+      console.log("alret arrive");
+    }
+    else if(data.type == "warning"){
+      $(".alert_area").append("<div id='toast'></div>")
+      toast("※[경고]강의자가 경고를 보냈습니다※");
+    }
+
   },
 
   onChannelOpened: function (channel) {
@@ -804,11 +812,13 @@ if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
 //팝업 알림 기능
 
 function sendMessage(msg) {
-  //let obj = {
-  //  "message": msg,
-  //}
+  let obj = {
+    "type": "notify",
+    "message": msg,
+  }
+  obj = JSON.stringify(obj)
   for(id=0;id<peerConnections.length;id++){
-    peerConnections[id].channel.send(msg);
+    peerConnections[id].channel.send(obj);
   }
 }
 
@@ -832,3 +842,11 @@ function toast(string) {  //toast message function
   toast.classList.add("reveal"),
     toast.innerText = string
 }
+
+//경고 기능(개발중)
+// const warning = document.getElementById('warning'); 
+// warning.addEventListener('click',()=>{
+//   for (id = 0; id < peerConnections.length; id++) {
+//     peerConnections[id].channel.send(obj);
+//   }
+// })
