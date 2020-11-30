@@ -502,3 +502,9 @@ img{
     visibility: visible;
     transform: translate(-50%, 0)
 }
+
+#leave {
+  z-index: 9999;
+  display: none;
+  margin: 0px;
+}

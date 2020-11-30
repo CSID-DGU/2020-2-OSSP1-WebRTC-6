@@ -1,5 +1,6 @@
+//const { query } = require("express");
+
 var tempStream;
-var canvasStream = document.getElementById('canvas').captureStream(30);
 var capacity = 1;
 
 userInfo = userInfo.replace(/&#34;/gi,'\"');
@@ -130,6 +131,10 @@ var config = {
     else if(data.type == "warning"){
       $(".alert_area").append("<div id='toast'></div>")
       toast("※[경고]강의자가 경고를 보냈습니다※");
+    }
+    else if(data.type == "kick"){
+      $(".alert_area").append("<div id='toast'></div>")
+      toast("강제 퇴장 당하셨습니다 [연결 종료] ");
     }
 
   },
@@ -288,158 +293,163 @@ function micOnOff(element) {
 
 
 //화이트보드 기능
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const range = document.getElementById("jsRange");
-const mode = document.getElementById("jsMode");
-const erase = document.getElementById("jsErase");
-const redpen = document.getElementById("redpen");
-const reset = document.getElementById("reset");
+if (userInfo.job == "professor") {
+  var canvasStream = document.getElementById('canvas').captureStream(30);
 
-canvas.width = 1100;
-canvas.height = 800;
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  const range = document.getElementById("jsRange");
+  const mode = document.getElementById("jsMode");
+  const erase = document.getElementById("jsErase");
+  const redpen = document.getElementById("redpen");
+  const reset = document.getElementById("reset");
 
-ctx.fillStyle = "white";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+  canvas.width = 1100;
+  canvas.height = 800;
 
-ctx.strokeStyle = "#2c2c2c";
-ctx.lineWidth = 2.5;
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-let painting = false;
-let filling = false;
-
-stopPainting = () => {
-  painting = false;
-};
-
-onMouseMove = e => {
-  const x = e.offsetX;
-  const y = e.offsetY;
-  if (!painting) {
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  } else {
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  }
-};
-
-startPainting = () => {
-  painting = true;
-};
-handleCanvasClick = () => {
-};
-handleCM = e => {
-  e.preventDefault();
-};
-
-if (canvas) {
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
-  canvas.addEventListener("mouseup", stopPainting);
-  canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", handleCanvasClick);
-  canvas.addEventListener("contextmenu", handleCM);
-}
-
-handleRangeChange = e => {
-  const brushWidth = e.target.value;
-  ctx.lineWidth = brushWidth;
-};
-
-if (range) {
-  range.addEventListener("input", handleRangeChange);
-}
-
-//Paint 클릭 시
-handleModeClick = e => {
-  painting = false;
   ctx.strokeStyle = "#2c2c2c";
-  filling = false;
-};
-//Erase 클릭 시
-handleEraseClick = e => {
-  painting = false;
-  ctx.strokeStyle = "white";
-  filling = false;
-};
-//Redpen 클릭 시
-handleRedPen = e => {
-  painting = false;
-  ctx.strokeStyle = "red";
-  filling = false;
-}
-//Reset 클릭 시
-handleReset = e => {
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+  ctx.lineWidth = 2.5;
 
-if (mode) {
-  mode.addEventListener("click", handleModeClick);
-}
-if (erase) {
-  erase.addEventListener("click", handleEraseClick);
-}
-if (redpen) {
-  redpen.addEventListener("click", handleRedPen);
-}
-if (reset) {
-  reset.addEventListener("click", handleReset);
-}
+  let painting = false;
+  let filling = false;
 
-/*  화이트보드가 크롬창 크기 따라 움직이는 코드이지만
-창 크기를 움직이면 화이트보드가 초기화됨 
-function whiteBoardResize() {
-  canvas.width = document.getElementById("participants").offsetWidth;
-  canvas.height = document.getElementById("participants").offsetHeight;
+  stopPainting = () => {
+    painting = false;
+  };
 
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  onMouseMove = e => {
+    const x = e.offsetX;
+    const y = e.offsetY;
+    if (!painting) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+  };
 
-  document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
-  document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
-  document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
-}
+  startPainting = () => {
+    painting = true;
+  };
+  handleCanvasClick = () => {
+  };
+  handleCM = e => {
+    e.preventDefault();
+  };
 
-window.onresize = function() {
-  whiteBoardResize();
-}
-*/
+  if (canvas) {
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousedown", startPainting);
+    canvas.addEventListener("mouseup", stopPainting);
+    canvas.addEventListener("mouseleave", stopPainting);
+    canvas.addEventListener("click", handleCanvasClick);
+    canvas.addEventListener("contextmenu", handleCM);
+  }
 
-function showWhiteBoard() {
-  document.getElementById("whiteBoard").style.display = 'block';
+  handleRangeChange = e => {
+    const brushWidth = e.target.value;
+    ctx.lineWidth = brushWidth;
+  };
 
-  canvas.width = document.getElementById("participants").offsetWidth;
-  canvas.height = document.getElementById("participants").offsetHeight;
+  if (range) {
+    range.addEventListener("input", handleRangeChange);
+  }
 
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  //Paint 클릭 시
+  handleModeClick = e => {
+    painting = false;
+    ctx.strokeStyle = "#2c2c2c";
+    filling = false;
+  };
+  //Erase 클릭 시
+  handleEraseClick = e => {
+    painting = false;
+    ctx.strokeStyle = "white";
+    filling = false;
+  };
+  //Redpen 클릭 시
+  handleRedPen = e => {
+    painting = false;
+    ctx.strokeStyle = "red";
+    filling = false;
+  }
+  //Reset 클릭 시
+  handleReset = e => {
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
 
-  document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
-  document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
-  document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
+  if (mode) {
+    mode.addEventListener("click", handleModeClick);
+  }
+  if (erase) {
+    erase.addEventListener("click", handleEraseClick);
+  }
+  if (redpen) {
+    redpen.addEventListener("click", handleRedPen);
+  }
+  if (reset) {
+    reset.addEventListener("click", handleReset);
+  }
 
-  
-  for (id = 0; id < peerConnections.length; id++) {
-    var senderlist = peerConnections[id].peer.getSenders();
-    senderlist.forEach(function (sender) {
-      sender.replaceTrack(canvasStream.getVideoTracks()[0]);
-    })
+  /*  화이트보드가 크롬창 크기 따라 움직이는 코드이지만
+  창 크기를 움직이면 화이트보드가 초기화됨 
+  function whiteBoardResize() {
+    canvas.width = document.getElementById("participants").offsetWidth;
+    canvas.height = document.getElementById("participants").offsetHeight;
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
+    document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
+    document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
+  }
+
+  window.onresize = function() {
+    whiteBoardResize();
+  }
+  */
+
+  function showWhiteBoard() {
+    document.getElementById("whiteBoard").style.display = 'block';
+
+    canvas.width = document.getElementById("participants").offsetWidth;
+    canvas.height = document.getElementById("participants").offsetHeight;
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    document.getElementById("jsRange").style.width = canvas.width * 0.5 + 'px';
+    document.getElementById("canvasBtns").style.marginTop = canvas.height * 0.93 + 'px';
+    document.getElementById("exitCanvas").style.marginLeft = canvas.width * 0.93 + 'px';
+
+    
+    for (id = 0; id < peerConnections.length; id++) {
+      var senderlist = peerConnections[id].peer.getSenders();
+      senderlist.forEach(function (sender) {
+        sender.replaceTrack(canvasStream.getVideoTracks()[0]);
+      })
+    }
+  }
+
+  function hideWhiteBoard() {
+    document.getElementById("whiteBoard").style.display = 'none';
+    
+    for (id = 0; id < peerConnections.length; id++) {
+      var senderlist = peerConnections[id].peer.getSenders();
+      senderlist.forEach(function (sender) {
+        sender.replaceTrack(tempStream.getVideoTracks()[0]);
+      })
+    }
   }
 }
 
-function hideWhiteBoard() {
-  document.getElementById("whiteBoard").style.display = 'none';
-  
-  for (id = 0; id < peerConnections.length; id++) {
-    var senderlist = peerConnections[id].peer.getSenders();
-    senderlist.forEach(function (sender) {
-      sender.replaceTrack(tempStream.getVideoTracks()[0]);
-    })
-  }
-}
-
-function clickevent_peer_video(id) {      //add button in peer-video
+//add button in peer-video
+function clickevent_peer_video(id) {
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity","1");
@@ -456,6 +466,7 @@ function clickevent_peer_video(id) {      //add button in peer-video
 //자리비움
 var timer_;
 var leavingText = document.getElementById('leaving_cancle');
+
 function leaving() {
   var leaveIcon = document.getElementById('leaveIcon');
   var micIcon = document.getElementById('micIcon');
@@ -488,7 +499,7 @@ function leaving() {
     width: '100%',
     height: '100%',
     overflow: 'auto',
-    backgroundColor: 'rgba(0,0,0,0.4)'
+    backgroundColor: 'rgba(0,0,0,0.6)'
   });
   document.body.append(bg);
 
@@ -525,7 +536,37 @@ function leaving() {
       leavingTime.innerHTML = min_ + ":" + sec_;
     }
     time_++;
+
+    leaveCtx.fillStyle = "black"
+    leaveCtx.fillRect(0, 100, leave.width, leave.height);
+    leaveCtx.fillStyle = "white";
+    leaveCtx.fillText(leavingTime.innerHTML, 190, 160);
   }, 1000);
+
+  var leave = document.getElementById("leave");
+  leave.width = document.getElementById('localvideo').offsetWidth;
+  leave.height = document.getElementById('localvideo').offsetHeight;
+  if(leave.getContext){
+    var leaveCtx = leave.getContext("2d");
+
+    leaveCtx.fillStyle = "black";
+    leaveCtx.fillRect(0, 0, leave.width, leave.height);
+    
+    leaveCtx.fillStyle = "white";
+    leaveCtx.font = '45px 맑은 고딕';
+    leaveCtx.textAlign = 'center';
+    leaveCtx.fillText(document.getElementById("studentName").innerText, 190, 80);
+  }
+
+  var leavingStream = document.getElementById('leave').captureStream(30);
+
+  for (id = 0; id < peerConnections.length; id++) {
+    var senderlist = peerConnections[id].peer.getSenders();
+    senderlist.forEach(function (sender) {
+      sender.replaceTrack(leavingStream.getVideoTracks()[0]);
+    })
+  }
+
   
 }
 
@@ -546,6 +587,14 @@ function leaving_cancle() {
   leavingText.style.display = "none";
   bg.remove();
   clearInterval(timer_);
+
+  for (id = 0; id < peerConnections.length; id++) {
+    var senderlist = peerConnections[id].peer.getSenders();
+    senderlist.forEach(function (sender) {
+      sender.replaceTrack(tempStream.getVideoTracks()[0]);
+    })
+  }
+  
 }
 
 function toggleFullScreen() { //전체화면
@@ -787,66 +836,66 @@ function stopRecording() {
 }
 
 //화면공유 기능
+if (userInfo.job == "professor") {
+  function screenshare_suc(screenStream) {
+    screenshare.disabled = true;
 
-function screenshare_suc(screenStream) {
-  screenshare.disabled = true;
-
-  for(id=0;id<peerConnections.length;id++){
-    var senderlist=peerConnections[id].peer.getSenders();
-    senderlist.forEach(function(sender){
-      sender.replaceTrack(screenStream.getVideoTracks()[0]);
-    })
-  }
-
-  var local_video = document.getElementById("local_video");
-  local_video.srcObject= screenStream;
-  local_video.play();
-
-  // demonstrates how to detect that the user has stopped
-  // sharing the screen via the browser UI.
-  screenStream.getVideoTracks()[0].addEventListener('ended', () => {
-
-    for (id = 0; id < peerConnections.length; id++) {
-      var senderlist = peerConnections[id].peer.getSenders();
-      senderlist.forEach(function (sender) {
-        sender.replaceTrack(tempStream.getVideoTracks()[0]);
+    for(id=0;id<peerConnections.length;id++){
+      var senderlist=peerConnections[id].peer.getSenders();
+      senderlist.forEach(function(sender){
+        sender.replaceTrack(screenStream.getVideoTracks()[0]);
       })
     }
 
     var local_video = document.getElementById("local_video");
-    local_video.srcObject = tempStream;
+    local_video.srcObject= screenStream;
     local_video.play();
 
-    errorMsg('The user has ended sharing the screen');
-    screenshare.disabled = false;
+    // demonstrates how to detect that the user has stopped
+    // sharing the screen via the browser UI.
+    screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+
+      for (id = 0; id < peerConnections.length; id++) {
+        var senderlist = peerConnections[id].peer.getSenders();
+        senderlist.forEach(function (sender) {
+          sender.replaceTrack(tempStream.getVideoTracks()[0]);
+        })
+      }
+
+      var local_video = document.getElementById("local_video");
+      local_video.srcObject = tempStream;
+      local_video.play();
+
+      errorMsg('The user has ended sharing the screen');
+      screenshare.disabled = false;
+    });
+  }
+
+  function screenshare_err(error) {
+    console.error()
+    errorMsg(`getDisplayMedia error: ${error.name}`, error);
+  }
+
+  function errorMsg(msg, error) {
+  //const errorElement = document.querySelector('#errorMsg');
+    //errorElement.innerHTML += `<p>${msg}</p>`;
+    if (typeof error !== 'undefined') {
+    // console.error(error);
+    }
+  }
+
+  const screenshare = document.getElementById('screenshare');
+  screenshare.addEventListener('click', () => {
+    navigator.mediaDevices.getDisplayMedia({ audio: true, video: true })
+      .then(screenshare_suc, screenshare_err);
   });
-}
 
-function screenshare_err(error) {
-  console.error()
-  errorMsg(`getDisplayMedia error: ${error.name}`, error);
-}
-
-function errorMsg(msg, error) {
- //const errorElement = document.querySelector('#errorMsg');
-  //errorElement.innerHTML += `<p>${msg}</p>`;
-  if (typeof error !== 'undefined') {
-   // console.error(error);
+  if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
+    screenshare.disabled = false;
+  } else {
+    errorMsg('getDisplayMedia is not supported');
   }
 }
-
-const screenshare = document.getElementById('screenshare');
-screenshare.addEventListener('click', () => {
-  navigator.mediaDevices.getDisplayMedia({ audio: true, video: true })
-    .then(screenshare_suc, screenshare_err);
-});
-
-if ((navigator.mediaDevices && 'getDisplayMedia' in navigator.mediaDevices)) {
-  screenshare.disabled = false;
-} else {
-  errorMsg('getDisplayMedia is not supported');
-}
-
 
 //팝업 알림 기능
 
@@ -890,4 +939,16 @@ function warning_event(id){
   }
   obj = JSON.stringify(obj)
   peerConnections[id].channel.send(obj);
+}
+
+function kick_event(id){
+  var id = parseInt(id)
+  obj = {
+    "type": "kick",
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj)
+  peerConnections[id].peer.close();
+  var query = "#"+id;
+  $(query).parent(".video_content").children(".peer_video").remove(".peer_video");
 }
