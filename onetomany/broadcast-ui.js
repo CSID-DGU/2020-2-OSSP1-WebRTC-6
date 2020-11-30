@@ -61,6 +61,8 @@ var config = {
       //rotateVideo(video);
     },
     onRoomFound: function(room) {
+      if(document.getElementById("job").innerText == "professor") return;
+      
       document.getElementById("no_class").style.display="none";
       var alreadyExist = document.getElementById(room.broadcaster);
       if (alreadyExist) return;
@@ -287,10 +289,6 @@ const erase = document.getElementById("jsErase");
 const redpen = document.getElementById("redpen");
 const reset = document.getElementById("reset");
 
-canvas.width = 1100;
-canvas.height = 800;
-//canvas.width = 300;
-//canvas.height = 200;
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -382,6 +380,10 @@ if (reset) {
 
 function showWhiteBoard() {
   document.getElementById("whiteBoard").style.display = 'block';
+  console.log(document.getElementById("participants").offsetWidth);
+
+  //canvas.width = document.getElementById("participants").offsetWidth;
+  //canvas.height = document.getElementById("participants").offsetHeight;
   
   for (id = 0; id < peerConnections.length; id++) {
     var senderlist = peerConnections[id].peer.getSenders();

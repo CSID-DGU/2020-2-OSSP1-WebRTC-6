@@ -30,8 +30,10 @@
             <div class="slider visible">
                 <h1 style="color:white">WebRTC 화상회의 <br>
                     <%=userInfo.job%> <%=userInfo.name%>님 환영합니다</h1>
+                    <p></p>
                 <h2 style="color:white;">미팅 룸 목록</h2>
-                <p></p>
+                
+                <p id="job" style="display:none"><%=userInfo.job%></p>
                 <p style="display:none"><%=userInfo.name%></p>
                 <div class="slides">
                     <h1 id="no_class" style="color:white">진행중인 강의가 없습니다</h1>
