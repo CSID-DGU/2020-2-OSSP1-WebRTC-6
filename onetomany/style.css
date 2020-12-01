@@ -509,16 +509,50 @@ img{
   margin: 0px;
 }
 
+.text_input_area{
+  margin : 5px;
+  width: 97%;
+  border-radius: 5px;
+  background-color: white;
+  height: 10%;
+}
+
+#chat_message{
+  height: 90%;
+  width: 75%;
+  border :0;
+  outline: 0;
+  font-family: inherit;
+  font-size : 1.5rem;
+  word-wrap: break-word;
+  word-break:break-word;
+  overFlow-y : scroll;
+}
+
+#sand_btn{
+  border-radius: 5px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor : pointer;
+  background-color : rgb(119, 205, 255);
+  color : white;
+  border :0;
+  outline :0;
+  width: 19%;
+  margin : 5px;
+  height : 85%;
+}
+
 #sand_msg{
   width: auto;
-  max-height: 10%;
   padding : 10px;
   height: auto;
   margin: 10px;
   margin-left: 40%;
-  background : rgba(91, 162, 255, 0.925);
+  background : rgb(91, 162, 255);
   overflow: hidden;
   font-family: inherit;
+  word-wrap: break-word;
   color : white;
   border-radius: 10px;
   font-size: 1.5rem;
@@ -526,15 +560,15 @@ img{
 
 #got_msg{
   width: auto;
-  max-height: 10%;
   padding : 10px;
   height: auto;
   margin: 10px;
   margin-right: 40%;
-  background : rgb(216, 224, 235);
+  background : white;
   overflow: hidden;
   font-family: inherit;
-  color : black;
+  color : rgb(46, 46, 46);
+  word-wrap: break-word;
   border-radius: 10px;
   font-size: 1.5rem;
 }
