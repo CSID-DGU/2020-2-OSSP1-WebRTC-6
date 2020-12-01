@@ -508,3 +508,33 @@ img{
   display: none;
   margin: 0px;
 }
+
+#sand_msg{
+  width: auto;
+  max-height: 10%;
+  padding : 10px;
+  height: auto;
+  margin: 10px;
+  margin-left: 40%;
+  background : rgba(91, 162, 255, 0.925);
+  overflow: hidden;
+  font-family: inherit;
+  color : white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+#got_msg{
+  width: auto;
+  max-height: 10%;
+  padding : 10px;
+  height: auto;
+  margin: 10px;
+  margin-right: 40%;
+  background : rgb(216, 224, 235);
+  overflow: hidden;
+  font-family: inherit;
+  color : black;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}

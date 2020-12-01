@@ -88,6 +88,28 @@ var broadcast = function(config) {
 
             peer = RTCPeerConnection(peerConfig);
             peerConnections[peerConnections.length] = peer;
+            if (userInfo.job == "professor") {
+                peerConnections[peerConnections.length-1].peer.ondatachannel = function (event) {
+                    var channel=event.channel
+                    channel.onmessage = function (event) {
+                        if (config.onChannelMessage) config.onChannelMessage(event);
+                    };
+
+                    channel.onopen = function () {
+                        if (config.onChannelOpened) config.onChannelOpened(channel);
+                    };
+                    channel.onclose = function (event) {
+                        if (config.onChannelClosed) config.onChannelClosed(event);
+
+                        console.warn('WebRTC DataChannel closed', event);
+                    };
+                    channel.onerror = function (event) {
+                        if (config.onChannelError) config.onChannelError(event);
+
+                        console.error('WebRTC DataChannel error', event);
+                    };
+                };
+            }
         }
         
 

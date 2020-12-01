@@ -65,7 +65,10 @@
                         <div id=localvideo>
                             <canvas id="leave"></canvas>
                         </div>
-                        <div id=chat>chatting area</div>
+                        <div id=chat style="overflow: hidden;">
+                            <div class="massage_area" style="height: max-content; overFlow-y : scroll "></div>
+                            <input type="text" id="chat_message"></input><button id="sand_btn" onclick="sand_chat()">전송</button>
+                        </div>
 
                     </div>
                 </div>

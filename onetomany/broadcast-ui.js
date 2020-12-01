@@ -136,6 +136,9 @@ var config = {
       $(".alert_area").append("<div id='toast'></div>")
       toast("강제 퇴장 당하셨습니다 [연결 종료] ");
     }
+    else if(data.type == "chat"){
+      get_chat(data.message);
+    }
 
   },
 
@@ -951,4 +954,25 @@ function kick_event(id){
   peerConnections[id].peer.close();
   var query = "#"+id;
   $(query).parent(".video_content").children(".peer_video").remove(".peer_video");
+}
+
+//채팅기능
+function sand_chat(){
+  msg = document.getElementById("chat_message").value;
+  obj = {
+    "type": "chat",
+    "message" : msg,
+  }
+  obj = JSON.stringify(obj)
+  for (id = 0; id < peerConnections.length; id++) {
+    peerConnections[id].channel.send(obj);
+  }
+  var msg_window = "<div id=sand_msg>"+msg+"<div>"
+  $(".massage_area").append(msg_window);
+  document.getElementById("chat_message").value = null;
+}
+
+function get_chat(msg){
+  var msg_window = "<div id=got_msg>" + msg + "<div>"
+  $(".massage_area").append(msg_window);
 }
