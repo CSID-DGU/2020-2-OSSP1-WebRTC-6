@@ -2,10 +2,14 @@ var express = require('express');
 var router = express.Router();
 var path = require("path");
 var alert = require('alert');
+var session = require('express-session');
+var querystring = require('querystring');
+var url = require('url');
 
 
 var firebase = require('firebase');
 const { fstat } = require('fs');
+const { QuerySnapshot } = require('@google-cloud/firestore');
 //const { firestore } = require('firebase-admin');
 
 
@@ -57,16 +61,21 @@ router.post('/loginChk', function(req, res, next) {
             }
             snapshot.forEach(doc => {
                 userInfo = {name: doc.data().name, job : doc.data().job}
-            //인증 상태 유형 Session 으로 변경
-            //signEmail(req.body.id, req.body.passwd)
+                //인증 상태 유형 Session 으로 변경
+                //signEmail(req.body.id, req.body.passwd)
 
-            if(userInfo.job == "student"){
-                res.render('viewer', { userInfo : userInfo, error: false });
-            }
-            else{
-                res.render('host', { userInfo : userInfo, error: false });
-            }        
-            // res.render('index', { userInfo : userInfo, error: false });
+                if(userInfo.job == "student"){
+                    // res.render('viewer', { userInfo : userInfo, error: false });
+                    req.session.vaild = { "name": doc.data().name,
+                                        "job": doc.data().job};
+                    res.redirect(307, '/view');
+                }
+                else{ 
+                    //session 으로 data 전달
+                    req.session.vaild = { "name": doc.data().name,
+                                            "job": doc.data().job};
+                    res.redirect(307, "/host");
+                }        
             })
         })
         .catch(err => {

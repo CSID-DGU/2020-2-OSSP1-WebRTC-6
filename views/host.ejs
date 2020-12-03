@@ -8,6 +8,9 @@
             //     location.reload();
             // }
             var userInfo= "<%=JSON.stringify(userInfo)%>";
+            var student= "<%=JSON.stringify(student)%>";
+
+            
             
         </script>
 
@@ -44,6 +47,10 @@
                         <input type="text" id="capacity" placeholder="수업 정원">
                         <input type="text" id="description" placeholder="수업 안내">
                         <input type="text" id="meetingTime" placeholder="수업 시간">
+                        <% for(var i =0; i<student.length; i++){ %>
+                           <input type = "button" value="<%=student[i]%>" >
+                        <% } %>
+                        <br>
                     </td>
                     <td>
                         <button id="start-conferencing">New Broadcast</button>

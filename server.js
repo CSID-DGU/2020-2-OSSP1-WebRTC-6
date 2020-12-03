@@ -5,6 +5,7 @@ var app= express();
 var https= require('https');
 var kurento = require('kurento-client');
 var minimist = require('minimist');
+var session = require('express-session');
 
 var firebase = require('firebase');
 var alert = require('alert');
@@ -66,51 +67,35 @@ var io= require('socket.io')(server);
 
 //access folder
 
+
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + './view'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: {secure: true}
+}));
+
 
 var index = require('./routes/index');
+var host = require('./routes/host');
+var view = require('./routes/view');
 const { userInfo } = require('os');
 
 
 app.use('/', index);
+app.use('/host', host);
+app.use('/view', view);
 app.use(express.static(__dirname+"/onetomany"));
 
-app.get('/loginchk', function(req,res){
-	//check curreent user 		
-		var user = firebase.auth().currentUser;
+app.get('/loginChk', function(req,res){
+	alert("새로고침 시 로그인을 다시 해주세요");
+	res.render('loginForm');
+})
 
-			if (user) {
-				console.log("User email is :  "+ user.email+" (server.js)");
-				let userDB = db.collection('users');
-				let query = userDB.where('email', '==', user.email).get()
-				.then(snapshot => {
-					if(snapshot.empty){
-						console.log('No matching documents');
-						return;
-					}
-					snapshot.forEach(doc => {
-						var userInfo = {name: doc.data().name,
-									job : doc.data().job}
-						if(userInfo.job == "student"){
-							res.render('viewer', { userInfo : userInfo, error: false });
-						}
-						else{
-							res.render('host', { userInfo : userInfo, error: false });
-						}
-						
-					})
-				})
-				.catch(err => {
-					console.log('Error getting documents', err);
-				});
-			} else {
-				alert("로그인을 해주세요");
-				res.render('loginForm');
-			}    
-	})
 
 /*
  * Rooms related methods
