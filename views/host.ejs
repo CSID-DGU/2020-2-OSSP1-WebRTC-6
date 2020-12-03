@@ -8,7 +8,7 @@
             //     location.reload();
             // }
             var userInfo= "<%=JSON.stringify(userInfo)%>";
-            var student= "<%=JSON.stringify(student)%>";
+            var studentInfo= "<%=JSON.stringify(studentInfo)%>";
 
             
             
@@ -24,7 +24,6 @@
         <link href="/style.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        
         <!-- <script>
             document.createElement('article');
             document.createElement('footer');
@@ -47,9 +46,13 @@
                         <input type="text" id="capacity" placeholder="수업 정원">
                         <input type="text" id="description" placeholder="수업 안내">
                         <input type="text" id="meetingTime" placeholder="수업 시간">
-                        <% for(var i =0; i<student.length; i++){ %>
-                           <input type = "button" value="<%=student[i]%>" >
+                        <select name="test" size="10" multiple>
+                        <% for(var i =0; i<studentInfo.name.length; i++){ %>
+                            <option value="<%=studentInfo.email[i]%>">이름 : <%=studentInfo.name[i]%>, 이메일 : <%=studentInfo.email[i]%></option>
                         <% } %>
+                        </select>
+                    
+
                         <br>
                     </td>
                     <td>

@@ -27,13 +27,16 @@ router.post('/', function(req,res){
 
     var userInfo = {name: HostName, job : HostJob};
     var StudentName = new Array();
+    var StudentEmail = new Array();
     
     let Viewer = userDB.where("job", "==", "student").get()
     .then(function(snap){
         snap.forEach(function(doc){
             StudentName.push(doc.data().name);
+            StudentEmail.push(doc.data().email);
         })
-        res.render('host', { userInfo : userInfo,student : StudentName , error: false });
+        var studentInfo = {name : StudentName, email : StudentEmail};
+        res.render('host', { userInfo : userInfo, studentInfo : studentInfo , error: false });
     })
     .catch(function(error){
         console.log("Error : ", error);
