@@ -60,14 +60,15 @@ router.post('/loginChk', function(req, res, next) {
                 return;
             }
             snapshot.forEach(doc => {
-                userInfo = {name: doc.data().name, job : doc.data().job}
+                userInfo = {name: doc.data().name, job : doc.data().job, email : doc.data().email}
                 //인증 상태 유형 Session 으로 변경
                 //signEmail(req.body.id, req.body.passwd)
 
                 if(userInfo.job == "student"){
                     // res.render('viewer', { userInfo : userInfo, error: false });
                     req.session.vaild = { "name": doc.data().name,
-                                        "job": doc.data().job};
+                                        "job": doc.data().job,
+                                        "email": doc.data().email};
                     res.redirect(307, '/view');
                 }
                 else{ 

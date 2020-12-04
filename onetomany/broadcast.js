@@ -212,7 +212,8 @@ var broadcast = function(config) {
             professorName: self.professorName,
             broadcaster: self.userToken,
             description: self.description,
-            meetingTime: self.meetingTime
+            meetingTime: self.meetingTime,
+            selected_students: self.selected_students
         });
         setTimeout(startBroadcasting, 3000);
     }
@@ -232,6 +233,16 @@ var broadcast = function(config) {
             self.professorName = document.getElementById("professorName").innerText;
             self.description = document.getElementById("description").value;
             self.meetingTime = document.getElementById("meetingTime").value;
+
+            var selected_students = [];
+            var students = document.getElementsByName("students");
+
+            for(var i = 0; i < students.length; i++) {
+                if(students[i].checked == true) {
+                selected_students.push(students[i].value);
+                }
+            }
+            self.selected_students = selected_students;
 
             isbroadcaster = true;
             isGetNewRoom = false;

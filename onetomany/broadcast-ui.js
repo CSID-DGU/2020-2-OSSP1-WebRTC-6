@@ -10,7 +10,7 @@ var config = {
     openSocket: function(config) {
         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
 
-        config.channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g, '');
+        config.channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]|host|view/g, '');
         var sender = Math.round(Math.random() * 999999999) + 999999999;
 
         io.connect(SIGNALING_SERVER).emit('new-channel', {
@@ -69,6 +69,7 @@ var config = {
       //rotateVideo(video);
     },
     onRoomFound: function(room) {
+
       if(document.getElementById("job").innerText == "professor") return;
       
       document.getElementById("no_class").style.display="none";
@@ -110,15 +111,30 @@ var config = {
 
         var join_btn = document.getElementById('join_btn');
         join_btn.setAttribute('id', room.broadcaster);
+
+        var userEmail = document.getElementById("userEmail").innerText;
+
         join_btn.onclick = function() {
-        join_btn = this;
-        captureUserMedia(function() {
-              broadcastUI.joinRoom({
-                  roomToken: tr.querySelector('.join').id,
-                  joinUser: tr.id
-              });
-          });
-          hideUnnecessaryStuff();
+          var count = 0;
+          for(var i = 0; i < room.selected_students.length; i++, count++) {
+            //초대된 학생이면 통과
+            if(room.selected_students[i] == userEmail) {
+              break;
+            }
+            //초대되지 않은 학생이면 입장 거부
+            if(count == room.selected_students.length - 1) {
+              alert("허용되지 않은 사용자입니다.");
+              return;
+            }
+          }
+          join_btn = this;
+          captureUserMedia(function() {
+                broadcastUI.joinRoom({
+                    roomToken: tr.querySelector('.join').id,
+                    joinUser: tr.id
+                });
+            });
+            hideUnnecessaryStuff();
       };
   },
   onChannelMessage: function (event) {
@@ -158,6 +174,7 @@ function createButtonClickHandler() {
   });
   updateLayout(capacity);
   hideUnnecessaryStuff();
+
 }
 
 
@@ -203,6 +220,7 @@ var roomsList = document.getElementById('rooms-list');
 if (startConferencing) startConferencing.onclick = createButtonClickHandler;
 
 function hideUnnecessaryStuff() {
+    //console.log(selected_student);
     var visibleElements = document.getElementsByClassName('visible'),
         length = visibleElements.length;
     for (var i = 0; i < length; i++) {
