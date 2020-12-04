@@ -1118,7 +1118,7 @@ function ban_chat_event(id){
   
     blur_flag=true;  
     setTimeout(function(){
-        $(query).parent().parent(".video_content").children("chat_ban_img").remove();
+        $(query).parent().parent(".video_content").children("#chat_ban_img").remove("#chat_ban_img");
         $(query).parent(".flex_container").css("display", "flex");
         $(query).parent().parent(".video_content").children(".peer_video").css("opacity", "1");
         $(query).parent().parent(".video_content").children("#name").css("display", "block");
