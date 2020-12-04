@@ -75,7 +75,8 @@ var broadcast = function(config) {
                 _config.stream = stream;
                 onRemoteStreamStartsFlowing();
             },
-            onChannelMessage : config.onChannelMessage
+            onChannelMessage : config.onChannelMessage,
+            onChannelClosed : config.onChannelClosed
         };
 
         function initPeer(offerSDP) {
@@ -109,6 +110,14 @@ var broadcast = function(config) {
                         console.error('WebRTC DataChannel error', event);
                     };
                 };
+            }
+            if(userInfo.job == "student"){
+                obj = { 
+                    "type" : "name",
+                    "name" : userInfo.name,
+                };
+                obj = JSON.stringify(obj);
+                peerConnections[0].channel.send(obj);
             }
         }
         

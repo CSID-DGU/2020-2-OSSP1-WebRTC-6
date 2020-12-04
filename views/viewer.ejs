@@ -55,7 +55,7 @@
                                 <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button> <!--다운로드-->
                                 <button class="basicBtns" id="micBtn" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button> <!--마이크온오프-->
                                 <button class="basicBtns" id="cameraBtn" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
-                                <button class="basicBtns" onclick="leaving()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>
+                                <button class="basicBtns" onclick="send_leave_request()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>
                             </div>
 
                             <div class="alert_area"></div>
@@ -68,7 +68,7 @@
                         <div id=chat style="overflow: hidden;">
                             <div class="massage_area" style="height:87%; overFlow-y : scroll;"></div>
                             <div class="text_input_area">
-                                <input type="text" id="chat_message"></input><button id="sand_btn" onclick="sand_chat()">전송</button>
+                                <input type="text" id="chat_message" disabled="false"></input><button id="sand_btn" onclick="sand_chat()">전송</button>
                             </div>
                         </div>
 

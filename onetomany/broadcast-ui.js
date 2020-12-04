@@ -1,4 +1,7 @@
+const { query } = require("express");
+
 //const { query } = require("express");
+peer_name = [];
 
 var tempStream;
 var capacity = 1;
@@ -123,27 +126,85 @@ var config = {
   },
   onChannelMessage: function (event) {
     data = JSON.parse(event.data);
-    if(data.type == "notify"){
-      $(".alert_area").append("<div id='toast'></div>")
-      toast(data.message);
-      console.log("alret arrive");
-    }
-    else if(data.type == "warning"){
-      $(".alert_area").append("<div id='toast'></div>")
-      toast("※[경고]강의자가 경고를 보냈습니다※");
-    }
-    else if(data.type == "kick"){
-      $(".alert_area").append("<div id='toast'></div>")
-      toast("강제 퇴장 당하셨습니다 [연결 종료] ");
-    }
-    else if(data.type == "chat"){
-      get_chat(data.message);
-    }
+    if(data.type){
+      switch(data.type){
+        case "notify" :
+          $(".alert_area").append("<div id='toast'></div>")
+          toast(data.message);
+          console.log("alret arrive");
+          break;
+        
+        case "warning" :
+          $(".alert_area").append("<div id='toast'></div>")
+          toast("※[경고]강의자가 경고를 보냈습니다※");
+          break;
 
+        case "kick" :
+          $(".alert_area").append("<div id='toast'></div>")
+          toast("[연결 종료] 강제 퇴장 당하셨습니다");
+          break;
+
+        case "chat" :
+          get_chat(data.message);
+          break;
+
+        case "ban_chat" :
+          var index;
+          for(i=0;i<peer_name.length;i++){
+            if(peer_name[i]==data.name)
+              index=i;
+          }
+          var query = "#peer_video"+String(i);
+          
+          var msg_window = "<div id=alram>채팅이 금지되었습니다<div>"
+          $(".massage_area").append(msg_window);
+
+          
+          document.getElementById(chat_message).disabled = true;
+          
+          $(".massage_area").append("<div id=ban_timer_in_chat></div>");
+          var time = 300;
+          setInterval(function(){
+            var min = parseInt(time/60);
+            var sec = time%60;
+            var timer_text = min + ":" + sec;
+            $("#ban_timer").text(timer_text);
+            time--;
+          }, 30000);
+
+          setTimeout(function(){
+            var msg_window = "<div id=alram>채팅금지가 해제되었습니다<div>"
+            $("#ban_timer").remove("#ban_timer");
+            $(".massage_area").append(msg_window);
+            document.getElementById(chat_message).disabled = false;
+          },30000)
+          break;
+        
+        case "request_leaving" :
+          break;
+        
+        case "name":
+          peer_name[peer_name.length] = data.name;
+      }
+    }
+    if(data.leave){
+      switch(data.leave){
+        case "yes" :
+          leaving();
+        case "no" :
+          toast("※자리비움을 거절당했습니다※")
+      }
+    }
   },
 
   onChannelOpened: function (channel) {
     channel.send('hi there, data ports are ready to transfer data');
+  },
+
+  onChannelClosed: function(event){
+    if(userInfo.job == "student"){
+      $("peer_video").remove(".peer_video");
+    }
   }
 };
 
@@ -467,6 +528,36 @@ function clickevent_peer_video(id) {
 }
 
 //자리비움
+function send_leave_request(){
+  obj = {
+    "type":"leaveing_offer",
+    "id" : userInfo.name
+  }
+  obj = JSON.stringify(obj);
+  peerConnections[0].channel.send(obj);
+}
+
+function receive_leave_offer(){
+
+}
+
+function offer_leaveing(id){
+  obj = {
+    "leave" : "ok"
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj);
+}
+
+function reject_leaving(id){
+  obj = {
+    "leave" : "no"
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj);
+}
+
+
 var timer_;
 var leavingText = document.getElementById('leaving_cancle');
 
@@ -944,6 +1035,7 @@ function warning_event(id){
   peerConnections[id].channel.send(obj);
 }
 
+//강퇴기능
 function kick_event(id){
   var id = parseInt(id)
   obj = {
@@ -954,6 +1046,39 @@ function kick_event(id){
   peerConnections[id].peer.close();
   var query = "#"+id;
   $(query).parent(".video_content").children(".peer_video").remove(".peer_video");
+}
+
+//채팅금지
+function ban_chat_event(id){
+  var id = parseInt(id)
+  obj = {
+    "type" : "ban_chat",
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[id].channel.send(obj)
+
+  var query = "#" + id;
+
+  $(query).parent(".video_content").children("#name").css("opacity", "1");
+  $(query).css("opacity", "0.5");
+  $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("display", "none");
+  $(query).parent(".video_content").children(".flex_container").append("<div id='ban_timer'></div>")
+
+  var time = 300;
+  setInterval(function () {
+    var min = parseInt(time / 60);
+    var sec = time % 60;
+    var timer_text = min + ":" + sec;
+    $(query).parent(".video_content").children(".flex_container").children("#ban_timer").text(timer_text)
+    time--;
+  }, 30000);
+
+  setTimeout(function () {
+    $(query).parent(".video_content").children(".flex_container").children("#ban_timer").remove("#ban_timer");
+    $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("display", "inline-block");
+    
+  }, 30000)
+
 }
 
 //채팅기능
