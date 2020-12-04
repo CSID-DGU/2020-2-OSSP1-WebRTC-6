@@ -528,8 +528,28 @@ img{
   word-break:break-word;
   overFlow-y : scroll;
 }
+#chat_ban_img{
+  color:white;
+  text-align: center;
+  position: relative;
+  font-size: calc(5*var(--font_num));
+  z-index: 10000;
+  margin-top: 17%;
+}
 
-#sand_btn{
+#chat_notice{
+  font-family: inherit;
+  font-size:1.2rem;
+  color:rgb(65, 65, 65)
+}
+
+#ban_timer_in_chat{
+  font-family: inherit;
+  font-size:1.2rem;
+  color:rgb(65, 65, 65)
+}
+
+#send_btn{
   border-radius: 5px;
   font-family: inherit;
   font-weight: bold;
