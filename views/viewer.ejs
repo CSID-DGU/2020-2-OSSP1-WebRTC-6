@@ -3,10 +3,8 @@
 
     <head>
         <script>
-            // if(!location.hash.replace('#', '').length) {
-            //     location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
-            //     location.reload();
-            // }
+        
+
             var userInfo = "<%=JSON.stringify(userInfo)%>";
         </script>
         <style>.video_btn{ display:none; }</style>
@@ -35,6 +33,7 @@
 
                 <p id="job" style="display:none"><%=userInfo.job%></p>
                 <p id="studentName" style="display:none"><%=userInfo.name%></p>
+                <p id="userEmail" style="display:none"><%=userInfo.email%></p>
                 <div class="slides">
                     <h1 id="no_class" style="color:white">진행중인 강의가 없습니다</h1>
                 </div>

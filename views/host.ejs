@@ -38,6 +38,7 @@
             </div>
             <p id="job" style="display:none"><%=userInfo.job%></p>
             <p id="professorName" style="display:none"><%=userInfo.name%></p>
+
             <table id="class_input" class="visible">
                 <tr>
                     <td style="text-align: right;">
@@ -46,13 +47,7 @@
                         <input type="text" id="capacity" placeholder="수업 정원">
                         <input type="text" id="description" placeholder="수업 안내">
                         <input type="text" id="meetingTime" placeholder="수업 시간">
-                        <select name="test" size="10" multiple>
-                        <% for(var i =0; i<studentInfo.name.length; i++){ %>
-                            <option value="<%=studentInfo.email[i]%>">이름 : <%=studentInfo.name[i]%>, 이메일 : <%=studentInfo.email[i]%></option>
-                        <% } %>
-                        </select>
-                    
-
+                       
                         <br>
                     </td>
                     <td>
@@ -60,6 +55,13 @@
                     </td>
                 </tr>
             </table>
+
+            <div class="visible">
+                <% for(var i =0; i<studentInfo.name.length; i++){ %>
+                    <label style="color:white;"><input type='checkbox' name="students" value="<%=studentInfo.email[i]%>">이름 : <%=studentInfo.name[i]%>, 이메일 : <%=studentInfo.email[i]%></label>
+                <% } %>
+            </div>
+
             <table id="rooms-list" class="visible" style="color:white;"></table>
 
             <div class=non-visual><!--invisiable in homepage-->
