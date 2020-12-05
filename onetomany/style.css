@@ -568,12 +568,17 @@ img{
   height : 85%;
 }
 
+.msg_container{
+  width : 100%;
+}
+
 #sand_msg{
-  width: auto;
+  max-width: 60%;
   padding : 10px;
   height: auto;
   margin: 10px;
-  margin-left: 40%;
+  display : inline-block;
+  /*margin-left: 40%;*/
   background : rgb(91, 162, 255);
   overflow: hidden;
   font-family: inherit;
@@ -584,11 +589,12 @@ img{
 }
 
 #got_msg{
-  width: auto;
+  max-width: 60%;
   padding : 10px;
   height: auto;
+  display : inline-block;
   margin: 10px;
-  margin-right: 40%;
+  /*margin-right: 40%;*/
   background : white;
   overflow: hidden;
   font-family: inherit;
@@ -596,4 +602,10 @@ img{
   word-wrap: break-word;
   border-radius: 10px;
   font-size: 1.5rem;
+}
+
+#msg_time{
+  font-size : 1.2rem;
+  font-family: inherit;
+  display : inline-block;
 }

@@ -166,7 +166,7 @@ var config = {
           break;
 
         case "chat" :
-          get_chat(data.message);
+          get_chat(data);
           break;
 
         case "ban_chat" :
@@ -338,7 +338,7 @@ function updateLayout(num) {
       rowHeight = '1fr';
       colWidth = '1fr';
       col_num = '3';
-      ow_num = '3';
+      row_num = '3';
       font_num = '2.5rem'
     }
     else if (num >9 && num <= 16) {
@@ -574,38 +574,46 @@ function send_leave_request(){
   }
   obj = JSON.stringify(obj);
   peerConnections[0].channel.send(obj);
+  var msg_window = "<div id=chat_notice>자리비움을 요청했습니다<div>"
+  $(".massage_area").append(msg_window);
 }
 
+var leave_id;
 function receive_leave_offer(name){
-  var id;
   for (i = 0; i < peer_name.length; i++) {
-    if (peer_name[i] == name)
-      id = i;
+    if (peer_name[i] == name){
+      leave_id = i;
+      break;
+    }
   }
+  var msg_window = "<div id=chat_notice>"+peer_name[leave_id]+"님께서 자리비움을 요청했습니다<div>"
+  $(".massage_area").append(msg_window);
   $(".dialog_area").dialog({
+    title: "자리비움 요청",
     resizable: false,
     height: "auto",
     width: 400,
     modal: false,
     buttons: {
-      "수락": function (id) {
+      "수락": ({ id : leave_id }, function () {
         obj = {
-          "leave": "ok"
+          "leave": "yes"
         }
         obj = JSON.stringify(obj)
-        peerConnections[id].channel.send(obj);
+        peerConnections[leave_id].channel.send(obj);
         $(this).dialog("close");
-      },
-      "거절": function (id) {
+      }),
+      "거절": ({ id: leave_id },function () {
         obj = {
           "leave": "no"
         }
         obj = JSON.stringify(obj)
-        peerConnections[id].channel.send(obj);
+        peerConnections[leave_id].channel.send(obj);
         $(this).dialog("close");
-      }
+      })
     }
   });
+  $("#dialog").dialog("open");
 }
 
 var timer_;
@@ -1150,22 +1158,36 @@ function ban_chat_event(id){
 //채팅기능
 function sand_chat(){
   msg = document.getElementById("chat_message").value;
+  var today = new Date();
+  var hour = today.getHours();
+  var min = today.getMinutes();
   if(msg){
     obj = {
       "type": "chat",
       "message" : msg,
+      "time" : hour + ":" + min,
+      "name" : userInfo.name
     }
     obj = JSON.stringify(obj)
     for (id = 0; id < peerConnections.length; id++) {
       peerConnections[id].channel.send(obj);
     }
-    var msg_window = "<div id=sand_msg>"+msg+"<div>"
-    $(".massage_area").append(msg_window);
+    var msg_container = "<div class=msg_container style='text-align : right'></div>"
+    $(".massage_area").append(msg_container);
+    var msg_time = "<div id=msg_time>" + hour + ":" + min + "</div>"
+    var msg_window = "<div id=sand_msg>" + msg + "</div>"
+    $(".msg_container:last").append(msg_time);
+    $(".msg_container:last").append(msg_window);
+    
     document.getElementById("chat_message").value = null;
   }
 }
 
-function get_chat(msg){
-  var msg_window = "<div id=got_msg>" + msg + "<div>"
-  $(".massage_area").append(msg_window);
+function get_chat(data){
+  var msg_container = "<div class=msg_container style='text-align : left'></div>"
+  $(".massage_area").append(msg_container);
+  var msg_time = "<div id=msg_time>" + data.name + " " + data.time + "</div>"
+  var msg_window = "<div id=got_msg>" + data.message + "</div>"
+  $(".msg_container:last").append(msg_window);
+  $(".msg_container:last").append(msg_time);
 }
