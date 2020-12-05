@@ -111,14 +111,6 @@ var broadcast = function(config) {
                     };
                 };
             }
-            // if(userInfo.job == "student"){
-            //     obj = { 
-            //         "type" : "name",
-            //         "name" : userInfo.name,
-            //     };
-            //     obj = JSON.stringify(obj);
-            //     peerConnections[0].channel.send(obj);
-            // }
         }
         
 

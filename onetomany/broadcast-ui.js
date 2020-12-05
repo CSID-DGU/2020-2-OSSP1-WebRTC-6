@@ -65,6 +65,14 @@ var config = {
         $(".flex_container:last").append(btn_kick);
         $(".flex_container:last").append(btn_ban_chat);
       }
+      if(userInfo.job == "student"){
+          obj = { 
+              "type" : "name",
+              "name" : userInfo.name,
+          };
+          obj = JSON.stringify(obj);
+          peerConnections[0].channel.send(obj);
+      }
       video.play();
       //rotateVideo(video);
     },
@@ -210,7 +218,8 @@ var config = {
           }, 300000)
           break;
         
-        case "request_leaving" :
+        case "leave_request" :
+          receive_leave_offer(data.name);
           break;
         
         case "name":
@@ -560,33 +569,44 @@ function clickevent_peer_video(id) {
 //자리비움
 function send_leave_request(){
   obj = {
-    "type":"leaveing_offer",
-    "id" : userInfo.name
+    "type":"leave_request",
+    "name" : userInfo.name
   }
   obj = JSON.stringify(obj);
   peerConnections[0].channel.send(obj);
 }
 
-function receive_leave_offer(){
-
-}
-
-function offer_leaveing(id){
-  obj = {
-    "leave" : "ok"
+function receive_leave_offer(name){
+  var id;
+  for (i = 0; i < peer_name.length; i++) {
+    if (peer_name[i] == name)
+      id = i;
   }
-  obj = JSON.stringify(obj)
-  peerConnections[id].channel.send(obj);
+  $(".dialog_area").dialog({
+    resizable: false,
+    height: "auto",
+    width: 400,
+    modal: false,
+    buttons: {
+      "수락": function (id) {
+        obj = {
+          "leave": "ok"
+        }
+        obj = JSON.stringify(obj)
+        peerConnections[id].channel.send(obj);
+        $(this).dialog("close");
+      },
+      "거절": function (id) {
+        obj = {
+          "leave": "no"
+        }
+        obj = JSON.stringify(obj)
+        peerConnections[id].channel.send(obj);
+        $(this).dialog("close");
+      }
+    }
+  });
 }
-
-function reject_leaving(id){
-  obj = {
-    "leave" : "no"
-  }
-  obj = JSON.stringify(obj)
-  peerConnections[id].channel.send(obj);
-}
-
 
 var timer_;
 var leavingText = document.getElementById('leaving_cancle');

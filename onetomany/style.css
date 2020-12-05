@@ -537,6 +537,11 @@ img{
   margin-top: 17%;
 }
 
+.dialog_area{
+  position: absolute;
+  z-index: 10000;
+}
+
 #chat_notice{
   font-family: inherit;
   font-size:1.2rem;
