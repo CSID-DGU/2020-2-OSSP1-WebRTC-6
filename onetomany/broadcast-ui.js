@@ -636,7 +636,7 @@ function leaving() {
   var micBtn = document.getElementById('micBtn');
   var cameraBtn = document.getElementById('cameraBtn');
 
-  leaveIcon.style.color="#FA4949";
+  //leaveIcon.style.color="#FA4949";
   micIcon.style.color="#FA4949";
   cameraIcon.style.color="#FA4949";
 
@@ -733,7 +733,7 @@ function leaving() {
 
 //자리비움 취소(복귀)
 function leaving_cancle() {
-  leaveIcon.style.color="white";
+  //leaveIcon.style.color="white";
   micIcon.style.color="white";
   cameraIcon.style.color="white";
 
@@ -1179,10 +1179,10 @@ function sand_chat(){
     for (id = 0; id < peerConnections.length; id++) {
       peerConnections[id].channel.send(obj);
     }
-    var msg_container = "<div class=msg_container style='text-align : right'></div>"
+    var msg_container = "<div class=msg_container style='text-align : right'></div>";
     $(".massage_area").append(msg_container);
-    var msg_time = "<div id=msg_time>" + hour + ":" + min + "</div>"
-    var msg_window = "<div id=sand_msg>" + msg + "</div>"
+    var msg_time = "<div id=msg_time>" +time+ "</div>";
+    var msg_window = "<div id=sand_msg>" + msg + "</div>";
     $(".msg_container:last").append(msg_time);
     $(".msg_container:last").append(msg_window);
     
