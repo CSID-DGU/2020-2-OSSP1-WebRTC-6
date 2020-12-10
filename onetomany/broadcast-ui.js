@@ -209,7 +209,8 @@ var config = {
           
 
           setTimeout(function(){
-            var msg_window = "<div id=chat_notice>채팅금지가 해제되었습니다<div>"
+            var time = get_timestamp()
+            var msg_window = "<div id=chat_notice>채팅금지가 해제되었습니다 "+time+"<div>"
             $("#ban_timer_in_chat").remove("#ban_timer_in_chat");
             $(".massage_area").append(msg_window);
             chat_input.disabled = false;
@@ -232,6 +233,9 @@ var config = {
           leaving();
         case "no" :
           toast("※자리비움을 거절당했습니다※")
+          var time = get_timestamp()
+          var msg_window = "<div id=chat_notice>자리비움을 거절당했습니다 "+time+"<div>"
+          $(".massage_area").append(msg_window);
       }
     }
   },
@@ -574,7 +578,8 @@ function send_leave_request(){
   }
   obj = JSON.stringify(obj);
   peerConnections[0].channel.send(obj);
-  var msg_window = "<div id=chat_notice>자리비움을 요청했습니다<div>"
+  var time = get_timestamp()
+  var msg_window = "<div id=chat_notice>자리비움을 요청했습니다 "+time+"<div>"
   $(".massage_area").append(msg_window);
 }
 
@@ -601,6 +606,8 @@ function receive_leave_offer(name){
         }
         obj = JSON.stringify(obj)
         peerConnections[leave_id].channel.send(obj);
+        var msg_window = "<div id=chat_notice>"+peer_name[leave_id]+"님의 자리비움 요청을 수락했습니다<div>"
+        $(".massage_area").append(msg_window);
         $(this).dialog("close");
       }),
       "거절": ({ id: leave_id },function () {
@@ -609,6 +616,8 @@ function receive_leave_offer(name){
         }
         obj = JSON.stringify(obj)
         peerConnections[leave_id].channel.send(obj);
+        peerConnections[leave_id].channel.send(obj);
+        var msg_window = "<div id=chat_notice>" + peer_name[leave_id] + "님의 자리비움 요청을 거절했습니다<div>"
         $(this).dialog("close");
       })
     }
@@ -1158,14 +1167,12 @@ function ban_chat_event(id){
 //채팅기능
 function sand_chat(){
   msg = document.getElementById("chat_message").value;
-  var today = new Date();
-  var hour = today.getHours();
-  var min = today.getMinutes();
+  var time = get_timestamp();
   if(msg){
     obj = {
       "type": "chat",
       "message" : msg,
-      "time" : hour + ":" + min,
+      "time" : time,
       "name" : userInfo.name
     }
     obj = JSON.stringify(obj)
@@ -1190,4 +1197,15 @@ function get_chat(data){
   var msg_window = "<div id=got_msg>" + data.message + "</div>"
   $(".msg_container:last").append(msg_window);
   $(".msg_container:last").append(msg_time);
+}
+
+function get_timestamp(){
+  var today = new Date();
+  var hour = today.getHours();
+  var min = today.getMinutes();
+  
+  if(min<10 && min>=0) { var time = hour + ":0" + min; }
+  else { var time = hour + ":" + min; }
+  
+  return time;
 }

@@ -3,8 +3,6 @@
 
     <head>
         <script>
-        
-
             var userInfo = "<%=JSON.stringify(userInfo)%>";
         </script>
         <style>.video_btn{ display:none; }</style>
@@ -55,12 +53,14 @@
                                 <button id="download" class="basicBtns" disabled><i class="fas fa-download fa-lg"></i></button> <!--다운로드-->
                                 <button class="basicBtns" id="micBtn" onclick="micOnOff(this)"><i class="fas fa-microphone fa-lg" id="micIcon"></i></button> <!--마이크온오프-->
                                 <button class="basicBtns" id="cameraBtn" onclick="cameraOnOff(this)"><i class="fas fa-video fa-lg" id="cameraIcon"></i></button> <!--카메라온오프-->
-                                <button class="basicBtns" onclick="send_leave_request()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>
+                                <!--<button class="basicBtns" onclick="send_leave_request()"><i class="fas fa-sign-out-alt" id="leaveIcon"></i></button>-->
                             </div>
 
                             <div class="alert_area"></div>
                             
                             <div class=videos id="participants"></div>
+                            <button class="viewer_btn" id="question_btn">질문 요청</button>
+                            <button class="viewer_btn" id="leave_btn" onclick="send_leave_request()">자리비움 요청</button>
                         </div>
                         <div id=localvideo>
                             <canvas id="leave"></canvas>
