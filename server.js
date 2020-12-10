@@ -449,8 +449,8 @@ function stopPresenter(socket){
 
 function stopViewing(socket){
 	var room = getRoom(socket);
-	var video = document.getElementById(socket.id);
-	video.remove();
+	//var video = document.getElementById(socket.id);
+	//video.remove();
 
 	clearCandidatesQueue(socket.id);
 	room.viewers[socket.id].webRtcEndpoint.release();
