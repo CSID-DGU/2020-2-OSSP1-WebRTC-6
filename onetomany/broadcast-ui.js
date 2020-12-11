@@ -50,17 +50,16 @@ var config = {
 
      // video_content[index].setAttribute("id", id);
       video_content[index].insertBefore(video, video_content[index].firstChild);
-
-
+      $(".video_content:last").addClass(String(index));
 
       if (userInfo.job == "professor") {
-        var user_name = "<div id='name' style='opacity:0'>"+userInfo.name+"</div>"
+        var user_name = "<div class='name "+ index +"' style='opacity:0'>"+userInfo.name+"</div>"
         $(".video_content:last").append(user_name);
-        $(".video_content:last").append("<div class='flex_container'></div>");
+        $(".video_content:last").append("<div class='flex_container "+ index + "'></div>");
       
-        var btn_warn = "<button class='video_btn' onclick='warning_event(this.id)' id='"+index+"' style='opacity:0'>경고</button>";
-        var btn_kick = "<button class='video_btn' onclick='kick_event(this.id)' id='"+index+"' style='opacity:0'>강퇴</button>";
-        var btn_ban_chat = "<button class='video_btn' onclick='ban_chat_event(this.id)' id='"+index+"' style='opacity:0'>채팅금지</button>";
+        var btn_warn = "<button class='video_btn "+index+ "' onclick='warning_event(this.classList)' style='opacity:0'>경고</button>";
+        var btn_kick = "<button class='video_btn " + index + "' onclick='kick_event(this.classList)' style='opacity:0'>강퇴</button>";
+        var btn_ban_chat = "<button class='video_btn " + index +"' onclick='ban_chat_event(this.classList)' style='opacity:0'>채팅금지</button>";
         $(".flex_container:last").append(btn_warn);
         $(".flex_container:last").append(btn_kick);
         $(".flex_container:last").append(btn_ban_chat);
@@ -223,19 +222,56 @@ var config = {
           receive_leave_offer(data.name);
           break;
         
+        case "question" :
+          recevie_question(data.name)
+          break;
+
         case "name":
           peer_name[peer_name.length] = data.name;
+          break;
       }
     }
-    if(data.leave){
+    if(data.leave){//자리비움
       switch(data.leave){
         case "yes" :
           leaving();
+          break;
+
         case "no" :
           toast("※자리비움을 거절당했습니다※")
           var time = get_timestamp()
           var msg_window = "<div id=chat_notice>자리비움을 거절당했습니다 "+time+"<div>"
           $(".massage_area").append(msg_window);
+          break;
+      }
+    }
+    if(data.question){//질문
+      switch(data.question){
+        case "yes" :
+          toast("※질문 요청이 수락되었습니다※");
+          var time = get_timestamp()
+          var msg_window = "<div id=chat_notice>질문 요청이 수락되었습니다 " + time + "<div>"
+          $(".massage_area").append(msg_window);
+          break;
+        
+        case "no" :
+          toast("※질문요청을 거절당했습니다※")
+          var time = get_timestamp()
+          var msg_window = "<div id=chat_notice>질문요청을 거절당했습니다 " + time + "<div>"
+          $(".massage_area").append(msg_window);
+          break;
+      }
+    }
+    if(data.control){
+      switch(data.control){
+        case "micOff" :
+          micOnOff(document.getElementById("micBtn"));
+          $(".alert_area").append("<div id='toast'></div>")
+          toast("질문이 시작되었습니다");
+          break;
+
+        case "micOn":
+          micOnOff(document.getElementById("micBtn"));
       }
     }
   },
@@ -558,14 +594,14 @@ function clickevent_peer_video(id) {
   document.getElementById(id).style.opacity = 0.5;
   var query = "#"+id;
   $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity","1");
-  $(query).parent(".video_content").children("#name").css("opacity","1");
+  $(query).parent(".video_content").children(".name").css("opacity","1");
   //btn.style.opacity = 1;
   
   setTimeout(function () {
     if(!blur_flag){
       document.getElementById(id).style.opacity = 1;
     }
-    $(query).parent(".video_content").children("#name").css("opacity", "0");
+    $(query).parent(".video_content").children(".name").css("opacity", "0");
     $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity", "0");
   }, 5000);
 }
@@ -1094,7 +1130,7 @@ function toast(string) {  //toast message function
 
 //경고 기능
 function warning_event(id){
-  var id = parseInt(id)
+  var id = parseInt(id[1])
   obj = {
     "type" : "warning",
   }
@@ -1104,7 +1140,7 @@ function warning_event(id){
 
 //강퇴기능
 function kick_event(id){
-  var id = parseInt(id)
+  var id = parseInt(id[1])
   obj = {
     "type": "kick",
   }
@@ -1116,10 +1152,9 @@ function kick_event(id){
 }
 
 //채팅금지
-
 var blur_flag = false;
 function ban_chat_event(id){
-  var id = parseInt(id)
+  var id = parseInt(id[1])
   obj = {
     "type" : "ban_chat",
   }
@@ -1148,17 +1183,17 @@ function ban_chat_event(id){
   //   clearInterver(timver);
   // }, 300000)
 
-    $(query).parent().parent(".video_content").children(".peer_video").css("opacity", "0.5");
-    $(query).parent().parent(".video_content").append("<div id='chat_ban_img'><i class='fas fa-comment-slash'></i></div>");
-    $(query).parent(".flex_container").css("display","none");
-    $(query).parent().parent(".video_content").children("#name").css("display", "none");
+    $("#peer_video"+id).css("opacity", "0.5");
+    $(".video_content."+id).append("<div id='chat_ban_img'><i class='fas fa-comment-slash'></i></div>");
+    $(".flex_container."+id).css("display","none");
+    $(".name."+id).css("display", "none");
   
     blur_flag=true;  
     setTimeout(function(){
-        $(query).parent().parent(".video_content").children("#chat_ban_img").remove("#chat_ban_img");
-        $(query).parent(".flex_container").css("display", "flex");
-        $(query).parent().parent(".video_content").children(".peer_video").css("opacity", "1");
-        $(query).parent().parent(".video_content").children("#name").css("display", "block");
+        $(".video_content."+id).children("#chat_ban_img").remove("#chat_ban_img");
+        $(".flex_container." + id).css("display", "flex");
+        $("#peer_video" + id).css("opacity", "1");
+        $(".name." + id).css("display", "block");
         blur_flag=false;
     },300000)
 }
@@ -1208,4 +1243,87 @@ function get_timestamp(){
   else { var time = hour + ":" + min; }
   
   return time;
+}
+
+//질문기능
+var timerId;
+
+function question_reqeust(){
+  var time = get_timestamp();
+  obj={
+    "type" : "question",
+    "name" : userInfo.name,
+    "time" : time,
+  }
+  obj = JSON.stringify(obj);
+  peerConnections[0].channel.send(obj);
+  var msg_window = "<div id=chat_notice>질문을 요청하였습니다 "+ time +"<div>";
+  $(".massage_area").append(msg_window);
+
+}
+
+function recevie_question(name){
+  var id;
+  for (i = 0; i < peer_name.length; i++) {
+    if (peer_name[i] == name) {
+      id = i;
+      break;
+    }
+  }
+  $(".video_btn."+id).css("display", "none");
+  $("#peer_video" + id).css("opacity", "0.5");
+  $(".name." + id).css("opacity", "1");
+
+  var btn_accept = "<button class='request_btn " + id + "' onclick='question_accept(this.classList)'>수락</button>";
+  var btn_reject = "<button class='request_btn " + id +"' onclick='question_reject(this.classList)' style = 'background-color:rgb(255, 108, 108); color:white;'>거절</button>";
+
+  $(".flex_container."+id).append(btn_accept);
+  $(".flex_container."+id).append(btn_reject);
+
+  blur_flag = true;
+  timerId = setTimeout(function () {
+    question_reject($(".request_btn."+id).classList);
+  }, 60000); //1분뒤 자동 거절
+}
+
+function question_accept(index){
+  index = index[1];
+  clearTimeout(timerId);
+  $(".request_btn."+index).remove();
+  $(".name." + index).css("opacity", "0");
+  $("#peer_video"+index).css("opacity", "1");
+  $(".video_btn." + index).css("display", "inline-block");;
+  blur_flag = false;
+
+  obj={
+    "control" : "micOff"
+  }
+  obj = JSON.stringify(obj)
+  for (i = 0; i < peerConnections.length; i++){
+    if(i!=index){
+      peerConnections[i].channel.send(obj);
+    }
+  }
+
+  obj = {
+    "question": "yes"
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[index].channel.send(obj);
+}
+
+function question_reject(index) {
+  index = index[1];
+  clearTimeout(timerId);
+  $(".request_btn." + index).remove();
+  $(".name." + id).css("opacity", "0");
+  $("#peer_video" + index).css("opacity", "1");
+  $(".video_btn." + index).css("display", "inline-block");;
+  blur_flag = false;
+  
+  obj = {
+    "question": "no"
+  }
+  obj = JSON.stringify(obj)
+  peerConnections[index].channel.send(obj);
 }

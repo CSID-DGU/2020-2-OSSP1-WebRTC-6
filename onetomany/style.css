@@ -111,7 +111,7 @@ padding: .5em;
       max-height: 300px;
     }
 
-#name{
+.name{
   font-size: calc(2*var(--font_num));
   text-align: center;
   font-family: inherit;
@@ -146,7 +146,21 @@ padding: .5em;
 .video_btn:hover{
   background-color: rgb(148, 207, 255);
 }
-    
+
+.request_btn{ /*peer-video button setting*/
+  border-radius: calc((var(--row_num))*10px);
+  position: relative;
+  display: inline-block;
+  margin-left: 1%;
+  z-index: 50;
+  font-size: var(--font_num);
+  font-family: inherit;
+  cursor : pointer;
+  background-color: white;
+  border : 0;
+  outline: 0;
+  color : black;
+  }
 
 /*---other button setting---*/
 .basicBtns{
@@ -624,7 +638,7 @@ img{
   outline : 1px;
   outline-color: rgb(26, 36, 58);
   left:40%;
-  top : -20px;
+  top : -40px;
   background-color: whitesmoke;
   position: relative;
   cursor : pointer;
