@@ -601,7 +601,10 @@ function clickevent_peer_video(id) {
     if(!blur_flag){
       document.getElementById(id).style.opacity = 1;
     }
-    $(query).parent(".video_content").children(".name").css("opacity", "0");
+    if(!request_blur_flag){
+      document.getElementById(id).style.opacity = 1;
+      $(query).parent(".video_content").children(".name").css("opacity", "0");
+    }
     $(query).parent(".video_content").children(".flex_container").children(".video_btn").css("opacity", "0");
   }, 5000);
 }
@@ -1262,6 +1265,7 @@ function question_reqeust(){
 
 }
 
+var request_blur_flag=false;
 function recevie_question(name){
   var id;
   for (i = 0; i < peer_name.length; i++) {
@@ -1274,13 +1278,15 @@ function recevie_question(name){
   $("#peer_video" + id).css("opacity", "0.5");
   $(".name." + id).css("opacity", "1");
 
+  $(".name." + id).after("<div style='text-align:center;'><div class='request_sign " + id + "' id='question'>질문</div><div class='request_sign " + id +"'>요청</div></div>")
+
   var btn_accept = "<button class='request_btn " + id + "' onclick='question_accept(this.classList)'>수락</button>";
   var btn_reject = "<button class='request_btn " + id +"' onclick='question_reject(this.classList)' style = 'background-color:rgb(255, 108, 108); color:white;'>거절</button>";
 
   $(".flex_container."+id).append(btn_accept);
   $(".flex_container."+id).append(btn_reject);
 
-  blur_flag = true;
+  request_blur_flag = true;
   timerId = setTimeout(function () {
     question_reject($(".request_btn."+id).classList);
   }, 60000); //1분뒤 자동 거절
@@ -1290,10 +1296,11 @@ function question_accept(index){
   index = index[1];
   clearTimeout(timerId);
   $(".request_btn."+index).remove();
+  $(".request_sign." + index).remove();
   $(".name." + index).css("opacity", "0");
   $("#peer_video"+index).css("opacity", "1");
   $(".video_btn." + index).css("display", "inline-block");;
-  blur_flag = false;
+  request_blur_flag = false;
 
   obj={
     "control" : "micOff"
@@ -1319,7 +1326,7 @@ function question_reject(index) {
   $(".name." + id).css("opacity", "0");
   $("#peer_video" + index).css("opacity", "1");
   $(".video_btn." + index).css("display", "inline-block");;
-  blur_flag = false;
+  request_blur_flag = false;
   
   obj = {
     "question": "no"

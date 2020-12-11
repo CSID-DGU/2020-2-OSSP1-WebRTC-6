@@ -644,3 +644,23 @@ img{
   cursor : pointer;
 }
 
+.request_sign{
+  font-family: inherit;
+  font-size : var(--font_num);
+  font-weight: bold;
+  color : white; 
+  display:inline-block;
+  overflow: hidden;
+  z-index: 55;
+  position: relative;
+  text-align: center;
+  margin-top : 3%;
+}
+
+.request_sign#question{
+  color : rgb(255, 108, 108);
+}
+
+.request_sign#leave{
+  color : rgb(255, 108, 108);
+}
