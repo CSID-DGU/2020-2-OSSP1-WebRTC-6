@@ -31,34 +31,35 @@
     <body>
         <article>
             <div class="slider visible">
-                <h1 style="color:white;text-align:center">WebRTC 화상회의 <br>
+                <h1 style="color:white">WebRTC 화상회의 <br>
                     <%=userInfo.job%> <%=userInfo.name%>님 환영합니다</h1>
+                    <p></p>
+                <h2 style="color:white;">미팅 룸 생성</h2>
+                <div class="slides" sytle="text-align: center;">
+                    <div id= "host_slides" class="column">
+                        <div class="card">
+                            <img src="img1.jpg" alt="java" style="width:50%">
+                            <div class="container">
+                                <input type="text" id="conference-name" placeholder="수업 이름"><br>
+                                <input type="text" id="capacity" placeholder="수업 정원"><br>
+                                <input type="text" id="description" placeholder="수업 안내"><br>
+                                <input type="text" id="meetingTime" placeholder="수업 시간"><br>                           
+                                <p><button id="start-conferencing" class="button">화상회의 생성</button></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
             </div>
             <p id="job" style="display:none"><%=userInfo.job%></p>
             <p id="professorName" style="display:none"><%=userInfo.name%></p>
-
-            <table id="class_input" class="visible">
-                <tr>
-                    <td style="text-align: right;">
-                        <tx style="color:white">creat new broadcast here</tx>
-                        <input type="text" id="conference-name" placeholder="수업 이름">
-                        <input type="text" id="capacity" placeholder="수업 정원">
-                        <input type="text" id="description" placeholder="수업 안내">
-                        <input type="text" id="meetingTime" placeholder="수업 시간">
-                       
-                        <br>
-                    </td>
-                    <td>
-                        <button id="start-conferencing">New Broadcast</button>
-                    </td>
-                </tr>
-            </table>
 
             <div class="visible">
                 <% for(var i =0; i<studentInfo.name.length; i++){ %>
                     <label style="color:white;"><input type='checkbox' name="students" value="<%=studentInfo.email[i]%>">이름 : <%=studentInfo.name[i]%>, 이메일 : <%=studentInfo.email[i]%></label>
                 <% } %>
             </div>
+                
 
             <table id="rooms-list" class="visible" style="color:white;"></table>
 
@@ -134,7 +135,6 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-            
         </article>      
     
         <!-- commits.js is useless for you! -->

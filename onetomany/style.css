@@ -45,13 +45,6 @@ border-left: 1px solid rgb(189, 189, 189);
 padding: .5em;
 }
 
-#start-conferencing{
-  background-color: aliceblue;
-  font-size: 15px;
-  border-radius: 5px;
-  text-align: center;
-}
-
 .non-visual{ display: none; }
 
 /* gird dispaly setting*/
@@ -663,4 +656,8 @@ img{
 
 .request_sign#leave{
   color : rgb(255, 108, 108);
+}
+
+#host_slides {
+  margin: 0px auto;
 }
