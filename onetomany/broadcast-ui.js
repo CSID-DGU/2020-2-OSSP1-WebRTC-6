@@ -238,6 +238,7 @@ var config = {
           break;
 
         case "no" :
+          $(".alert_area").append("<div id='toast'></div>")
           toast("※자리비움을 거절당했습니다※")
           var time = get_timestamp()
           var msg_window = "<div id=chat_notice>자리비움을 거절당했습니다 "+time+"<div>"
@@ -248,6 +249,7 @@ var config = {
     if(data.question){//질문
       switch(data.question){
         case "yes" :
+          $(".alert_area").append("<div id='toast'></div>")
           toast("※질문 요청이 수락되었습니다※");
           var time = get_timestamp()
           var msg_window = "<div id=chat_notice>질문 요청이 수락되었습니다 " + time + "<div>"
@@ -255,6 +257,7 @@ var config = {
           break;
         
         case "no" :
+          $(".alert_area").append("<div id='toast'></div>")
           toast("※질문요청을 거절당했습니다※")
           var time = get_timestamp()
           var msg_window = "<div id=chat_notice>질문요청을 거절당했습니다 " + time + "<div>"
@@ -1323,7 +1326,8 @@ function question_reject(index) {
   index = index[1];
   clearTimeout(timerId);
   $(".request_btn." + index).remove();
-  $(".name." + id).css("opacity", "0");
+  $(".request_sign." + index).remove();
+  $(".name." + index).css("opacity", "0");
   $("#peer_video" + index).css("opacity", "1");
   $(".video_btn." + index).css("display", "inline-block");;
   request_blur_flag = false;
