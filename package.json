@@ -24,6 +24,7 @@
     "firebase": "^8.1.1",
     "firebase-admin": "^9.4.1",
     "kurento-client": "^6.15.0",
+    "multiple-select": "^1.5.2",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

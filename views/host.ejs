@@ -3,10 +3,6 @@
 
     <head>
         <script>
-            // if(!location.hash.replace('#', '').length) {
-            //     location.href = location.href.split('#')[0] + '#' + (Math.random() * 100).toString().replace('.', '');
-            //     location.reload();
-            // }
             var userInfo= "<%=JSON.stringify(userInfo)%>";
             var studentInfo= "<%=JSON.stringify(studentInfo)%>";
         </script>
@@ -22,13 +18,19 @@
         <link href="/style.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        <!-- <script>
-            document.createElement('article');
-            document.createElement('footer');
-        </script> -->
+        <!-- jequery mutiple select box  -->
+        <!-- Latest compiled and minified CSS -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+        
+
     </head>
 
     <body>
+
         <article>
             <div class="slider visible">
                 <h1 style="color:white">WebRTC 화상회의 <br>
@@ -43,7 +45,12 @@
                                 <input type="text" id="conference-name" placeholder="수업 이름"><br>
                                 <input type="text" id="capacity" placeholder="수업 정원"><br>
                                 <input type="text" id="description" placeholder="수업 안내"><br>
-                                <input type="text" id="meetingTime" placeholder="수업 시간"><br>                           
+                                <input type="text" id="meetingTime" placeholder="수업 시간"><br>  
+                                  <select id="studentlist" multiple="multiple" style="width:100%">
+                                  <% for(var i =0; i<studentInfo.name.length; i++){ %>
+                                    <option name="students" value="<%=studentInfo.email[i]%>"><%=studentInfo.name[i]%></option>
+                                  <% } %>          
+                                  </select>
                                 <p><button id="start-conferencing" class="button">화상회의 생성</button></p>
                             </div>
                         </div>
@@ -54,12 +61,26 @@
             <p id="job" style="display:none"><%=userInfo.job%></p>
             <p id="professorName" style="display:none"><%=userInfo.name%></p>
 
+            <script>
+            
+                    $('#studentlist').multipleSelect({
+                        // options here
+                        hideOptgroupCheckboxes:true,
+                        placeholder:'학생목록',
+                        multipleWidth: 60,
+                        openOnHover:true,
+                        multiple:true,
+                    
+                });
+            </script>
+
+            <!-- 학생목록 출력
             <div class="visible">
                 <% for(var i =0; i<studentInfo.name.length; i++){ %>
                     <label style="color:white;"><input type='checkbox' name="students" value="<%=studentInfo.email[i]%>">이름 : <%=studentInfo.name[i]%>, 이메일 : <%=studentInfo.email[i]%></label>
                 <% } %>
             </div>
-                
+                 -->
 
             <table id="rooms-list" class="visible" style="color:white;"></table>
 
