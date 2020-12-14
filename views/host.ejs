@@ -20,12 +20,14 @@
 
         <!-- jequery mutiple select box  -->
         <!-- Latest compiled and minified CSS -->
-        <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
-        
+
+        <link rel="stylesheet" href="easySelectStyle.css">
+        <script type="text/javascript" src="easySelect.js"></script>
+
 
     </head>
 
@@ -46,7 +48,7 @@
                                 <input type="text" id="capacity" placeholder="수업 정원"><br>
                                 <input type="text" id="description" placeholder="수업 안내"><br>
                                 <input type="text" id="meetingTime" placeholder="수업 시간"><br>  
-                                  <select id="studentlist" multiple="multiple" style="width:100%">
+                                  <select id="studentlist" multiple="multiple">
                                   <% for(var i =0; i<studentInfo.name.length; i++){ %>
                                     <option name="students" value="<%=studentInfo.email[i]%>"><%=studentInfo.name[i]%></option>
                                   <% } %>          
@@ -62,16 +64,22 @@
             <p id="professorName" style="display:none"><%=userInfo.name%></p>
 
             <script>
-            
-                    $('#studentlist').multipleSelect({
-                        // options here
-                        hideOptgroupCheckboxes:true,
-                        placeholder:'학생목록',
-                        multipleWidth: 60,
-                        openOnHover:true,
-                        multiple:true,
-                    
-                });
+                $("#studentlist").easySelect({
+                search:true,
+                // placeholder text
+                placeholder: '학생 목록',
+                // color of selected options
+                selectColor: '#414c52',
+                // color of placeholder text
+                placeholderColor: '#838383',
+                // title of selected options
+                itemTitle: '명 선택',
+                // shows values
+                showEachItem: true,
+                // width
+                width: '100%'
+
+                })
             </script>
 
             <!-- 학생목록 출력
@@ -155,6 +163,7 @@
             <script src="broadcast-ui.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         </article>      
     
