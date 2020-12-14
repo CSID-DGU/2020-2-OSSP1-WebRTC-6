@@ -288,7 +288,14 @@ var config = {
 
 
 function createButtonClickHandler() {
-  capacity = document.getElementById('capacity').value;
+  var selected_students = [];
+            
+  $("option[name='students']:checked").each(function() {
+      selected_students.push($(this).val());
+  })
+
+  capacity = selected_students.length;
+
   capacity = Number(capacity);
   captureUserMedia(function() {
       broadcastUI.createRoom({
