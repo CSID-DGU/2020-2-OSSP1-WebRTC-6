@@ -236,13 +236,11 @@ var broadcast = function(config) {
             self.meetingTime = document.getElementById("meetingTime").value;
 
             var selected_students = [];
-            var students = document.getElementsByName("students");
-
-            for(var i = 0; i < students.length; i++) {
-                if(students[i].checked == true) {
-                selected_students.push(students[i].value);
-                }
-            }
+            
+            $("option[name='students']:checked").each(function() {
+                selected_students.push($(this).val());
+            })
+          
             self.selected_students = selected_students;
 
             isbroadcaster = true;
