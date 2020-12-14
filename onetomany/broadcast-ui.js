@@ -263,18 +263,28 @@ var config = {
           var msg_window = "<div id=chat_notice>질문요청을 거절당했습니다 " + time + "<div>"
           $(".massage_area").append(msg_window);
           break;
+        
+        case "question_start":
+          $(".alert_area").append("<div id='toast'></div>");
+          toast("질문이 시작되었습니다");
+          break;
       }
     }
     if(data.control){
       switch(data.control){
-        case "micOff" :
-          micOnOff(document.getElementById("micBtn"));
-          $(".alert_area").append("<div id='toast'></div>")
-          toast("질문이 시작되었습니다");
+        case "micOff":
+          if(config.attachStream.getAudioTracks()[0].enabled) {
+            config.attachStream.getAudioTracks()[0].enabled = false;
+            document.getElementById("micIcon").classList.replace('fa-microphone', 'fa-microphone-slash');
+          }
           break;
 
         case "micOn":
-          micOnOff(document.getElementById("micBtn"));
+          if (!(config.attachStream.getAudioTracks()[0].enabled)) {
+            config.attachStream.getAudioTracks()[0].enabled = true;
+            document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
+          }
+          break;
       }
     }
   },
@@ -1306,6 +1316,7 @@ function question_accept(index){
   request_blur_flag = false;
 
   obj={
+    "question": "question_start",
     "control" : "micOff"
   }
   obj = JSON.stringify(obj)
@@ -1316,7 +1327,8 @@ function question_accept(index){
   }
 
   obj = {
-    "question": "yes"
+    "question": "yes",
+    "control" : "micOn"
   }
   obj = JSON.stringify(obj)
   peerConnections[index].channel.send(obj);
@@ -1337,4 +1349,28 @@ function question_reject(index) {
   }
   obj = JSON.stringify(obj)
   peerConnections[index].channel.send(obj);
+}
+
+//all student mic off
+function soundOnOff(element){
+  if (document.getElementById("soundIcon").classList[1] == 'fa-volume-up') {
+    obj = {
+      "control": "micOff"
+    }
+    obj = JSON.stringify(obj)
+    for (i = 0; i < peerConnections.length; i++){
+      peerConnections[i].channel.send(obj);
+    }
+    document.getElementById("soundIcon").classList.replace('fa-volume-up', 'fa-volume-mute');
+  }
+  else {
+    obj = {
+      "control": "micOn"
+    }
+    obj = JSON.stringify(obj)
+    for (i = 0; i < peerConnections.length; i++) {
+      peerConnections[i].channel.send(obj);
+    }
+    document.getElementById("soundIcon").classList.replace('fa-volume-mute', 'fa-volume-up');
+  }
 }
