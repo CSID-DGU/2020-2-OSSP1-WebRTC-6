@@ -386,6 +386,7 @@ function updateLayout(num) {
     var rowHeight = '-webkit-fill-available';
     var colWidth = '-webkit-fill-available';
     var col_num = '1' ,row_num='1';
+    var font_num = '4rem'
 
     if(num>1 && num<=4){
       rowHeight = '1fr';
