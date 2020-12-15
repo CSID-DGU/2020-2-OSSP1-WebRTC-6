@@ -92,10 +92,16 @@
             <table id="rooms-list" class="visible" style="color:white;"></table>
 
             <div class=non-visual><!--invisiable in homepage-->
+                <div class="modal"></div>
+                <div class="pop-up">
+                    <div style="margin-top:10%; color:black; font-size:2.5rem; font-weight: bold;">정말 나가시겠습니까?</div>
+                    <button class="exit_btn" onclick="exit_yes()">네</button>
+                    <button class="exit_btn" onclick="exit_no()">아니오</button>
+                </div>
                     <div class="wrapper"><!--grid UI-->
                         <div class=content><!--remote video-->
                             <div class="left_nav">
-                                <button id="exit" class="basicBtns"><i class="fas fa-sign-out-alt"></i></button><!--exit peer connection func bnt-->
+                                <button id="exit" class="basicBtns" onclick="exitRoom()"><i class="fas fa-sign-out-alt"></i></button><!--exit peer connection func bnt-->
                                 <button id="fullscreen" class="basicBtns" onclick="toggleFullScreen()"><i class="fas fa-expand"></i></i></button><!--full screen func bnt-->
                             </div>
 

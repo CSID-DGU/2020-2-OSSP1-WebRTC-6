@@ -670,3 +670,45 @@ img{
 #host_slides {
   margin: 0 auto;
 }
+
+.pop-up{
+  position:absolute;
+  display : none;
+  left : 50%;
+  top: 50%;
+  border-radius: 20px;
+  margin-left: -250px;
+  margin-top:-150px;
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  color:black;
+  font : 2.5rem;
+  z-index:10000000;
+  text-align: center;
+}
+
+.modal{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.432);
+  z-index: 1000000;
+  width: 100vw;
+  height: 100vh;
+  display:none;
+}
+
+.exit_btn{
+  background-color: rgb(27, 27, 75);
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  margin-top:30%;
+  padding: 10px;
+  margin-left: 10px;
+  color : white;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1.8rem;
+  border : 0;
+  outline: 0;
+}

@@ -1398,3 +1398,18 @@ function soundOnOff(element){
     document.getElementById("soundIcon").classList.replace('fa-volume-mute', 'fa-volume-up');
   }
 }
+
+function exitRoom(){ //개발중
+  $(".pop-up").css("display","block");
+  $(".modal").css("display", "block");
+}
+
+function exit_yes(){
+  $(".pop-up").css("display", "none");
+  $(".modal").css("display", "none");
+}
+
+function exit_no(){
+  $(".pop-up").css("display", "none");
+  $(".modal").css("display", "none");
+}
