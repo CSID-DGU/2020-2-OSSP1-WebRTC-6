@@ -1,4 +1,5 @@
 var peerConnections= [];
+var studentName;
 
 var broadcast = function(config) {
     var self = {
@@ -28,7 +29,8 @@ var broadcast = function(config) {
             openSubSocket({
                 isofferer: true,
                 channel: response.channel || response.userToken,
-                closeSocket: true
+                closeSocket: true,
+                response: response
             });
         }
     }
@@ -50,6 +52,7 @@ var broadcast = function(config) {
 
         var socket = config.openSocket(socketConfig),
             isofferer = _config.isofferer,
+            response = _config.response,
             gotstream,
             video = document.createElement('video'),
             inner = { },
@@ -116,10 +119,11 @@ var broadcast = function(config) {
 
         function afterRemoteStreamStartedFlowing() {
             gotstream = true;
-
             config.onRemoteStream({
                 video: video,
-                stream: _config.stream
+                stream: _config.stream,
+                studentName: self.studentName,
+                response: response
             });
             
 
@@ -249,6 +253,7 @@ var broadcast = function(config) {
         },
         joinRoom: function(_config) {
             self.roomToken = _config.roomToken;
+            self.studentName = document.getElementById("studentName").innerText;
             isGetNewRoom = false;
 
             openSubSocket({
@@ -258,7 +263,8 @@ var broadcast = function(config) {
             defaultSocket.send({
                 participant: true,
                 userToken: self.userToken,
-                joinUser: _config.joinUser
+                joinUser: _config.joinUser,
+                studentName: self.studentName
             });
         }
     };

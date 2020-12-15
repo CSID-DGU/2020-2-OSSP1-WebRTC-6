@@ -33,7 +33,8 @@ var config = {
 
         socket.on('message', config.onmessage);
     },
-    onRemoteStream: function(media) {
+    onRemoteStream: function(media) {  //진행중
+      if(userInfo.job=="professor") $(".notVisit").remove(String("."+media.response.studentName));
       var video = media.video;
       // video.setAttribute('controls', true);
       $(".videos").append("<div class='video_content'></div>");
@@ -41,7 +42,6 @@ var config = {
       
       var index = video_content.length - 1;
       var id = "peer_video" + index.toString();
-      
       video.setAttribute("class","peer_video");
       video.id = id;
       if (userInfo.job == "professor"){
@@ -53,7 +53,7 @@ var config = {
       $(".video_content:last").addClass(String(index));
 
       if (userInfo.job == "professor") {
-        var user_name = "<div class='name "+ index +"' style='opacity:0'>"+userInfo.name+"</div>"
+        var user_name = "<div class='name "+ index +"' style='opacity:0'>"+media.response.studentName+"</div>"
         $(".video_content:last").append(user_name);
         $(".video_content:last").append("<div class='flex_container "+ index + "'></div>");
       
@@ -96,7 +96,8 @@ var config = {
           captureUserMedia(function() {
               broadcastUI.joinRoom({
                   roomToken: tr.querySelector('.join').id,
-                  joinUser: tr.id
+                  joinUser: tr.id,
+                  studentName: userInfo.name
               });
           });
           hideUnnecessaryStuff();
@@ -299,9 +300,11 @@ var config = {
 
 function createButtonClickHandler() {
   var selected_students = [];
+  var selected_student_name = [];
             
   $("option[name='students']:checked").each(function() {
       selected_students.push($(this).val());
+      selected_student_name.push($(this).text());
   })
 
   capacity = selected_students.length;
@@ -315,6 +318,19 @@ function createButtonClickHandler() {
   updateLayout(capacity);
   hideUnnecessaryStuff();
 
+  //진행중
+  for(var i = 0; i < capacity; i++) {
+    $(".videos").append("<div class='notVisit'></div>");
+    notVisit = document.getElementsByClassName("notVisit");
+    var index = notVisit.length - 1;
+
+    document.getElementsByName("students").value
+
+    $(".notVisit:last").addClass(String(selected_student_name[i]));
+    notVisit[index].innerHTML = "<br>"+selected_student_name[i]+"<br><br>미출석";
+  }
+  
+  
 }
 
 
