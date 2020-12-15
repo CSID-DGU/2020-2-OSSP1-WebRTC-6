@@ -390,6 +390,21 @@ function hideUnnecessaryStuff() {
     //document.getElementById("open_Concentration").style.display = 'block';
 }
 
+function reloadUnnecessaryStuff() {
+  //console.log(selected_student);
+  var visibleElements = document.getElementsByClassName('visible'),
+    length = visibleElements.length;
+  for (var i = 0; i < length; i++) {
+    visibleElements[i].style.display = 'unset';
+  }
+  var header = document.getElementsByTagName('h1');
+  header[0].style.display = 'block';
+
+  var non_visual = document.getElementsByClassName('non-visual');
+  non_visual[0].style.display = 'none'; //hide peer connection page factor
+  //document.getElementById("open_Concentration").style.display = 'block';
+}
+
 function rotateVideo(video) {
     video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
     setTimeout(function() {
@@ -1405,8 +1420,12 @@ function exitRoom(){ //개발중
 }
 
 function exit_yes(){
+  for(i=0;i<peerConnections.length;i++){
+    peerConnections[i].peer.close();
+  }
   $(".pop-up").css("display", "none");
   $(".modal").css("display", "none");
+  reloadUnnecessaryStuff();
 }
 
 function exit_no(){
