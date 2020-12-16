@@ -238,6 +238,15 @@ var config = {
         case "name":
           peer_name[peer_name.length] = data.name;
           break;
+
+        case "concentration_good" :
+          //여기여기
+          receive_concentration_offer(data.name, true);
+          break;
+
+        case "concentration_bad" :
+          receive_concentration_offer(data.name, false);
+          break;
       }
     }
     if(data.leave){//자리비움
@@ -294,6 +303,11 @@ var config = {
             document.getElementById("micIcon").classList.replace('fa-microphone-slash', 'fa-microphone');
           }
           break;
+
+        case "test_concentration" :
+        testConcentration();
+        break;
+        
       }
     }
   },
@@ -882,6 +896,7 @@ function toggleFullScreen() { //전체화면
   }
 }
 
+//집중도테스트
 var success;
 var bg = document.createElement('div');
 var modal = document.getElementById('testConcentration')
@@ -940,13 +955,32 @@ function testConcentration() {
     }
 
     time--;
-
+    //여기여기
     if(success == true) {  //잘 입력했으면 타이머 중지
       clearInterval(timer);
+      var msg_window = "<div id=chat_notice>" + userInfo.name +  "님 집중도 테스트 통과 <div>";
+      
+      obj = {
+        "type": "concentration_good",
+        "name" : userInfo.name
+      }
+      obj = JSON.stringify(obj)
+      peerConnections[0].channel.send(obj);
+      $(".massage_area").append(msg_window);
+
     }
     if(time < 0) {  //타임오버
       clearInterval(timer);
       document.getElementById("timer").innerHTML = "집중 안해요?";
+      var msg_window = "<div id=chat_notice>" + userInfo.name +  "님 집중도 테스트 실패 <div>";
+      
+      obj = {
+        "type": "concentration_bad",
+        "name" : userInfo.name
+      }
+      obj = JSON.stringify(obj)
+      peerConnections[0].channel.send(obj);
+      $(".massage_area").append(msg_window);
     }
   }, 1000);
 }
@@ -1438,4 +1472,35 @@ function exit_yes(){
 function exit_no(){
   $(".pop-up").css("display", "none");
   $(".modal").css("display", "none");
+}
+
+//집중도테스트 시작
+function startTestConcentrationAllStudents() {
+  alert("전체 학생에게 집중도 테스트를 시작합니다.");
+  obj = {
+    "control": "test_concentration"
+  }
+  obj = JSON.stringify(obj)
+  for (i = 0; i < peerConnections.length; i++){
+    peerConnections[i].channel.send(obj);
+  }
+}
+
+
+var concentration_id;
+function receive_concentration_offer(name, isGood){
+  for (i = 0; i < peer_name.length; i++) {
+    if (peer_name[i] == name){
+      concentration_id = i;
+      break;
+    }
+  }
+
+  if(isGood)
+    var msg_window = "<div id=chat_notice>" + peer_name[concentration_id] +  "님 집중도 테스트 통과 <div>";
+
+  else
+    var msg_window = "<div id=chat_notice>" + peer_name[concentration_id] +  "님 집중도 테스트 실패 <div>";
+  $(".massage_area").append(msg_window);
+  
 }

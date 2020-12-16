@@ -177,6 +177,9 @@ padding: .5em;
   color: white;
 }
 
+#conc {
+  font-size: 18px;
+}
 .navbar {
 width: 550px;
 left:50%; 
