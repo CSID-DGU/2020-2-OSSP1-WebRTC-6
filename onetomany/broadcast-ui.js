@@ -329,6 +329,11 @@ function createButtonClickHandler() {
       selected_student_name.push($(this).text());
   })
 
+  if(selected_students.length == 0) {
+    alert("초대할 학생을 1명 이상 선택해 주세요.");
+    return;
+  }
+
   capacity = selected_students.length;
 
   capacity = Number(capacity);
