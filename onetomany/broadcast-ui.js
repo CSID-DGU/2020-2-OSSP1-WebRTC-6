@@ -34,11 +34,19 @@ var config = {
         socket.on('message', config.onmessage);
     },
     onRemoteStream: function(media) {  //진행중
-      if(userInfo.job=="professor") $(".notVisit").remove(String("."+media.response.studentName));
+      
       var video = media.video;
       // video.setAttribute('controls', true);
-      $(".videos").append("<div class='video_content'></div>");
+      
+      if(userInfo.job=="professor") {
+        $(".notVisit:first").before("<div class='video_content'></div>");
+        $(".notVisit").remove(String("."+media.response.studentName));
+      }
+      else {
+        $(".videos").append("<div class='video_content'></div>");
+      }
       video_content = document.getElementsByClassName("video_content");
+
       
       var index = video_content.length - 1;
       var id = "peer_video" + index.toString();
@@ -329,7 +337,6 @@ function createButtonClickHandler() {
     $(".notVisit:last").addClass(String(selected_student_name[i]));
     notVisit[index].innerHTML = "<br>"+selected_student_name[i]+"<br><br>미출석";
   }
-  
   
 }
 
