@@ -718,7 +718,7 @@ img{
 
 .chatOffBtn {
   background: aliceblue;
-  color: black;
+  color: rgb(85, 117, 165);
   border: none;
   width: 40px;
   text-decoration: none;
@@ -746,4 +746,7 @@ img{
 #hiddenChat {
   margin: auto;
   margin-top: 8px;
+  position:relative;
+  text-align: right;
+  width: 95%;
 }
