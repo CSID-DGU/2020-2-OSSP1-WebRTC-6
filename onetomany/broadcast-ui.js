@@ -1559,6 +1559,7 @@ function hideNote(){
 }
 
 function bodyShot() {
+  document.getElementById("canvas").style.display = 'block';
       html2canvas(document.body).then(function (canvas) {
         drawImg(canvas.toDataURL('image/png'));
         saveAs(canvas.toDataURL(), 'file-name.png');
