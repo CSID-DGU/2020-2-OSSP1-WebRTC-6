@@ -306,9 +306,13 @@ var config = {
           break;
 
         case "test_concentration" :
-        testConcentration();
-        break;
+          testConcentration();
+          break;
         
+        case "exit":
+          setTimeout(exit_yes, 5000); 
+          break;
+
       }
     }
   },
@@ -1495,8 +1499,20 @@ function exitRoom(){
 }
 
 function exit_yes(){
-  for(i=0;i<peerConnections.length;i++){
-    peerConnections[i].peer.close();
+  if(userInfo.job=="professor"){
+    obj={
+      "type" : "notify",
+      "control" : "exit",
+      "message" : "수업이 종료되었습니다. 5초 후 자동종료"
+    }
+    obj = JSON.stringify(obj);
+    for(i=0;i<peerConnections.length;i++){
+      peerConnections[i].channel.send(obj);
+      peerConnections[i].peer.close();
+    }
+  }
+  else{
+    peerConnections[0].peer.close();
   }
   $(".pop-up").css("display", "none");
   $(".modal").css("display", "none");
