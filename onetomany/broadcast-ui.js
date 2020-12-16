@@ -710,36 +710,61 @@ function receive_leave_offer(name){
   }
   var msg_window = "<div id=chat_notice>"+peer_name[leave_id]+"님께서 자리비움을 요청했습니다<div>"
   $(".massage_area").append(msg_window);
-  $(".dialog_area").dialog({
-    title: "자리비움 요청",
-    resizable: false,
-    height: "auto",
-    width: 400,
-    modal: false,
-    buttons: {
-      "수락": ({ id : leave_id }, function () {
-        obj = {
-          "leave": "yes"
-        }
-        obj = JSON.stringify(obj)
-        peerConnections[leave_id].channel.send(obj);
-        var msg_window = "<div id=chat_notice>"+peer_name[leave_id]+"님의 자리비움 요청을 수락했습니다<div>"
-        $(".massage_area").append(msg_window);
-        $(this).dialog("close");
-      }),
-      "거절": ({ id: leave_id },function () {
-        obj = {
-          "leave": "no"
-        }
-        obj = JSON.stringify(obj)
-        peerConnections[leave_id].channel.send(obj);
-        peerConnections[leave_id].channel.send(obj);
-        var msg_window = "<div id=chat_notice>" + peer_name[leave_id] + "님의 자리비움 요청을 거절했습니다<div>"
-        $(this).dialog("close");
-      })
+  
+  $(".video_btn." + leave_id).css("display", "none");
+  $("#peer_video" + leave_id).css("opacity", "0.5");
+  $(".name." + leave_id).css("opacity", "1");
+
+  $(".name." + leave_id).after("<div style='text-align:center;'><div class='request_sign " + leave_id + "' id='question'>자리비움</div><div class='request_sign " + leave_id + "'>요청</div></div>")
+
+  var btn_accept = "<button class='request_btn " + leave_id + "' onclick='leave_accept(this.classList)'>수락</button>";
+  var btn_reject = "<button class='request_btn " + leave_id + "' onclick='leave_reject(this.classList)' style = 'background-color:rgb(255, 108, 108); color:white;'>거절</button>";
+
+  $(".flex_container." + leave_id).append(btn_accept);
+  $(".flex_container." + leave_id).append(btn_reject);
+
+  request_blur_flag = true;
+  timerId = setTimeout(function () {
+    leave_reject($(".request_btn." + leave_id).classList);
+  }, 60000); //1분뒤 자동 거절
+}
+
+function leave_accept(index){
+  index = index[1];
+  clearTimeout(timerId);
+  $(".request_btn." + index).remove();
+  $(".request_sign." + index).remove();
+  $(".name." + index).css("opacity", "0");
+  $("#peer_video" + index).css("opacity", "1");
+  $(".video_btn." + index).css("display", "inline-block");;
+  request_blur_flag = false;
+
+  obj = {
+  "leave": "yes"
+}
+obj = JSON.stringify(obj)
+peerConnections[index].channel.send(obj);
+var msg_window = "<div id=chat_notice>" + peer_name[index] + "님의 자리비움 요청을 수락했습니다<div>"
+$(".massage_area").append(msg_window);
+}
+
+function leave_reject(index){
+  index = index[1];
+  clearTimeout(timerId);
+  $(".request_btn." + index).remove();
+  $(".request_sign." + index).remove();
+  $(".name." + index).css("opacity", "0");
+  $("#peer_video" + index).css("opacity", "1");
+  $(".video_btn." + index).css("display", "inline-block");;
+  request_blur_flag = false;
+
+    obj = {
+      "leave": "no"
     }
-  });
-  $("#dialog").dialog("open");
+    obj = JSON.stringify(obj)
+    peerConnections[index].channel.send(obj);
+
+    var msg_window = "<div id=chat_notice>" + peer_name[index] + "님의 자리비움 요청을 거절했습니다<div>"
 }
 
 var timer_;
@@ -1460,7 +1485,7 @@ function soundOnOff(element){
   }
 }
 
-function exitRoom(){ //개발중
+function exitRoom(){ 
   $(".pop-up").css("display","block");
   $(".modal").css("display", "block");
 }
