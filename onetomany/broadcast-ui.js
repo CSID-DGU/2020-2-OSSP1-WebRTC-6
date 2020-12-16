@@ -312,7 +312,10 @@ var config = {
         case "exit":
           setTimeout(exit_yes, 5000); 
           break;
-
+        
+        case "record":
+          recordButton_start();
+          break;
       }
     }
   },
@@ -1060,10 +1063,27 @@ function submit_concentration() {
 
 
 //녹화 기능
+function record_request(){
+  obj={
+    "control" : "record"
+  }
+  obj=JSON.stringify(obj)
+  for(i=0;i<peerConnections.length;i++){
+    peerConnections[i].channel.send(obj);
+  }
+  if (recordStart == true) {
+      recordStart = false;
+      recordButton.style.color = "red";
+    } else {
+      recordStart = true;
+      recordButton.style.color = "white";
+    }
+}
+
 let recordedBlobs;
 var recordStart = true;
 var recordButton = document.getElementById("record");
-recordButton.addEventListener("click", ()=>{
+function recordButton_start(){
     if (recordStart == true) {
       recordStart = false;
       startRecording();
@@ -1074,7 +1094,7 @@ recordButton.addEventListener("click", ()=>{
       downloadButton.disabled = false;
       recordButton.style.color = "white";
     }
-})
+}
 
 
 function getDateFormat(date, delimiter) { //날짜 구하기 > filename
@@ -1089,7 +1109,7 @@ function getDateFormat(date, delimiter) { //날짜 구하기 > filename
   if (dd < 10) dd = "0" + dd;
 
   if (delimiter == null) delimiter = "";
-  return yy + delimiter + mm + delimiter + dd;
+  return yy + delimiter + mm + delimiter + dd + get_timestamp();
 }
 
 const downloadButton = document.querySelector('button#download');
@@ -1123,7 +1143,7 @@ function startRecording() {
     video: true
   }
   recordedBlobs = [];
-  var canvas = document.getElementById("local_video")
+  var canvas = document.getElementById("peer_video0")
   // Optional frames per second argument.
   var stream = canvas.captureStream(25);
   var recordedChunks = [];
