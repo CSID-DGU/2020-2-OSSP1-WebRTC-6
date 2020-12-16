@@ -715,3 +715,35 @@ img{
   border : 0;
   outline: 0;
 }
+
+.chatOffBtn {
+  background: aliceblue;
+  color: black;
+  border: none;
+  width: 40px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 0px;
+  cursor: pointer;
+  padding: 0px;
+}
+
+.chatOnBtn {
+  background: #181818;
+  color: white;
+  border: solid 1px grey;
+  border-radius: 2px;
+  width: 40px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 0px;
+  cursor: pointer;
+  padding: 0px;
+}
+
+#hiddenChat {
+  margin: auto;
+  margin-top: 8px;
+}

@@ -1534,3 +1534,13 @@ function receive_concentration_offer(name, isGood){
   $(".massage_area").append(msg_window);
   
 }
+
+function chatOff() {
+  document.getElementById("chat").style.display = "none";
+  document.getElementById("hiddenChat").style.display = "block";
+}
+
+function chatOn() {
+  document.getElementById("hiddenChat").style.display = "none";
+  document.getElementById("chat").style.display = "block";
+}
