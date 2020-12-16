@@ -141,10 +141,12 @@
                         </div>
                         <div id=localvideo></div>
                         <div id=hiddenChat style="display: none;">
-                            <button class="chatOnBtn" onclick="chatOn()"><i class="fas fa-eye"></i></button>
+                            <button class="chatOnBtn" onclick="chatOn()" ><i class="fas fa-eye"></i></button>
                         </div>
                         <div id=chat style="overflow: hidden;">
-                            <div class="massage_area" style="height:87%; overFlow-y : scroll;"><button class="chatOffBtn" onclick="chatOff()"><i class="fas fa-eye-slash"></i></button></div>
+                            <div class="massage_area" style="height:87%; overFlow-y : scroll;">
+                                <div style="text-align: right; padding-right:5px"><button class="chatOffBtn" onclick="chatOff()"><i class="fas fa-eye-slash"></i></button></div>
+                            </div>
                             <div class="text_input_area">
                                 <input type="text" id="chat_message"></input><button id="send_btn" onclick="sand_chat()">전송</button>
                             </div>
