@@ -171,6 +171,7 @@ var config = {
         case "kick" :
           $(".alert_area").append("<div id='toast'></div>")
           toast("[연결 종료] 강제 퇴장 당하셨습니다");
+          peerConnections[0].peer.close();
           break;
 
         case "chat" :
@@ -311,10 +312,13 @@ var config = {
       }
     }
   },
+  onRemoteStreamEnded: function(stream){
+    console.log(stream);
+  },
 
-  onChannelClosed: function(event){
+  onChannelClose: function(event){
     if(userInfo.job == "student"){
-      $("peer_video").remove(".peer_video");
+      $(".peer_video").remove();
     }
   }
 };
