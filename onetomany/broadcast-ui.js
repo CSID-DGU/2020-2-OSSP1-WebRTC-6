@@ -1098,6 +1098,7 @@ function record_request(){
     } else {
     timestamp.disabled = true;
       obj={
+        "timestamp_title" : stamp_title,
         "record_timestamp" : record_stamp
       }
       obj = JSON.stringify(obj)
@@ -1111,7 +1112,10 @@ function record_request(){
 }
 
 var record_stamp = [];
+var stamp_title = [];
 function record_timestamp() {
+  msg = prompt("책갈피 제목을 입력하세요");
+  stamp_title[stamp_title.length]=msg;
   record_stamp[record_stamp.length]=record_time;
 }
 
@@ -1716,17 +1720,24 @@ function saveAs(uri, filename) {
   
   setTimeout(() => {
     record_stamp = data.record_timestamp;
+    stamp_title = data.timestamp_title;
     console.log(record_video.duration);
     for (i = 0; i < record_stamp.length; i++) {
-      $(".stamp_btn").append("<button id='stamp_btn_" + i + "' onclick='seek_timestamp(this)'>" + i + "</button>");
+      $(".stamp_btn").append("<button id='stamp_btn_" + i + "' onclick='seek_timestamp(this)'>" + stamp_title[i] + "</button>");
     }
-  }, 100);
+  }, 1000);
  
   //record_video.play();
 }
 
 function seek_timestamp(element){
-  var index = element.textContent;
+  var index
+  for(i=0;i<stamp_title.length;i++){
+    if(stamp_title[i]==element.textContent){
+      index = i;
+      break;
+    }
+  }
   record_video.currentTime=record_stamp[index];
   record_video.pause();
 }
