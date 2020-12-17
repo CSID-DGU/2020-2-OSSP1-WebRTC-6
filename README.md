@@ -18,7 +18,7 @@
 > ## Developer Tool
 * Kurento Media Server (Server)
 * Firebase (Database)
-* Node.JS, javascript  
+* Node.JS, javascript (Frontend, Backend)
 <br/>
  
 > ## How to run<br/>
