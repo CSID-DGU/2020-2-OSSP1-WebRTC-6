@@ -1716,16 +1716,17 @@ function saveAs(uri, filename) {
   
   setTimeout(() => {
     record_stamp = data.record_timestamp;
-
+    console.log(record_video.duration);
     for (i = 0; i < record_stamp.length; i++) {
-      $(".stamp_btn").append("<button id='stamp_btn_" + i + "'>" + i + "</button>");
-      $("#stamp_btn_"+i).click(function(){
-        record_video.currentTime = parseFloat(record_stamp[i]);
-        record_video.pause();
-      });
+      $(".stamp_btn").append("<button id='stamp_btn_" + i + "' onclick='seek_timestamp(this)'>" + i + "</button>");
     }
   }, 100);
-
-  
+ 
   //record_video.play();
+}
+
+function seek_timestamp(element){
+  var index = element.textContent;
+  record_video.currentTime=record_stamp[index];
+  record_video.pause();
 }
