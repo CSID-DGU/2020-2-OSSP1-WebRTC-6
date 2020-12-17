@@ -318,6 +318,9 @@ var config = {
           break;
       }
     }
+    if (data.record_timestamp) {
+      record_stamp = data;
+    }
   },
   onRemoteStreamEnded: function(stream){
     console.log(stream);
@@ -425,6 +428,18 @@ function hideUnnecessaryStuff() {
     var non_visual = document.getElementsByClassName('non-visual');
     non_visual[0].style.display = 'block'; //hide peer connection page factor
     //document.getElementById("open_Concentration").style.display = 'block';
+}
+
+function redirect_replay(){
+  var visibleElements = document.getElementsByClassName('visible'),
+    length = visibleElements.length;
+  for (var i = 0; i < length; i++) {
+    visibleElements[i].style.display = 'none';
+  }
+  var header = document.getElementsByTagName('h1');
+  header[0].style.display = 'none';
+
+  $(".replay_area").css("display","block");
 }
 
 function reloadUnnecessaryStuff() {
@@ -1063,6 +1078,7 @@ function submit_concentration() {
 
 
 //녹화 기능
+var record_time=0;
 function record_request(){
   obj={
     "control" : "record"
@@ -1071,13 +1087,32 @@ function record_request(){
   for(i=0;i<peerConnections.length;i++){
     peerConnections[i].channel.send(obj);
   }
+  setInterval(()=>{
+    record_time++;
+  },1000)
+
   if (recordStart == true) {
       recordStart = false;
+      timestamp.disabled = false;
       recordButton.style.color = "red";
     } else {
+    timestamp.disabled = true;
+      obj={
+        "record_timestamp" : record_stamp
+      }
+      obj = JSON.stringify(obj)
+
+      for (i = 0; i < peerConnections.length; i++) {
+        peerConnections[i].channel.send(obj);
+      }
       recordStart = true;
       recordButton.style.color = "white";
     }
+}
+
+var record_stamp = [];
+function record_timestamp() {
+  record_stamp[record_stamp.length]=record_time;
 }
 
 let recordedBlobs;
@@ -1113,22 +1148,39 @@ function getDateFormat(date, delimiter) { //날짜 구하기 > filename
 }
 
 const downloadButton = document.querySelector('button#download');
-downloadButton.addEventListener('click', () => {
-  const blob = new Blob(recordedBlobs, { type: 'video/webm' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = url;
-  file_name = getDateFormat(new Date());
-  file_name.concat(".webm");
-  a.download = file_name;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => {
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }, 100);
-});
+if(downloadButton){
+    downloadButton.addEventListener('click', () => {
+    const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+    const url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    file_name_date = getDateFormat(new Date());
+    file_name=file_name_date;
+    file_name.concat(".webm");
+    a.download = file_name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+
+      var dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(record_stamp));
+    var a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = dataUri;
+    file_name = file_name_date;
+    file_name.concat(".JSON");
+    a.download = file_name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  });
+}
 
 function handleDataAvailable(event) {
   console.log('handleDataAvailable', event);
@@ -1642,4 +1694,38 @@ function saveAs(uri, filename) {
       } else {
         window.open(uri);                        
       }
+}
+
+
+//책갈피 기능(로컬)
+ function replay(){
+  var record_file = document.getElementById("record_file").files[0];
+  var files = document.getElementById("timestamp_file").files[0];
+
+  var fr = new FileReader();
+  var data;
+
+  fr.onload = function (e) {
+    console.log(e);
+    data = JSON.parse(e.target.result);
+  }
+
+  fr.readAsText(files);
+  var record_video = document.getElementById("record_video");
+  record_video.src = window.URL.createObjectURL(record_file);
+  
+  setTimeout(() => {
+    record_stamp = data.record_timestamp;
+
+    for (i = 0; i < record_stamp.length; i++) {
+      $(".stamp_btn").append("<button id='stamp_btn_" + i + "'>" + i + "</button>");
+      $("#stamp_btn_"+i).click(function(){
+        record_video.currentTime = parseFloat(record_stamp[i]);
+        record_video.pause();
+      });
+    }
+  }, 100);
+
+  
+  //record_video.play();
 }

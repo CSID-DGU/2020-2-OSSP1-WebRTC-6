@@ -37,6 +37,13 @@
                     <h1 id="no_class" style="color:white">진행중인 강의가 없습니다</h1>
                 </div>
                 <br><br>
+                <button id="redirect_replay_area" onclick="redirect_replay()">다시보기</button>
+            </div>
+            <div class="replay_area" style="display:none;">
+                <div><video id="record_video" controls></video></div>
+                <input type="file" id="record_file">녹화파일</input><input type="file" id="timestamp_file">책갈피파일</input><br>
+                <button id="replay" onclick="replay()">PLAY</button>
+                <div class="stamp_btn"></div>
             </div>
             <table style="display:none" id="rooms-list" class="visible" style="color:white;"></table>
             <div class=non-visual><!--invisiable in homepage-->
