@@ -39,11 +39,15 @@
                 <br><br>
                 <button id="redirect_replay_area" onclick="redirect_replay()">다시보기</button>
             </div>
-            <div class="replay_area" style="display:none; color:white;">
+            <div class="replay_area" style="display:none; color:white; text-align: center;">
+                <h2 style="color:white">강의 영상 다시보기</h2>
                 <div><video id="record_video" controls></video></div>
-                녹화파일<input type="file" id="record_file"></input><br>책갈피파일<input type="file" id="timestamp_file"></input><br>
-                <button id="replay" onclick="replay()">PLAY</button>
-                <div class="stamp_btn"></div>
+                <div style="font-size: 2rem;">
+                    녹화파일  <input type="file" id="record_file"></input><br>
+                    책갈피파일 <input type="file" id="timestamp_file"></input><br>
+                    <button id="replay" onclick="replay()">PLAY</button>
+                <div class="stamp_btn_area"></div>
+                </div>
             </div>
             <table style="display:none" id="rooms-list" class="visible" style="color:white;"></table>
             <div class=non-visual><!--invisiable in homepage-->

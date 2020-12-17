@@ -1723,7 +1723,7 @@ function saveAs(uri, filename) {
     stamp_title = data.timestamp_title;
     console.log(record_video.duration);
     for (i = 0; i < record_stamp.length; i++) {
-      $(".stamp_btn").append("<button id='stamp_btn_" + i + "' onclick='seek_timestamp(this)'>" + stamp_title[i] + "</button>");
+      $(".stamp_btn_area").append("<button class='stamp_btn' onclick='seek_timestamp(this)'>" + stamp_title[i] + "</button>");
     }
   }, 1000);
  
